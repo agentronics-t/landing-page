@@ -5,7 +5,8 @@ import { Pricing } from "@/components/sections/Pricing";
 
 export const metadata: Metadata = {
   title: "Pricing — Agentronics",
-  description: "Simple pricing that grows with your team. Plans for trying WebMCP through established platforms.",
+  description:
+    "Simple pricing that grows with your team. Measure agent traffic from $29/mo, full governance at $199/mo, enterprise-grade custom plans.",
 };
 
 export default function PricingPage() {

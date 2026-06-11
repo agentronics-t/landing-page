@@ -2,32 +2,145 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Rocket, Users, Building2 } from "lucide-react";
+import { Building2, Check, Minus, Rocket, Users } from "lucide-react";
 import { EyebrowPill } from "@/components/layout/Eyebrow";
-import { Button } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
+import { ButtonLink } from "@/components/ui/Button";
+import { LaunchTrigger } from "@/components/launch/LaunchModal";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 
 /**
- * Spec 09C — Pricing. Layout is complete; PRICES + FEATURE LISTS are intentional
- * placeholders (pricing not yet decided). Fill `price`/`features` per plan when
- * the numbers are confirmed.  TODO: confirm pricing
+ * Pricing (spec: UI/pricing-page.md). Center-anchor strategy: Team is the
+ * conversion target — centered, "Most popular", dark surface + indigo glow,
+ * and the only solid CTA. Starter/Business are positioning rails with ghost
+ * CTAs. Full feature-comparison matrix below the cards. Self-serve CTAs open
+ * the launching-soon popup (signup isn't live); Contact sales → /book.
  */
+
+type PlanId = "starter" | "team" | "business";
+
 interface Plan {
+  id: PlanId;
   name: string;
-  sub: string;
+  tagline: string;
   Icon: typeof Rocket;
+  priceMonthly: number | null; // null = custom
+  priceYearly: number | null; // annual = 2 months free
   cta: string;
-  featureCount: number;
-  popular?: boolean;
+  highlighted?: boolean;
+  badge?: string;
+  highlights: string[]; // first line may be an "Everything in X, plus:" lead-in
 }
 
 const PLANS: Plan[] = [
-  { name: "Starter", sub: "Best for trying WebMCP", Icon: Rocket, cta: "Start free", featureCount: 4 },
-  { name: "Team", sub: "Growing agent traffic", Icon: Users, cta: "Start free trial", featureCount: 6, popular: true },
-  { name: "Business", sub: "Established platforms", Icon: Building2, cta: "Contact sales", featureCount: 6 },
+  {
+    id: "starter",
+    name: "Starter",
+    tagline: "Measure agent traffic on a single source.",
+    Icon: Rocket,
+    priceMonthly: 29,
+    priceYearly: 290,
+    cta: "Get started",
+    highlights: [
+      "1 connected data source",
+      "ML forecasting + statistical analysis",
+      "Agent detection & basic authentication",
+      "Basic observability",
+      "25K agent requests / mo",
+      "Community support",
+    ],
+  },
+  {
+    id: "team",
+    name: "Team",
+    tagline: "Full governance for growing agent traffic.",
+    Icon: Users,
+    priceMonthly: 199,
+    priceYearly: 1990,
+    cta: "Start free trial",
+    highlighted: true,
+    badge: "Most popular",
+    highlights: [
+      "Everything in Starter, plus:",
+      "All data sources connected",
+      "Natural-language insights + agent chat",
+      "Full auth, authz, memory & context",
+      "Full observability & audit trail",
+      "1M agent requests / mo",
+      "Email support",
+    ],
+  },
+  {
+    id: "business",
+    name: "Business",
+    tagline: "Enterprise-grade for established platforms.",
+    Icon: Building2,
+    priceMonthly: null,
+    priceYearly: null,
+    cta: "Contact sales",
+    highlights: [
+      "Everything in Team, plus:",
+      "Unlimited volume + licensed data enrichment",
+      "SSO / SAML + audit-grade export",
+      "SLA + dedicated onboarding",
+      "Custom data retention",
+      "Dedicated support + Slack",
+    ],
+  },
 ];
+
+/* ----------------------- feature comparison matrix ------------------------ */
+
+type Cell = boolean | string;
+
+interface MatrixGroup {
+  group: string;
+  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
+}
+
+const DETECTION_TIP =
+  "Detection lanes: WebMCP-native (navigator.modelContext), Web Bot Auth–signed agents, and stealth Chromium fingerprinting.";
+
+const MATRIX: MatrixGroup[] = [
+  {
+    group: "Measurement & analytics",
+    rows: [
+      { label: "Agent traffic measurement", values: [true, true, true] },
+      {
+        label: "Connected data sources",
+        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
+      },
+      { label: "ML forecasting", values: [true, true, true] },
+      { label: "Statistical analysis & anomaly detection", values: [true, true, true] },
+      { label: "Natural-language insights (LLM)", values: [false, true, true] },
+      { label: "Agent chat (conversational analytics)", values: [false, true, true] },
+    ],
+  },
+  {
+    group: "Governance",
+    rows: [
+      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
+      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
+      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
+      { label: "Agent memory & context transfer", values: [false, true, true] },
+      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
+    ],
+  },
+  {
+    group: "Platform",
+    rows: [
+      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
+      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
+      { label: "Team seats", values: ["2", "10", "Unlimited"] },
+      { label: "SSO / SAML", values: [false, false, true] },
+      { label: "SLA & uptime guarantee", values: [false, false, true] },
+      { label: "Dedicated onboarding", values: [false, false, true] },
+      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
+    ],
+  },
+];
+
+/* --------------------------------- section -------------------------------- */
 
 export function Pricing() {
   const [yearly, setYearly] = useState(false);
@@ -55,16 +168,14 @@ export function Pricing() {
             <span className="flex items-center gap-2">
               Yearly
               <span className="rounded-pill bg-brand-soft px-1.5 py-0.5 font-mono text-xs text-brand">
-                20% off
+                2 months free
               </span>
             </span>
           </SegBtn>
         </div>
-        <p className="mt-3 font-mono text-xs uppercase tracking-caps text-content-muted">
-          Plans, pricing &amp; features are being finalized
-        </p>
       </div>
 
+      {/* plan cards — Team centered + dominant */}
       <motion.div
         variants={stagger}
         initial="hidden"
@@ -73,8 +184,26 @@ export function Pricing() {
         className="mx-auto mt-12 grid max-w-content grid-cols-1 gap-5 md:grid-cols-3"
       >
         {PLANS.map((plan) => (
-          <PlanCard key={plan.name} plan={plan} yearly={yearly} />
+          <PlanCard key={plan.id} plan={plan} yearly={yearly} />
         ))}
+      </motion.div>
+
+      <p className="mt-6 text-center text-sm text-content-muted">
+        Prices in USD. Annual billing saves ~2 months.
+      </p>
+
+      {/* feature comparison matrix */}
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={inViewOnce}
+        className="mx-auto mt-16 max-w-content"
+      >
+        <h3 className="text-center text-2xl font-bold tracking-title text-content">
+          Compare plans
+        </h3>
+        <ComparisonTable />
       </motion.div>
     </section>
   );
@@ -102,21 +231,32 @@ function SegBtn({
   );
 }
 
+/* ---------------------------------- cards --------------------------------- */
+
 function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
-  const dark = plan.popular;
+  const dark = !!plan.highlighted;
+  const price = plan.priceMonthly === null ? null : yearly ? plan.priceYearly : plan.priceMonthly;
+
   return (
     <motion.div
       variants={fadeUp}
       className={cn(
         "relative flex flex-col rounded-xl border p-6",
-        dark ? "border-transparent bg-neutral-950 text-white" : "border-border bg-surface",
+        dark ? "bg-neutral-950 text-white" : "border-border bg-surface",
       )}
-      style={dark ? { boxShadow: "0 20px 60px -24px var(--brand)" } : undefined}
+      style={
+        dark
+          ? {
+              borderColor: "color-mix(in srgb, var(--brand) 45%, transparent)",
+              boxShadow: "0 24px 60px -20px color-mix(in srgb, var(--brand) 45%, transparent)",
+            }
+          : undefined
+      }
     >
-      {plan.popular && (
-        <div className="absolute right-5 top-5">
-          <Badge tone="brand">Most popular</Badge>
-        </div>
+      {plan.badge && (
+        <span className="absolute right-5 top-5 rounded-pill bg-brand-soft px-2.5 py-1 text-xs font-medium text-brand">
+          {plan.badge}
+        </span>
       )}
 
       <span
@@ -132,35 +272,150 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
         {plan.name}
       </h3>
       <p className={cn("mt-1 text-base", dark ? "text-[#b6bcca]" : "text-content-secondary")}>
-        {plan.sub}
+        {plan.tagline}
       </p>
 
-      {/* price — placeholder until confirmed */}
+      {/* price */}
       <div className="mt-6 flex items-end gap-1">
-        <span className={cn("font-sans text-4xl font-extrabold tracking-display", dark ? "text-white" : "text-content")}>
-          $—
+        <span
+          className={cn(
+            "font-sans text-4xl font-extrabold tracking-display",
+            dark ? "text-white" : "text-content",
+          )}
+        >
+          {price === null ? "Custom" : `$${price.toLocaleString("en-US")}`}
         </span>
-        <span className={cn("mb-1 text-base", dark ? "text-[#8b93a4]" : "text-content-muted")}>
-          /{yearly ? "year" : "month"}
-        </span>
+        {price !== null && (
+          <span className={cn("mb-1 text-base", dark ? "text-[#8b93a4]" : "text-content-muted")}>
+            /{yearly ? "year" : "month"}
+          </span>
+        )}
       </div>
 
-      <Button variant={dark ? "primary" : "ghost"} fullWidth className="mt-6">
-        {plan.cta}
-      </Button>
+      {/* CTA — Team is the only solid action; rails recede */}
+      <div className="mt-6">
+        {plan.id === "business" ? (
+          <ButtonLink href="/book" variant="ghost" fullWidth onDark={dark}>
+            {plan.cta}
+          </ButtonLink>
+        ) : (
+          <LaunchTrigger variant={dark ? "primary" : "ghost"} fullWidth glow={dark}>
+            {plan.cta}
+          </LaunchTrigger>
+        )}
+      </div>
 
-      {/* features — placeholder skeleton rows (TODO: confirm feature list) */}
+      {/* highlights */}
       <ul className="mt-6 space-y-3">
-        {Array.from({ length: plan.featureCount }).map((_, i) => (
-          <li key={i} className="flex items-center gap-3">
-            <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", dark ? "bg-white/30" : "bg-border-strong")} />
-            <span
-              className={cn("h-2.5 rounded-pill", dark ? "bg-white/10" : "bg-surface-raised border border-border")}
-              style={{ width: `${55 + ((i * 13) % 35)}%` }}
-            />
-          </li>
-        ))}
+        {plan.highlights.map((item) =>
+          item.endsWith("plus:") ? (
+            <li
+              key={item}
+              className={cn(
+                "text-sm font-medium",
+                dark ? "text-white/60" : "text-content-muted",
+              )}
+            >
+              {item}
+            </li>
+          ) : (
+            <li key={item} className="flex items-start gap-3">
+              <span
+                className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full"
+                style={{ background: "var(--success-bg)", color: "var(--success)" }}
+              >
+                <Check size={12} strokeWidth={3} aria-hidden />
+              </span>
+              <span className={cn("text-base", dark ? "text-[#b6bcca]" : "text-content-secondary")}>
+                {item}
+              </span>
+            </li>
+          ),
+        )}
       </ul>
     </motion.div>
+  );
+}
+
+/* ------------------------------- comparison ------------------------------- */
+
+function CellValue({ value }: { value: Cell }) {
+  if (value === true) {
+    return (
+      <span
+        aria-label="included"
+        className="inline-grid h-5 w-5 place-items-center rounded-full"
+        style={{ background: "var(--success-bg)", color: "var(--success)" }}
+      >
+        <Check size={12} strokeWidth={3} aria-hidden />
+      </span>
+    );
+  }
+  if (value === false) {
+    return (
+      <span aria-label="not included" className="inline-grid h-5 w-5 place-items-center text-content-muted">
+        <Minus size={14} aria-hidden />
+      </span>
+    );
+  }
+  return <span className="font-mono text-xs text-content-secondary">{value}</span>;
+}
+
+function ComparisonTable() {
+  return (
+    <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-surface">
+      <table className="w-full min-w-[640px] border-collapse text-left">
+        <thead>
+          <tr className="border-b border-border">
+            <th scope="col" className="px-5 py-4 text-sm font-medium text-content-muted">
+              Features
+            </th>
+            {PLANS.map((p) => (
+              <th
+                key={p.id}
+                scope="col"
+                className={cn(
+                  "px-5 py-4 text-center text-sm font-bold",
+                  p.highlighted ? "text-brand" : "text-content",
+                )}
+              >
+                {p.name}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        {MATRIX.map((group) => (
+          <tbody key={group.group}>
+            <tr className="border-b border-border bg-surface-raised">
+              <th
+                scope="rowgroup"
+                colSpan={4}
+                className="px-5 py-2.5 font-mono text-xs uppercase tracking-caps text-content-muted"
+              >
+                {group.group}
+              </th>
+            </tr>
+            {group.rows.map((row) => (
+              <tr key={row.label} className="border-b border-border last:border-b-0">
+                <th scope="row" className="px-5 py-3 text-sm font-normal text-content-secondary">
+                  {row.tip ? (
+                    <span title={row.tip} className="cursor-help underline decoration-dotted underline-offset-4">
+                      {row.label}
+                    </span>
+                  ) : (
+                    row.label
+                  )}
+                </th>
+                {row.values.map((v, i) => (
+                  <td key={i} className="px-5 py-3 text-center">
+                    <CellValue value={v} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        ))}
+      </table>
+    </div>
   );
 }
