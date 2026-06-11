@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 import { LaunchModalProvider } from "@/components/launch/LaunchModal";
 import "./globals.css";
 
@@ -53,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <LaunchModalProvider>{children}</LaunchModalProvider>
+        <Analytics />
       </body>
     </html>
   );
