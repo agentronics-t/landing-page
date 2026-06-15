@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { Building2, Check, Minus, Rocket, Users } from "lucide-react";
 import { EyebrowPill } from "@/components/layout/Eyebrow";
 import { ButtonLink } from "@/components/ui/Button";
-import { LaunchTrigger } from "@/components/launch/LaunchModal";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 
@@ -299,9 +298,9 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
             {plan.cta}
           </ButtonLink>
         ) : (
-          <LaunchTrigger variant={dark ? "primary" : "ghost"} fullWidth glow={dark}>
+          <ButtonLink href="/sign-up" variant={dark ? "primary" : "ghost"} fullWidth glow={dark}>
             {plan.cta}
-          </LaunchTrigger>
+          </ButtonLink>
         )}
       </div>
 

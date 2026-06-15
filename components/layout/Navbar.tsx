@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { Button } from "@/components/ui/Button";
+import { Button, ButtonLink } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { useLaunchModal } from "@/components/launch/LaunchModal";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
@@ -30,7 +29,6 @@ export function Navbar({ heroDark = true }: { heroDark?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const reduce = useReducedMotion();
-  const { open: openLaunchModal } = useLaunchModal();
 
   useEffect(() => {
     const onScroll = () => {
@@ -98,12 +96,12 @@ export function Navbar({ heroDark = true }: { heroDark?: boolean }) {
         </ul>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <Button variant="ghost" size="sm" onDark={lightText} onClick={openLaunchModal}>
+          <ButtonLink href="/sign-in" variant="ghost" size="sm" onDark={lightText}>
             Login
-          </Button>
-          <Button variant="primary" size="sm" onClick={openLaunchModal}>
+          </ButtonLink>
+          <ButtonLink href="/sign-up" variant="primary" size="sm">
             Sign up
-          </Button>
+          </ButtonLink>
           <ThemeToggle onDark={lightText} />
         </div>
 
@@ -161,26 +159,12 @@ export function Navbar({ heroDark = true }: { heroDark?: boolean }) {
               ))}
             </motion.ul>
             <div className="mt-8 flex flex-col gap-3 px-[clamp(20px,5vw,48px)]">
-              <Button
-                variant="ghost"
-                fullWidth
-                onClick={() => {
-                  setMenuOpen(false);
-                  openLaunchModal();
-                }}
-              >
+              <ButtonLink href="/sign-in" variant="ghost" fullWidth onClick={() => setMenuOpen(false)}>
                 Login
-              </Button>
-              <Button
-                variant="primary"
-                fullWidth
-                onClick={() => {
-                  setMenuOpen(false);
-                  openLaunchModal();
-                }}
-              >
+              </ButtonLink>
+              <ButtonLink href="/sign-up" variant="primary" fullWidth onClick={() => setMenuOpen(false)}>
                 Sign up
-              </Button>
+              </ButtonLink>
             </div>
           </motion.div>
         )}

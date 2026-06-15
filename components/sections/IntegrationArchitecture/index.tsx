@@ -12,7 +12,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import { Eyebrow } from "@/components/layout/Eyebrow";
-import { LaunchTrigger } from "@/components/launch/LaunchModal";
+import { ButtonLink } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 /**
@@ -211,13 +211,14 @@ export function IntegrationArchitecture() {
                     <p className="mt-5 font-mono text-xs uppercase tracking-caps text-content-muted">
                       {step.tags}
                     </p>
-                    <LaunchTrigger
+                    <ButtonLink
+                      href="/sign-up"
                       variant="accent"
                       size="md"
                       className="pointer-events-auto mt-7"
                     >
                       Start integrating
-                    </LaunchTrigger>
+                    </ButtonLink>
                   </motion.div>
                 </AnimatePresence>
               </div>

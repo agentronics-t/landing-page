@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ButtonLink } from "@/components/ui/Button";
-import { LaunchTrigger } from "@/components/launch/LaunchModal";
 import { HeroAgents } from "@/components/sections/HeroAgents";
 import { ThesisBand } from "@/components/sections/LosingTraffic";
 import { WebMCPSolution } from "@/components/sections/WebMCPSolution";
@@ -51,9 +50,9 @@ export default function Home() {
               Install the SDK, define your endpoints, and start governing agent traffic today.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <LaunchTrigger variant="primary" size="lg" glow>
+              <ButtonLink href="/sign-up" variant="primary" size="lg" glow>
                 Sign up
-              </LaunchTrigger>
+              </ButtonLink>
               <ButtonLink href="/book" variant="ghost" size="lg">
                 Book a demo
               </ButtonLink>
