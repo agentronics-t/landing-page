@@ -13,7 +13,7 @@ import { cn } from "@/lib/cn";
 const LINKS = [
   { label: "SDK", href: "/" },
   { label: "Intelligence", href: "/intelligence" },
-  { label: "Docs", href: "/docs" },
+  { label: "Docs", href: "https://docs.agentronics.dev" },
   { label: "Book a demo", href: "/book" },
   { label: "Pricing", href: "/pricing" },
 ];

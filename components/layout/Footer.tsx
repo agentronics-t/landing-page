@@ -7,7 +7,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
     links: [
       { label: "SDK", href: "/" },
       { label: "Intelligence", href: "/intelligence" },
-      { label: "Docs", href: "/docs" },
+      { label: "Docs", href: "https://docs.agentronics.dev" },
       { label: "Pricing", href: "/pricing" },
     ],
   },
