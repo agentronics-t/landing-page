@@ -23,8 +23,8 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: "Connect",
     links: [
-      { label: "Twitter / X", href: "https://x.com" },
-      { label: "LinkedIn", href: "https://linkedin.com" },
+      { label: "Twitter / X", href: "https://x.com/agentronics" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/company/agentronicss" },
       { label: "GitHub", href: "https://github.com/agentronics-t" },
       { label: "Email", href: "/book" },
     ],
