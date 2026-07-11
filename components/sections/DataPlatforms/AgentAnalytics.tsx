@@ -9,33 +9,52 @@ import {
   useTransform,
 } from "framer-motion";
 import {
-  LayoutDashboard, Bot, Activity, CircleDollarSign, FileBarChart, Download, Search, Sparkles,
+  LayoutGrid, TrendingUp, Sparkles, Plug, MessageSquare, Radar, KeyRound, ShieldCheck,
+  Brain, List, BarChart3, Search,
 } from "lucide-react";
 import { Logomark } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 
 /**
- * Intelligence page — agent-analytics platform mock. Alytics-style analytics
- * (KPIs, top agents by revenue, growth chart) reframed around what agent
- * traffic means for the business, with a VS Code-style agent chat docked on
- * the right that narrates the impact. The whole panel scrolls in tilted and
- * straightens flat as it reaches the viewport center.
+ * Intelligence page — faithful mock of the REAL Agentronics dashboard
+ * (Dashboard/apps/dashboard Overview page): sidebar with the actual nav
+ * (Overview/Forecast/Insights/Plugins/Agent Chat + SDK section), the real KPI
+ * row (requests / blocked / stealth / agents), the "Requests by agent lane"
+ * stacked area (WebMCP · Web Bot Auth · Stealth), top agents with lane badges,
+ * and the 14-day forecast band — plus the Agent Chat panel docked right.
+ * The whole panel scrolls in tilted and straightens flat at viewport center.
  */
 
-const NAV = [
-  { label: "Dashboard", Icon: LayoutDashboard, active: true },
-  { label: "Agents", Icon: Bot },
-  { label: "Traffic", Icon: Activity },
-  { label: "Revenue", Icon: CircleDollarSign },
-  { label: "Reports", Icon: FileBarChart },
-  { label: "Export", Icon: Download },
+const NAV_MAIN = [
+  { label: "Overview", Icon: LayoutGrid, active: true },
+  { label: "Forecast", Icon: TrendingUp },
+  { label: "Insights", Icon: Sparkles },
+  { label: "Plugins", Icon: Plug },
+  { label: "Agent Chat", Icon: MessageSquare },
+];
+
+const NAV_SDK = [
+  { label: "Detect", Icon: Radar },
+  { label: "Auth", Icon: KeyRound },
+  { label: "Authz", Icon: ShieldCheck },
+  { label: "WebMCP Tools", Icon: Plug },
+  { label: "Knaph", Icon: Brain },
+  { label: "Logs", Icon: List },
+  { label: "Analytics", Icon: BarChart3 },
+];
+
+// agent lanes — identical palette to the real dashboard
+const LANES = [
+  { label: "WebMCP", color: "var(--brand)" },
+  { label: "Web Bot Auth", color: "var(--accent)" },
+  { label: "Stealth", color: "var(--neutral-300)" },
 ];
 
 const TOP_AGENTS = [
-  { name: "GPTBot", org: "OpenAI", rev: "$3,240", verified: true, active: true },
-  { name: "ClaudeBot", org: "Anthropic", rev: "$2,610", verified: true },
-  { name: "PerplexityBot", org: "Perplexity", rev: "$1,408", verified: true },
-  { name: "Bingbot", org: "Microsoft", rev: "$310", verified: false },
+  { name: "GPTBot", lane: "webmcp", req: "412K", blocked: "0" },
+  { name: "ClaudeBot", lane: "webmcp", req: "286K", blocked: "0" },
+  { name: "PerplexityBot", lane: "webbotauth", req: "121K", blocked: "1.2K" },
+  { name: "Bingbot", lane: "stealth", req: "64K", blocked: "18K" },
 ];
 
 const CHAT: { role: "user" | "agent"; text: string }[] = [
@@ -64,7 +83,7 @@ export function AgentAnalytics() {
         style={reduce ? undefined : { rotateX, y, scale, transformOrigin: "50% 0%" }}
         className="overflow-hidden rounded-xl border border-border bg-surface shadow-raise"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-[150px_minmax(0,1fr)] lg:min-h-[550px] lg:grid-cols-[150px_minmax(0,1fr)_250px]">
+        <div className="grid grid-cols-1 sm:grid-cols-[164px_minmax(0,1fr)] lg:min-h-[550px] lg:grid-cols-[164px_minmax(0,1fr)_250px]">
           <Sidebar />
           <Main />
           <ChatPanel />
@@ -87,8 +106,9 @@ function Sidebar() {
         <Search size={13} />
         <span className="text-xs">Search</span>
       </div>
+
       <nav className="mt-3 space-y-0.5">
-        {NAV.map((n) => (
+        {NAV_MAIN.map((n) => (
           <div
             key={n.label}
             className={cn(
@@ -96,11 +116,28 @@ function Sidebar() {
               n.active ? "bg-brand-soft font-medium text-brand" : "text-content-secondary",
             )}
           >
-            <n.Icon size={14} />
+            <n.Icon size={14} strokeWidth={1.7} />
             {n.label}
           </div>
         ))}
       </nav>
+
+      {/* SDK section — mirrors the real dashboard's second nav group */}
+      <p className="mt-4 px-2 font-mono text-[9px] uppercase tracking-caps text-content-muted">
+        SDK
+      </p>
+      <nav className="mt-1 space-y-0.5">
+        {NAV_SDK.map((n) => (
+          <div
+            key={n.label}
+            className="flex items-center gap-2 rounded-md px-2 py-1 text-xs text-content-secondary"
+          >
+            <n.Icon size={14} strokeWidth={1.7} />
+            {n.label}
+          </div>
+        ))}
+      </nav>
+
       <div className="mt-auto flex items-center gap-2 border-t border-border pt-3">
         <span className="grid h-7 w-7 place-items-center rounded-full bg-brand text-xs font-bold text-white">
           NA
@@ -119,46 +156,62 @@ function Sidebar() {
 function Main() {
   return (
     <div className="min-w-0 p-4">
-      {/* KPI row — agent traffic in business terms */}
-      <div className="grid grid-cols-3 gap-3">
-        <Kpi label="Agent revenue" value="+18%" sub="vs last week, verified agents" tone="up" />
-        <Kpi label="Failed sessions" value="4%" sub="96 of 100 agent tasks complete" />
-        <Gauge label="Quarter goal" pct={84} />
+      {/* page header — real Overview heading */}
+      <div className="mb-3">
+        <p className="text-sm font-bold text-content">Overview</p>
+        <p className="text-[11px] text-content-muted">AI-agent traffic across the last 30 days</p>
       </div>
 
-      {/* middle: top agents by revenue + traffic growth */}
-      <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-[1fr_1.1fr]">
+      {/* KPI row — the real dashboard's four */}
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Kpi label="Total requests" value="1.2M" sub="agent traffic, 30d" />
+        <Kpi label="Blocked" value="84K" sub="7% of requests" />
+        <Kpi label="Stealth share" value="22%" sub="unverified automated" />
+        <Kpi label="Distinct agents" value="8" sub="top observed" />
+      </div>
+
+      {/* requests by agent lane — stacked area */}
+      <div className="mt-3 rounded-lg border border-border p-3">
+        <p className="text-xs font-semibold text-content">Requests by agent lane</p>
+        <LaneChart />
+        <div className="mt-2 flex flex-wrap gap-4">
+          {LANES.map((l) => (
+            <span key={l.label} className="flex items-center gap-1.5 text-[10px] text-content-secondary">
+              <span className="h-2 w-2 rounded-full" style={{ background: l.color }} />
+              {l.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* bottom: top agents + forecast */}
+      <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-2">
         <div className="rounded-lg border border-border p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-content">Top agents by revenue</p>
-            <span className="text-[10px] text-content-muted">This week</span>
-          </div>
-          <ul className="mt-2 space-y-1.5">
+          <p className="text-xs font-semibold text-content">Top agents</p>
+          <ul className="mt-1">
             {TOP_AGENTS.map((a) => (
               <li
                 key={a.name}
-                className={cn(
-                  "flex items-center gap-2 rounded-md px-2 py-1.5",
-                  a.active && "bg-brand-soft",
-                )}
+                className="flex items-center justify-between border-b border-border py-1.5 last:border-b-0"
               >
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-surface-raised">
-                  <Bot size={12} className="text-content-secondary" />
+                <span className="flex items-center gap-2">
+                  <span className="font-mono text-[11px] font-semibold text-content">{a.name}</span>
+                  <span
+                    className="rounded-pill px-1.5 py-0.5 text-[9px] font-medium"
+                    style={
+                      a.lane === "stealth"
+                        ? { background: "var(--warning-bg)", color: "var(--warning)" }
+                        : { background: "var(--info-bg)", color: "var(--info)" }
+                    }
+                  >
+                    {a.lane}
+                  </span>
                 </span>
-                <div className="min-w-0 flex-1 leading-tight">
-                  <p className="truncate text-xs font-medium text-content">{a.name}</p>
-                  <p className="text-[10px] text-content-muted">{a.org}</p>
-                </div>
-                <span className="font-mono text-xs font-bold text-content">{a.rev}</span>
-                <span
-                  className="rounded-pill px-1.5 py-0.5 text-[9px] font-medium"
-                  style={
-                    a.verified
-                      ? { background: "var(--success-bg)", color: "var(--success)" }
-                      : { background: "var(--warning-bg)", color: "var(--warning)" }
-                  }
-                >
-                  {a.verified ? "Verified" : "Detected"}
+                <span className="flex gap-3 text-[10px] text-content-muted">
+                  <span>{a.req} req</span>
+                  <span style={a.blocked !== "0" ? { color: "var(--danger)" } : undefined}>
+                    {a.blocked} blocked
+                  </span>
                 </span>
               </li>
             ))}
@@ -166,44 +219,83 @@ function Main() {
         </div>
 
         <div className="rounded-lg border border-border p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-content">Agent traffic → revenue</p>
-            <span className="text-[10px] text-content-muted">Yearly</span>
-          </div>
-          <AreaChart />
-          <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
-            <Mini label="Peak month" value="November" accent />
-            <Mini label="Peak year" value="2026" />
-            <Mini label="Top tool" value="getOrders" />
-          </div>
-        </div>
-      </div>
-
-      {/* bottom widgets */}
-      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <div className="rounded-lg border border-border p-3">
-          <p className="text-xs font-semibold text-content">Revenue from agents</p>
-          <p className="mt-1 font-mono text-lg font-extrabold text-content">$8.4k</p>
-          <p className="text-[10px] text-content-muted">added this week</p>
-        </div>
-        <div className="rounded-lg border border-border p-3">
-          <p className="text-xs font-semibold text-content">Top regions</p>
-          <div className="mt-2 space-y-1.5">
-            <Bar label="US" pct={86} />
-            <Bar label="EU" pct={52} />
-          </div>
-        </div>
-        <div className="rounded-lg border border-border p-3">
-          <p className="text-xs font-semibold text-content">Tool calls</p>
-          <p className="mt-1 font-mono text-lg font-extrabold text-content">1.2M</p>
-          <p className="text-[10px] text-content-muted">across 8 governed tools</p>
+          <p className="text-xs font-semibold text-content">Requests forecast · next 14 days</p>
+          <ForecastBand />
         </div>
       </div>
     </div>
   );
 }
 
-/* ----------------------- VS Code-style agent chat -------------------------- */
+function Kpi({ label, value, sub }: { label: string; value: string; sub: string }) {
+  return (
+    <div className="rounded-lg border border-border p-3">
+      <p className="text-[10px] font-bold uppercase tracking-caps text-content-muted">{label}</p>
+      <p className="mt-1 text-[22px] font-extrabold tracking-display text-content">{value}</p>
+      <p className="text-[10px] text-content-muted">{sub}</p>
+    </div>
+  );
+}
+
+/** Three stacked lanes — WebMCP (brand) on top of Web Bot Auth (amber) on Stealth (neutral). */
+function LaneChart() {
+  return (
+    <svg viewBox="0 0 240 72" className="mt-2 w-full" preserveAspectRatio="none" aria-hidden>
+      {/* stealth (bottom band) */}
+      <path
+        d="M0,72 L0,58 L40,59 L80,60 L120,58 L160,59 L200,60 L240,59 L240,72 Z"
+        fill="var(--neutral-300)"
+        opacity="0.55"
+      />
+      {/* web bot auth (middle band) */}
+      <path
+        d="M0,58 L40,59 L80,60 L120,58 L160,59 L200,60 L240,59 L240,46 L200,48 L160,45 L120,44 L80,48 L40,50 L0,49 Z"
+        fill="var(--accent)"
+        opacity="0.75"
+      />
+      {/* webmcp (top band — grows) */}
+      <path
+        d="M0,49 L40,50 L80,48 L120,44 L160,45 L200,48 L240,46 L240,14 L200,20 L160,28 L120,34 L80,40 L40,44 L0,46 Z"
+        fill="var(--brand)"
+        opacity="0.8"
+      />
+    </svg>
+  );
+}
+
+/** Forecast line with a widening confidence band, like the real ForecastBand. */
+function ForecastBand() {
+  return (
+    <svg viewBox="0 0 240 80" className="mt-2 w-full" preserveAspectRatio="none" aria-hidden>
+      {/* history */}
+      <path
+        d="M0,58 L30,54 L60,55 L90,48 L120,42"
+        fill="none"
+        stroke="var(--brand)"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      {/* confidence band */}
+      <path d="M120,42 L150,40 L180,36 L210,34 L240,30 L240,8 L210,16 L180,22 L150,30 L120,42 Z"
+        fill="var(--brand)" opacity="0.14" />
+      <path d="M120,42 L150,44 L180,44 L210,46 L240,46 L240,30 L210,34 L180,36 L150,40 Z"
+        fill="var(--brand)" opacity="0.14" />
+      {/* forecast median (dashed) */}
+      <path
+        d="M120,42 L150,38 L180,32 L210,28 L240,22"
+        fill="none"
+        stroke="var(--brand)"
+        strokeWidth="2"
+        strokeDasharray="4 4"
+        strokeLinecap="round"
+      />
+      {/* today divider */}
+      <line x1="120" y1="4" x2="120" y2="76" stroke="var(--border)" strokeWidth="1" strokeDasharray="2 3" />
+    </svg>
+  );
+}
+
+/* ----------------------- Agent Chat panel (docked) ------------------------- */
 
 function ChatPanel() {
   const reduce = useReducedMotion();
@@ -233,7 +325,7 @@ function ChatPanel() {
         </span>
       </div>
 
-      {/* messages — newest pinned to the bottom, VS Code copilot style */}
+      {/* messages — newest pinned to the bottom */}
       <div className="flex min-h-[260px] flex-1 flex-col justify-end gap-2 overflow-hidden p-3">
         <AnimatePresence initial={false}>
           {CHAT.slice(0, shown).map((m, i) => (
@@ -282,79 +374,5 @@ function ChatPanel() {
         </div>
       </div>
     </aside>
-  );
-}
-
-/* -------------------------------- widgets --------------------------------- */
-
-function Kpi({ label, value, sub, tone }: { label: string; value: string; sub: string; tone?: "up" }) {
-  return (
-    <div className="rounded-lg border border-border p-3">
-      <p className="text-[10px] uppercase tracking-caps text-content-muted">{label}</p>
-      <p className="mt-1 flex items-center gap-1 font-mono text-lg font-extrabold text-content">
-        {value}
-        {tone === "up" && <span className="text-xs" style={{ color: "var(--success)" }}>↗</span>}
-      </p>
-      <p className="text-[10px] text-content-muted">{sub}</p>
-    </div>
-  );
-}
-
-function Gauge({ label, pct }: { label: string; pct: number }) {
-  const r = 16;
-  const c = 2 * Math.PI * r;
-  return (
-    <div className="rounded-lg border border-border p-3">
-      <p className="text-[10px] uppercase tracking-caps text-content-muted">{label}</p>
-      <div className="mt-1 flex items-center gap-2">
-        <svg width="44" height="44" viewBox="0 0 44 44">
-          <circle cx="22" cy="22" r={r} fill="none" stroke="var(--border)" strokeWidth="5" />
-          <circle
-            cx="22" cy="22" r={r} fill="none" stroke="var(--brand)" strokeWidth="5"
-            strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)}
-            transform="rotate(-90 22 22)"
-          />
-        </svg>
-        <span className="font-mono text-lg font-extrabold text-content">{pct}%</span>
-      </div>
-    </div>
-  );
-}
-
-function AreaChart() {
-  return (
-    <svg viewBox="0 0 240 80" className="mt-2 w-full" preserveAspectRatio="none" aria-hidden>
-      <defs>
-        <linearGradient id="agentArea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--brand)" stopOpacity="0.28" />
-          <stop offset="100%" stopColor="var(--brand)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <path d="M0,64 L40,56 L80,58 L120,40 L160,34 L200,20 L240,12 L240,80 L0,80 Z" fill="url(#agentArea)" />
-      <path
-        d="M0,64 L40,56 L80,58 L120,40 L160,34 L200,20 L240,12"
-        fill="none" stroke="var(--brand)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function Mini({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return (
-    <div>
-      <p className="text-content-muted">{label}</p>
-      <p className={cn("font-medium", accent ? "text-brand" : "text-content")}>{value}</p>
-    </div>
-  );
-}
-
-function Bar({ label, pct }: { label: string; pct: number }) {
-  return (
-    <div className="flex items-center gap-2">
-      <span className="w-5 text-[10px] text-content-muted">{label}</span>
-      <div className="h-1.5 flex-1 overflow-hidden rounded-pill bg-surface-raised">
-        <div className="h-full rounded-pill bg-brand" style={{ width: `${pct}%` }} />
-      </div>
-    </div>
   );
 }
