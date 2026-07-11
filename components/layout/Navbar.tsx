@@ -11,8 +11,8 @@ import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
-  { label: "SDK", href: "/" },
-  { label: "Intelligence", href: "/intelligence" },
+  { label: "Intelligence", href: "/" },
+  { label: "SDK", href: "/sdk" },
   { label: "Docs", href: "/docs" },
   { label: "Book a demo", href: "/book" },
   { label: "Pricing", href: "/pricing" },

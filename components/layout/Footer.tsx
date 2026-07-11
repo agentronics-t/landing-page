@@ -5,8 +5,8 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: "Platform",
     links: [
-      { label: "SDK", href: "/" },
-      { label: "Intelligence", href: "/intelligence" },
+      { label: "Intelligence", href: "/" },
+      { label: "SDK", href: "/sdk" },
       { label: "Docs", href: "/docs" },
       { label: "Pricing", href: "/pricing" },
     ],

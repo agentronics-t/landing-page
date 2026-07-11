@@ -10,8 +10,8 @@ const nextConfig = {
   reactStrictMode: true,
   async redirects() {
     return [
-      // SDK story was promoted to the home page
-      { source: "/sdk", destination: "/", permanent: true },
+      // Intelligence was promoted back to the home page; /sdk is a real route again
+      { source: "/intelligence", destination: "/", permanent: true },
     ];
   },
   async rewrites() {
