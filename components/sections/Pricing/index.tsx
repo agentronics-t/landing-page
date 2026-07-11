@@ -27,7 +27,7 @@ interface Plan {
   tagline: string;
   Icon: typeof Rocket;
   priceMonthly: number | null; // null = custom
-  priceYearly: number | null; // annual = 2 months free
+  priceYearly: number | null; // annual = 16% off (2 months free)
   cta: string;
   highlighted?: boolean;
   badge?: string;
@@ -186,7 +186,7 @@ export function Pricing() {
           <EyebrowPill>Pricing</EyebrowPill>
         </div>
         <h2 className="mt-5 text-3xl font-bold tracking-display text-content md:text-4xl">
-          Simple pricing that grows with your agent traffic
+          Pricing that grows with your agent traffic
         </h2>
 
         {/* Monthly / Yearly toggle */}
@@ -198,7 +198,7 @@ export function Pricing() {
             <span className="flex items-center gap-2">
               Yearly
               <span className="rounded-pill bg-brand-soft px-1.5 py-0.5 font-mono text-xs text-brand">
-                2 months free
+                16% off
               </span>
             </span>
           </SegBtn>
@@ -219,7 +219,7 @@ export function Pricing() {
       </motion.div>
 
       <p className="mt-6 text-center text-sm text-content-muted">
-        Prices in USD. Annual billing saves ~2 months.
+        Prices in USD. Annual billing saves 16%.
       </p>
 
       {/* feature comparison matrix */}

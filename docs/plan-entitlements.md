@@ -9,7 +9,7 @@ the same PR that changes pricing.
 
 ## Plans
 
-| Plan     | Monthly | Yearly (2 months free) | Positioning |
+| Plan     | Monthly | Yearly (16% off) | Positioning |
 |----------|---------|------------------------|-------------|
 | Observer | $29     | $290                   | Intelligence only — see what agents do on your site. No SDK. |
 | Starter  | $49     | $490                   | Measure + serve tools on a single source. |
