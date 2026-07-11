@@ -3,7 +3,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { DataToDecisions } from "@/components/sections/DataToDecisions";
 import { DataPlatforms } from "@/components/sections/DataPlatforms";
-import { Pricing } from "@/components/sections/Pricing";
 
 export const metadata: Metadata = {
   title: "Agentronics — Intelligence for the agent web",
@@ -13,8 +12,9 @@ export const metadata: Metadata = {
 
 /**
  * Home = the Intelligence product page:
- * Data to Decisions → Data platforms (analytics + agent chat) → Pricing.
- * The SDK / WebMCP developer story lives on /sdk.
+ * Data to Decisions → Data platforms (analytics + agent chat).
+ * Pricing lives on its own /pricing route; the SDK / WebMCP developer story
+ * lives on /sdk.
  */
 export default function Home() {
   return (
@@ -23,7 +23,6 @@ export default function Home() {
       <main>
         <DataToDecisions />
         <DataPlatforms />
-        <Pricing />
       </main>
       <Footer />
     </>

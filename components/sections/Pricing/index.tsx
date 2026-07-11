@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, Check, Minus, Rocket, Users } from "lucide-react";
+import { Building2, Check, Eye, Minus, Rocket, Users } from "lucide-react";
 import { EyebrowPill } from "@/components/layout/Eyebrow";
 import { ButtonLink } from "@/components/ui/Button";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
@@ -11,12 +11,15 @@ import { cn } from "@/lib/cn";
 /**
  * Pricing (spec: UI/pricing-page.md). Center-anchor strategy: Team is the
  * conversion target — centered, "Most popular", dark surface + indigo glow,
- * and the only solid CTA. Starter/Business are positioning rails with ghost
- * CTAs. Full feature-comparison matrix below the cards. Self-serve CTAs open
- * the launching-soon popup (signup isn't live); Contact sales → /book.
+ * and the only solid CTA. Observer/Starter/Business are positioning rails with
+ * ghost CTAs. Observer is the intelligence-only tier: dashboard + analytics +
+ * forecasting, but no SDK / WebMCP serving (that exclusion is rendered with a
+ * muted Minus mark on the card). Full feature-comparison matrix below the
+ * cards. Self-serve CTAs open the launching-soon popup (signup isn't live);
+ * Contact sales → /book.
  */
 
-type PlanId = "starter" | "team" | "business";
+type PlanId = "observer" | "starter" | "team" | "business";
 
 interface Plan {
   id: PlanId;
@@ -28,20 +31,46 @@ interface Plan {
   cta: string;
   highlighted?: boolean;
   badge?: string;
-  highlights: string[]; // first line may be an "Everything in X, plus:" lead-in
+  // string = feature (green check). { label, excluded } = an exclusion, shown
+  // with a muted Minus mark. A string ending in "plus:" is a lead-in label.
+  highlights: (string | Highlight)[];
+}
+
+interface Highlight {
+  label: string;
+  excluded: true;
 }
 
 const PLANS: Plan[] = [
+  {
+    id: "observer",
+    name: "Observer",
+    tagline: "Intelligence only — see what agents do on your site.",
+    Icon: Eye,
+    priceMonthly: 29,
+    priceYearly: 290,
+    cta: "Get started",
+    highlights: [
+      "Intelligence dashboard & analytics",
+      "Agent traffic measurement",
+      "ML forecasting + statistical analysis",
+      "1 connected data source",
+      { label: "No SDK / WebMCP serving", excluded: true },
+      "10K agent requests / mo",
+      "Community support",
+    ],
+  },
   {
     id: "starter",
     name: "Starter",
     tagline: "Measure agent traffic on a single source.",
     Icon: Rocket,
-    priceMonthly: 29,
-    priceYearly: 290,
+    priceMonthly: 49,
+    priceYearly: 490,
     cta: "Get started",
     highlights: [
       "1 connected data source",
+      "SDK + WebMCP tool serving",
       "ML forecasting + statistical analysis",
       "Agent detection & basic authentication",
       "Basic observability",
@@ -94,7 +123,7 @@ type Cell = boolean | string;
 
 interface MatrixGroup {
   group: string;
-  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
+  rows: { label: string; tip?: string; values: [Cell, Cell, Cell, Cell] }[];
 }
 
 const DETECTION_TIP =
@@ -104,37 +133,38 @@ const MATRIX: MatrixGroup[] = [
   {
     group: "Measurement & analytics",
     rows: [
-      { label: "Agent traffic measurement", values: [true, true, true] },
+      { label: "Agent traffic measurement", values: [true, true, true, true] },
       {
         label: "Connected data sources",
-        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
+        values: ["1 source", "1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
       },
-      { label: "ML forecasting", values: [true, true, true] },
-      { label: "Statistical analysis & anomaly detection", values: [true, true, true] },
-      { label: "Natural-language insights (LLM)", values: [false, true, true] },
-      { label: "Agent chat (conversational analytics)", values: [false, true, true] },
+      { label: "ML forecasting", values: [true, true, true, true] },
+      { label: "Statistical analysis & anomaly detection", values: [true, true, true, true] },
+      { label: "Natural-language insights (LLM)", values: [false, false, true, true] },
+      { label: "Agent chat (conversational analytics)", values: [false, false, true, true] },
     ],
   },
   {
     group: "Governance",
     rows: [
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
-      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
+      { label: "SDK / WebMCP tool serving", values: [false, true, true, true] },
+      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true, true] },
+      { label: "Authentication", values: [false, "Basic", "Full", "Full + SSO"] },
+      { label: "Authorization (scoped permissions)", values: [false, false, true, "Advanced"] },
+      { label: "Agent memory & context transfer", values: [false, false, true, true] },
+      { label: "Observability & audit trail", values: ["Basic", "Basic", "Full", "Audit-grade + export"] },
     ],
   },
   {
     group: "Platform",
     rows: [
-      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["2", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, true] },
-      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
+      { label: "Agent requests / mo", values: ["10K", "25K", "1M", "Unlimited"] },
+      { label: "Data retention", values: ["14 days", "30 days", "90 days", "Custom"] },
+      { label: "Team seats", values: ["1", "2", "10", "Unlimited"] },
+      { label: "SSO / SAML", values: [false, false, false, true] },
+      { label: "SLA & uptime guarantee", values: [false, false, false, true] },
+      { label: "Dedicated onboarding", values: [false, false, false, true] },
+      { label: "Support", values: ["Community", "Community", "Email", "Dedicated + Slack"] },
     ],
   },
 ];
@@ -180,7 +210,7 @@ export function Pricing() {
         initial="hidden"
         whileInView="show"
         viewport={inViewOnce}
-        className="mx-auto mt-12 grid max-w-content grid-cols-1 gap-5 md:grid-cols-3"
+        className="mx-auto mt-12 grid max-w-content grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
       >
         {PLANS.map((plan) => (
           <PlanCard key={plan.id} plan={plan} yearly={yearly} />
@@ -306,8 +336,27 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
 
       {/* highlights */}
       <ul className="mt-6 space-y-3">
-        {plan.highlights.map((item) =>
-          item.endsWith("plus:") ? (
+        {plan.highlights.map((item) => {
+          // Exclusion — muted Minus mark instead of the green check.
+          if (typeof item === "object") {
+            return (
+              <li key={item.label} className="flex items-start gap-3">
+                <span
+                  aria-label="not included"
+                  className={cn(
+                    "mt-0.5 grid h-5 w-5 shrink-0 place-items-center",
+                    dark ? "text-white/40" : "text-content-muted",
+                  )}
+                >
+                  <Minus size={14} aria-hidden />
+                </span>
+                <span className={cn("text-base", dark ? "text-white/40" : "text-content-muted")}>
+                  {item.label}
+                </span>
+              </li>
+            );
+          }
+          return item.endsWith("plus:") ? (
             <li
               key={item}
               className={cn(
@@ -320,6 +369,7 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
           ) : (
             <li key={item} className="flex items-start gap-3">
               <span
+                aria-label="included"
                 className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full"
                 style={{ background: "var(--success-bg)", color: "var(--success)" }}
               >
@@ -329,8 +379,8 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
                 {item}
               </span>
             </li>
-          ),
-        )}
+          );
+        })}
       </ul>
     </motion.div>
   );
@@ -388,7 +438,7 @@ function ComparisonTable() {
             <tr className="border-b border-border bg-surface-raised">
               <th
                 scope="rowgroup"
-                colSpan={4}
+                colSpan={5}
                 className="px-5 py-2.5 font-mono text-xs uppercase tracking-caps text-content-muted"
               >
                 {group.group}
