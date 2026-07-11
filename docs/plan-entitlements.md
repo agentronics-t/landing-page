@@ -47,8 +47,8 @@ Upgrading Observer → Starter (or higher) unlocks SDK access immediately.
 | Agent-traffic analytics                 | ✓        | ✓       | ✓    | ✓        |
 | ML forecasting                          | ✓        | ✓       | ✓    | ✓        |
 | Statistical / anomaly analysis          | ✓        | ✓       | ✓    | ✓        |
-| Natural-language insights (LLM)         | —        | —       | ✓    | ✓        |
-| Agent chat (conversational analytics)   | —        | —       | ✓    | ✓        |
+| Natural-language insights (LLM)         | ✓        | —       | ✓    | ✓        |
+| Agent chat (conversational analytics)   | ✓        | —       | ✓    | ✓        |
 | Data-source connectors                  | 1 source | 1 source | All  | All + licensed enrichment |
 
 ### SDK / WebMCP tools
@@ -61,26 +61,26 @@ Upgrading Observer → Starter (or higher) unlocks SDK access immediately.
 | Agent authentication                    | —        | Basic   | Full | Full + SSO |
 | Authorization (scoped permissions)      | —        | —       | ✓    | Advanced |
 | Agent memory & context transfer         | —        | —       | ✓    | ✓        |
-| Observability & audit trail             | Basic    | Basic   | Full | Audit-grade + export |
+| Observability & audit trail             | —        | Basic   | Full | Audit-grade + export |
 
 Notes:
 
-- **Agent detection & fingerprinting** is measurement-side and available to all
-  plans, including Observer (it does not require the SDK).
-- Observer's "Basic" observability applies to measured traffic only (no served
-  tools to audit).
+- **Agent detection & fingerprinting** requires the SDK — Starter and above
+  only; Observer does not include it.
+- Observer has no observability / audit trail (nothing is served, so there is
+  nothing to audit).
 
 ### Platform limits
 
 | Limit                | Observer   | Starter    | Team       | Business  |
 |----------------------|:----------:|:----------:|:----------:|:---------:|
-| Agent requests / mo  | 10K        | 25K        | 1M         | Unlimited |
+| Agent requests / mo  | —          | 25K        | 1M         | Unlimited |
 | Data retention       | 14 days    | 30 days    | 90 days    | Custom    |
 | Team seats           | 1          | 2          | 10         | Unlimited |
 | SSO / SAML           | —          | —          | —          | ✓         |
 | SLA & uptime         | —          | —          | —          | ✓         |
 | Dedicated onboarding | —          | —          | —          | ✓         |
-| Support              | Community  | Community  | Email      | Dedicated + Slack |
+| Support              | Email      | Community  | Email      | Dedicated + Slack |
 
 SLA is **Business only**.
 
@@ -122,7 +122,9 @@ SLA is **Business only**.
 - **Hard-stop** at the limit: further requests return 429 with an upgrade
   prompt payload.
 - **Overage grace of 10%** above the plan limit before the hard stop engages
-  (e.g. Observer 10K → soft ceiling 11K), to avoid abrupt mid-month cutoffs.
+  (e.g. Starter 25K → soft ceiling 27.5K), to avoid abrupt mid-month cutoffs.
+- Observer is not metered on agent requests (it serves nothing); its usage is
+  bounded by the single connected data source and 14-day retention.
 - Counters reset at the start of each billing period.
 
 ### Downgrade / upgrade semantics

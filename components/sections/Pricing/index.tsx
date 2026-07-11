@@ -54,10 +54,11 @@ const PLANS: Plan[] = [
       "Intelligence dashboard & analytics",
       "Agent traffic measurement",
       "ML forecasting + statistical analysis",
+      "Natural-language insights (LLM)",
+      "Agent chat (conversational analytics)",
       "1 connected data source",
       { label: "No SDK / WebMCP serving", excluded: true },
-      "10K agent requests / mo",
-      "Community support",
+      "Email support",
     ],
   },
   {
@@ -140,31 +141,31 @@ const MATRIX: MatrixGroup[] = [
       },
       { label: "ML forecasting", values: [true, true, true, true] },
       { label: "Statistical analysis & anomaly detection", values: [true, true, true, true] },
-      { label: "Natural-language insights (LLM)", values: [false, false, true, true] },
-      { label: "Agent chat (conversational analytics)", values: [false, false, true, true] },
+      { label: "Natural-language insights (LLM)", values: [true, false, true, true] },
+      { label: "Agent chat (conversational analytics)", values: [true, false, true, true] },
     ],
   },
   {
     group: "Governance",
     rows: [
       { label: "SDK / WebMCP tool serving", values: [false, true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true, true] },
+      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [false, true, true, true] },
       { label: "Authentication", values: [false, "Basic", "Full", "Full + SSO"] },
       { label: "Authorization (scoped permissions)", values: [false, false, true, "Advanced"] },
       { label: "Agent memory & context transfer", values: [false, false, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Basic", "Full", "Audit-grade + export"] },
+      { label: "Observability & audit trail", values: [false, "Basic", "Full", "Audit-grade + export"] },
     ],
   },
   {
     group: "Platform",
     rows: [
-      { label: "Agent requests / mo", values: ["10K", "25K", "1M", "Unlimited"] },
+      { label: "Agent requests / mo", values: [false, "25K", "1M", "Unlimited"] },
       { label: "Data retention", values: ["14 days", "30 days", "90 days", "Custom"] },
       { label: "Team seats", values: ["1", "2", "10", "Unlimited"] },
       { label: "SSO / SAML", values: [false, false, false, true] },
       { label: "SLA & uptime guarantee", values: [false, false, false, true] },
       { label: "Dedicated onboarding", values: [false, false, false, true] },
-      { label: "Support", values: ["Community", "Community", "Email", "Dedicated + Slack"] },
+      { label: "Support", values: ["Email", "Community", "Email", "Dedicated + Slack"] },
     ],
   },
 ];
@@ -210,7 +211,7 @@ export function Pricing() {
         initial="hidden"
         whileInView="show"
         viewport={inViewOnce}
-        className="mx-auto mt-12 grid max-w-content grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
+        className="mx-auto mt-12 grid max-w-[1240px] grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
       >
         {PLANS.map((plan) => (
           <PlanCard key={plan.id} plan={plan} yearly={yearly} />
@@ -270,7 +271,7 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
     <motion.div
       variants={fadeUp}
       className={cn(
-        "relative flex flex-col rounded-xl border p-6",
+        "relative flex flex-col rounded-xl border p-7",
         dark ? "bg-neutral-950 text-white" : "border-border bg-surface",
       )}
       style={
@@ -335,7 +336,7 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
       </div>
 
       {/* highlights */}
-      <ul className="mt-6 space-y-3">
+      <ul className="mt-7 space-y-3.5">
         {plan.highlights.map((item) => {
           // Exclusion — muted Minus mark instead of the green check.
           if (typeof item === "object") {
