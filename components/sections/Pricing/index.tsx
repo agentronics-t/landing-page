@@ -186,7 +186,7 @@ export function Pricing() {
           <EyebrowPill>Pricing</EyebrowPill>
         </div>
         <h2 className="mt-5 text-3xl font-bold tracking-display text-content md:text-4xl">
-          Simple pricing that grows with your team
+          Simple pricing that grows with your agent traffic
         </h2>
 
         {/* Monthly / Yearly toggle */}
