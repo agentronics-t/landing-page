@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Check, TrendingUp } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { Logomark } from "@/components/ui/Logo";
 import { fadeUp, floaty, stagger } from "@/lib/motion";
@@ -125,16 +125,60 @@ export function HeroAgentNative() {
   );
 }
 
+/**
+ * Agent activity card — who is crawling the site, how much, and how it's
+ * trending. Dot colour = the lane we classified them into (WebMCP-verified,
+ * Web Bot Auth, or unverified/stealth).
+ */
+const AGENTS: {
+  name: string;
+  org: string;
+  reqs: string;
+  color: string;
+  spark: string;
+}[] = [
+  {
+    name: "gptbot",
+    org: "OpenAI",
+    reqs: "2.1K",
+    color: "var(--brand)",
+    spark: "0,16 12,13 24,14 36,9 48,7 60,3",
+  },
+  {
+    name: "claudebot",
+    org: "Anthropic",
+    reqs: "1.4K",
+    color: "var(--accent)",
+    spark: "0,14 12,15 24,8 36,11 48,6 60,5",
+  },
+  {
+    name: "perplexitybot",
+    org: "Perplexity",
+    reqs: "486",
+    color: "var(--success)",
+    spark: "0,12 12,10 24,13 36,8 48,10 60,7",
+  },
+  {
+    name: "bingbot",
+    org: "Microsoft",
+    reqs: "95",
+    color: "var(--content-muted)",
+    spark: "0,10 12,14 24,11 36,15 48,13 60,16",
+  },
+];
+
 function FloatingCard({ reduce }: { reduce: boolean }) {
   return (
     <motion.div
       variants={reduce ? undefined : floaty}
       animate={reduce ? undefined : "animate"}
-      className="w-[420px] rounded-2xl border border-border bg-[color-mix(in_srgb,var(--surface)_82%,transparent)] p-7 shadow-raise backdrop-blur-md"
+      className="w-[420px] rounded-2xl border border-border bg-[color-mix(in_srgb,var(--surface)_82%,transparent)] p-6 shadow-raise backdrop-blur-md"
     >
+      {/* header */}
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-caps text-content-secondary">
-          <Logomark size={14} /> Agent traffic
+        <span className="flex items-center gap-2">
+          <Logomark size={16} />
+          <span className="text-base font-bold tracking-title text-content">Agent activity</span>
         </span>
         <span className="inline-flex items-center gap-1.5 rounded-pill border border-border bg-surface px-2 py-0.5 font-mono text-[9px] uppercase tracking-caps text-content-secondary">
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--success)" }} />
@@ -142,57 +186,48 @@ function FloatingCard({ reduce }: { reduce: boolean }) {
         </span>
       </div>
 
-      {/* headline stat */}
-      <div className="mt-5">
-        <p className="text-xs uppercase tracking-caps text-content-muted">Revenue from agents</p>
-        <p className="mt-1 flex items-center gap-2 font-mono text-4xl font-extrabold text-content">
-          +$8.4k
-          <span className="flex items-center gap-0.5 text-base" style={{ color: "var(--success)" }}>
-            <TrendingUp size={16} /> 12%
-          </span>
-        </p>
-        <p className="text-xs text-content-muted">this week · 1,840 checkouts</p>
+      {/* column head */}
+      <div className="mt-5 flex items-center justify-between border-b border-border pb-2 font-mono text-[10px] uppercase tracking-caps text-content-muted">
+        <span>Agent</span>
+        <span>Requests · 24h</span>
       </div>
 
-      {/* sparkline */}
-      <svg viewBox="0 0 300 60" className="mt-3 w-full" preserveAspectRatio="none" aria-hidden>
-        <defs>
-          <linearGradient id="heroSpark" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--brand)" stopOpacity="0.28" />
-            <stop offset="100%" stopColor="var(--brand)" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <path d="M0,48 L50,44 L100,46 L150,32 L200,26 L250,16 L300,8 L300,60 L0,60 Z" fill="url(#heroSpark)" />
-        <path
-          d="M0,48 L50,44 L100,46 L150,32 L200,26 L250,16 L300,8"
-          fill="none"
-          stroke="var(--brand)"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-
-      {/* mini rows */}
-      <div className="mt-4 space-y-2.5">
-        {[
-          ["Verified agent rate", "94%"],
-          ["Funnel recovered", "+18%"],
-        ].map(([label, val]) => (
-          <div key={label} className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-2 text-content-secondary">
-              <span
-                className="grid h-5 w-5 place-items-center rounded-full"
-                style={{ background: "var(--success-bg)", color: "var(--success)" }}
-              >
-                <Check size={12} strokeWidth={3} />
-              </span>
-              {label}
+      {/* rows */}
+      <ul>
+        {AGENTS.map((a) => (
+          <li
+            key={a.name}
+            className="flex items-center gap-3 border-b border-border py-2.5 last:border-b-0"
+          >
+            <span
+              className="h-2 w-2 shrink-0 rounded-full"
+              style={{ background: a.color }}
+              aria-hidden
+            />
+            <span className="min-w-0 flex-1 leading-tight">
+              <span className="block truncate font-mono text-[13px] text-content">{a.name}</span>
+              <span className="block text-[10px] text-content-muted">{a.org}</span>
             </span>
-            <span className="font-mono font-semibold text-content">{val}</span>
-          </div>
+            <span className="font-mono text-[13px] font-semibold text-content">{a.reqs}</span>
+            {/* per-agent trend */}
+            <svg width="60" height="20" viewBox="0 0 60 20" className="shrink-0" aria-hidden>
+              <polyline
+                points={a.spark}
+                fill="none"
+                stroke={a.color}
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <ChevronRight size={14} className="shrink-0 text-content-muted" aria-hidden />
+          </li>
         ))}
-      </div>
+      </ul>
+
+      <p className="mt-3 font-mono text-[10px] uppercase tracking-caps text-content-muted">
+        8 agents · 94% verified
+      </p>
     </motion.div>
   );
 }
