@@ -3,7 +3,6 @@ import { JetBrains_Mono } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
-import { LaunchModalProvider } from "@/components/launch/LaunchModal";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -26,9 +25,9 @@ export const metadata: Metadata = {
 };
 
 /**
- * Clerk is wired but stubbed for now: ClerkProvider only mounts when a real
- * publishable key is present, so the site boots cleanly without any keys.
- * (Auth buttons currently open the "launching soon" popup → book a demo.)
+ * ClerkProvider only mounts when a real publishable key is present, so the site
+ * still boots without keys. Auth buttons (Login / Sign up / Get started) link to
+ * the real /sign-in and /sign-up routes.
  */
 function hasClerkKey() {
   const k = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
@@ -47,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <LaunchModalProvider>{children}</LaunchModalProvider>
+        {children}
         <Analytics />
       </body>
     </html>

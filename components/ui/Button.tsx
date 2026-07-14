@@ -75,13 +75,15 @@ export function ButtonLink({
   glow = false,
   onDark = false,
   fullWidth = false,
+  prefetch,
   className,
   children,
   ...rest
-}: BaseProps & { href: string } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">) {
+}: BaseProps & { href: string; prefetch?: boolean } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">) {
   return (
     <Link
       href={href}
+      prefetch={prefetch}
       className={cn(
         base,
         sizes[size],

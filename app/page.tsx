@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { HeroAgentNative } from "@/components/sections/HeroAgentNative";
 import { DataToDecisions } from "@/components/sections/DataToDecisions";
 import { DataPlatforms } from "@/components/sections/DataPlatforms";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 /**
  * Home = the Intelligence product page:
- * Data to Decisions → Data platforms (analytics + agent chat).
+ * Hero (agent-native) → Data to Decisions → Data platforms (analytics + chat).
  * Pricing lives on its own /pricing route; the SDK / WebMCP developer story
  * lives on /sdk.
  */
@@ -21,6 +22,7 @@ export default function Home() {
     <>
       <Navbar heroDark={false} />
       <main>
+        <HeroAgentNative />
         <DataToDecisions />
         <DataPlatforms />
       </main>

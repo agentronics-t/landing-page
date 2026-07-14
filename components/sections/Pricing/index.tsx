@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Building2, Check, Eye, Minus, Rocket, Users } from "lucide-react";
-import { EyebrowPill } from "@/components/layout/Eyebrow";
 import { ButtonLink } from "@/components/ui/Button";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 import { cn } from "@/lib/cn";
@@ -182,10 +181,7 @@ export function Pricing() {
       className="bg-canvas px-[clamp(20px,5vw,48px)] py-20 md:py-28"
     >
       <div className="mx-auto max-w-content text-center">
-        <div className="flex justify-center">
-          <EyebrowPill>Pricing</EyebrowPill>
-        </div>
-        <h2 className="mt-5 text-3xl font-bold tracking-display text-content md:text-4xl">
+        <h2 className="text-3xl font-bold tracking-display text-content md:text-4xl">
           Pricing that grows with your agent traffic
         </h2>
 

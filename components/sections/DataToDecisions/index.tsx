@@ -76,7 +76,7 @@ export function DataToDecisions() {
   return (
     <section
       data-screen-label="data-to-decisions"
-      className="bg-canvas px-[clamp(20px,5vw,48px)] pt-32 md:pt-40"
+      className="bg-canvas px-[clamp(20px,5vw,48px)] pt-16 md:pt-20"
     >
       {/* heading + subcopy */}
       <motion.div
@@ -86,12 +86,12 @@ export function DataToDecisions() {
         viewport={inViewOnce}
         className="mx-auto max-w-content text-center"
       >
-        <motion.h1
+        <motion.h2
           variants={fadeUp}
           className="text-4xl font-bold tracking-display text-content md:text-5xl"
         >
           Data to decisions
-        </motion.h1>
+        </motion.h2>
         <motion.p
           variants={fadeUp}
           className="mx-auto mt-5 max-w-[680px] text-pretty text-lg text-content-secondary"
