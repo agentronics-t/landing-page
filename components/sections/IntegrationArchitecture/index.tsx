@@ -55,10 +55,10 @@ const STEPS: Step[] = [
   },
   {
     n: "04",
-    kicker: "Intelligence",
-    title: "Intelligence platform",
-    body: "Turn agent activity into business sense — our intelligence platform shows what this data means for your revenue, product, and roadmap.",
-    tags: "INSIGHTS · BUSINESS · STRATEGY",
+    kicker: "Dashboard",
+    title: "Governance dashboard",
+    body: "Manage it all from one place — agent access, memory, WebMCP tools, and live traffic, governed and audited from a single dashboard.",
+    tags: "DASHBOARD · GOVERNANCE · CONTROL",
   },
 ];
 

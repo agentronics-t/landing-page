@@ -35,10 +35,10 @@ npm run build      # production build
 
 | Area | Now | Later phase |
 |---|---|---|
-| All marketing UI (Home/SDK + Intelligence + pages) | ✅ Built | — |
-| Auth buttons (`Login`, `Sign up`) | "Launching soon" popup → Book a demo | Real Clerk sign-in/up + `ClerkProvider` |
+| Marketing UI (Home = SDK/WebMCP story + pages) | ✅ Built | — |
+| Auth buttons (`Login`, `Sign up`) | ✅ Real Clerk `/sign-in` + `/sign-up` | — |
 | Book a demo | ✅ Real Calendly inline widget | — |
-| Pricing | Layout complete, **prices are `TODO` placeholders** | Confirm real numbers + feature lists |
+| Pricing | ✅ Real prices (Starter / Team / Business) + comparison matrix | — |
 
 ### Enabling Clerk later
 
@@ -50,7 +50,7 @@ npm run build      # production build
 ## Structure
 
 ```
-app/            routes (Home/SDK + /intelligence /docs /book /pricing) + globals.css
+app/            routes (Home = SDK/WebMCP story, /docs /book /pricing, /sign-in /sign-up) + globals.css
 components/ui   design-system primitives (Button, Card, CodeBlock, …)
 components/layout  Navbar, Footer, Section, Eyebrow
 components/sections  one folder per home section

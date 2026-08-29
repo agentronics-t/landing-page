@@ -10,7 +10,7 @@ import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 /**
  * /sdk — From SDK to dashboard. Left: a small dark tile standing in for the
  * customer's backend with the Agentronics SDK installed. Right: the full
- * governance dashboard (reused from the Intelligence page). Between them,
+ * governance dashboard. Between them,
  * woven cords carry traveling data pulses — install once, everything streams
  * into the dashboard.
  */

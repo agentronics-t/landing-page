@@ -15,11 +15,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Agentronics — Infrastructure for the agent web",
   description:
-    "Agentronics is developer-facing AI-agent infrastructure: the WebMCP protocol, an SDK, and a governance dashboard that gives sites real-time visibility into agent traffic.",
+    "Agentronics is developer-facing AI-agent infrastructure: the WebMCP protocol, an SDK, and a governance dashboard that gives sites a structured, governed interface for agent traffic.",
   metadataBase: new URL("https://agentronics.dev"),
   openGraph: {
     title: "Agentronics — Infrastructure for the agent web",
-    description: "Make your site agent-native. Govern, observe, and serve autonomous agent traffic.",
+    description: "Make your site agent-native. Serve, govern, and observe autonomous agent traffic with the SDK and WebMCP.",
     type: "website",
   },
 };

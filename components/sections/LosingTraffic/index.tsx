@@ -152,7 +152,7 @@ function Stat({
 
 export function LosingTraffic() {
   return (
-    <section data-screen-label="losing-traffic" id="intelligence">
+    <section data-screen-label="losing-traffic" id="solution">
       <div className="bg-canvas px-[clamp(20px,5vw,48px)] py-20 md:py-28">
         <div className="mx-auto max-w-content">
           <CurrentVsFuture />

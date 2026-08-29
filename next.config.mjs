@@ -28,7 +28,9 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // Intelligence was promoted back to the home page; /sdk is a real route again
+      // Agentronics is one product now — the SDK story is the home page.
+      // Keep the old routes working.
+      { source: "/sdk", destination: "/", permanent: true },
       { source: "/intelligence", destination: "/", permanent: true },
     ];
   },

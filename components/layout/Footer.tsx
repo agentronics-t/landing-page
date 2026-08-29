@@ -3,10 +3,9 @@ import { Logo } from "@/components/ui/Logo";
 
 const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] = [
   {
-    heading: "Platform",
+    heading: "Product",
     links: [
-      { label: "Intelligence", href: "/" },
-      { label: "SDK", href: "/sdk" },
+      { label: "SDK & WebMCP", href: "/" },
       { label: "Docs", href: "/docs" },
       { label: "Pricing", href: "/pricing" },
     ],

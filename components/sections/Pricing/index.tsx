@@ -2,23 +2,21 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, Check, Eye, Minus, Rocket, Users } from "lucide-react";
+import { Building2, Check, Minus, Rocket, Users } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 import { cn } from "@/lib/cn";
 
 /**
- * Pricing (spec: UI/pricing-page.md). Center-anchor strategy: Team is the
- * conversion target — centered, "Most popular", dark surface + indigo glow,
- * and the only solid CTA. Observer/Starter/Business are positioning rails with
- * ghost CTAs. Observer is the intelligence-only tier: dashboard + analytics +
- * forecasting, but no SDK / WebMCP serving (that exclusion is rendered with a
- * muted Minus mark on the card). Full feature-comparison matrix below the
- * cards. Self-serve CTAs open the launching-soon popup (signup isn't live);
- * Contact sales → /book.
+ * Pricing (spec: UI/pricing-page.md). Agentronics is one product now — the SDK
+ * and the dashboard it feeds — so every plan includes SDK / WebMCP serving.
+ * Center-anchor strategy: Team is the conversion target — centered, "Most
+ * popular", dark surface + indigo glow, and the only solid CTA. Starter and
+ * Business are positioning rails with ghost CTAs. Full feature-comparison
+ * matrix below the cards. Self-serve CTAs → /sign-up; Contact sales → /book.
  */
 
-type PlanId = "observer" | "starter" | "team" | "business";
+type PlanId = "starter" | "team" | "business";
 
 interface Plan {
   id: PlanId;
@@ -26,7 +24,7 @@ interface Plan {
   tagline: string;
   Icon: typeof Rocket;
   priceMonthly: number | null; // null = custom
-  priceYearly: number | null; // annual = 16% off (2 months free)
+  priceYearly: number | null; // annual = 16% off
   cta: string;
   highlighted?: boolean;
   badge?: string;
@@ -42,38 +40,18 @@ interface Highlight {
 
 const PLANS: Plan[] = [
   {
-    id: "observer",
-    name: "Observer",
-    tagline: "Intelligence only — see what agents do on your site.",
-    Icon: Eye,
-    priceMonthly: 29,
-    priceYearly: 290,
-    cta: "Get started",
-    highlights: [
-      "Intelligence dashboard & analytics",
-      "Agent traffic measurement",
-      "ML forecasting + statistical analysis",
-      "Natural-language insights (LLM)",
-      "Agent chat (conversational analytics)",
-      "1 connected data source",
-      { label: "No SDK / WebMCP serving", excluded: true },
-      "Email support",
-    ],
-  },
-  {
     id: "starter",
     name: "Starter",
-    tagline: "Measure agent traffic on a single source.",
+    tagline: "Serve and govern agents on a single source.",
     Icon: Rocket,
     priceMonthly: 49,
     priceYearly: 490,
     cta: "Get started",
     highlights: [
-      "1 connected data source",
       "SDK + WebMCP tool serving",
-      "ML forecasting + statistical analysis",
+      "1 connected data source",
       "Agent detection & basic authentication",
-      "Basic observability",
+      "Basic observability & analytics",
       "25K agent requests / mo",
       "Community support",
     ],
@@ -91,7 +69,6 @@ const PLANS: Plan[] = [
     highlights: [
       "Everything in Starter, plus:",
       "All data sources connected",
-      "Natural-language insights + agent chat",
       "Full auth, authz, memory & context",
       "Full observability & audit trail",
       "1M agent requests / mo",
@@ -123,7 +100,7 @@ type Cell = boolean | string;
 
 interface MatrixGroup {
   group: string;
-  rows: { label: string; tip?: string; values: [Cell, Cell, Cell, Cell] }[];
+  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
 }
 
 const DETECTION_TIP =
@@ -131,40 +108,37 @@ const DETECTION_TIP =
 
 const MATRIX: MatrixGroup[] = [
   {
-    group: "Measurement & analytics",
+    group: "SDK & governance",
     rows: [
-      { label: "Agent traffic measurement", values: [true, true, true, true] },
-      {
-        label: "Connected data sources",
-        values: ["1 source", "1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
-      },
-      { label: "ML forecasting", values: [true, true, true, true] },
-      { label: "Statistical analysis & anomaly detection", values: [true, true, true, true] },
-      { label: "Natural-language insights (LLM)", values: [true, false, true, true] },
-      { label: "Agent chat (conversational analytics)", values: [true, false, true, true] },
+      { label: "SDK / WebMCP tool serving", values: [true, true, true] },
+      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
+      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
+      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
+      { label: "Agent memory & context transfer", values: [false, true, true] },
+      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
     ],
   },
   {
-    group: "Governance",
+    group: "Measurement & analytics",
     rows: [
-      { label: "SDK / WebMCP tool serving", values: [false, true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [false, true, true, true] },
-      { label: "Authentication", values: [false, "Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, false, true, true] },
-      { label: "Observability & audit trail", values: [false, "Basic", "Full", "Audit-grade + export"] },
+      { label: "Agent traffic measurement", values: [true, true, true] },
+      {
+        label: "Connected data sources",
+        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
+      },
+      { label: "Analytics dashboard", values: ["Basic", "Full", "Full"] },
     ],
   },
   {
     group: "Platform",
     rows: [
-      { label: "Agent requests / mo", values: [false, "25K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["14 days", "30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["1", "2", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, false, true] },
-      { label: "Support", values: ["Email", "Community", "Email", "Dedicated + Slack"] },
+      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
+      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
+      { label: "Team seats", values: ["2", "10", "Unlimited"] },
+      { label: "SSO / SAML", values: [false, false, true] },
+      { label: "SLA & uptime guarantee", values: [false, false, true] },
+      { label: "Dedicated onboarding", values: [false, false, true] },
+      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
     ],
   },
 ];
@@ -207,7 +181,7 @@ export function Pricing() {
         initial="hidden"
         whileInView="show"
         viewport={inViewOnce}
-        className="mx-auto mt-12 grid max-w-[1240px] grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
+        className="mx-auto mt-12 grid max-w-[1040px] grid-cols-1 gap-5 md:grid-cols-3"
       >
         {PLANS.map((plan) => (
           <PlanCard key={plan.id} plan={plan} yearly={yearly} />
@@ -435,7 +409,7 @@ function ComparisonTable() {
             <tr className="border-b border-border bg-surface-raised">
               <th
                 scope="rowgroup"
-                colSpan={5}
+                colSpan={4}
                 className="px-5 py-2.5 font-mono text-xs uppercase tracking-caps text-content-muted"
               >
                 {group.group}
