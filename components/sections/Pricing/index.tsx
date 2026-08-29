@@ -6,142 +6,22 @@ import { Building2, Check, Minus, Rocket, Users } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+import { PLANS, MATRIX, type Cell, type PlanId, type PlanInfo } from "@/lib/catalog";
 
 /**
- * Pricing (spec: UI/pricing-page.md). Agentronics is one product now — the SDK
- * and the dashboard it feeds — so every plan includes SDK / WebMCP serving.
- * Center-anchor strategy: Team is the conversion target — centered, "Most
- * popular", dark surface + indigo glow, and the only solid CTA. Starter and
- * Business are positioning rails with ghost CTAs. Full feature-comparison
- * matrix below the cards. Self-serve CTAs → /sign-up; Contact sales → /book.
+ * Pricing (spec: UI/pricing-page.md). Plan + matrix data lives in lib/catalog
+ * (shared with the WebMCP `get_pricing` / `compare_features` tools, so an agent
+ * can never disagree with the page). Agentronics is one product now — every
+ * plan includes SDK / WebMCP serving. Center-anchor strategy: Team is the
+ * conversion target — centered, "Most popular", dark surface + indigo glow,
+ * and the only solid CTA. Self-serve CTAs → /sign-up; Contact sales → /book.
  */
 
-type PlanId = "starter" | "team" | "business";
-
-interface Plan {
-  id: PlanId;
-  name: string;
-  tagline: string;
-  Icon: typeof Rocket;
-  priceMonthly: number | null; // null = custom
-  priceYearly: number | null; // annual = 16% off
-  cta: string;
-  highlighted?: boolean;
-  badge?: string;
-  // string = feature (green check). { label, excluded } = an exclusion, shown
-  // with a muted Minus mark. A string ending in "plus:" is a lead-in label.
-  highlights: (string | Highlight)[];
-}
-
-interface Highlight {
-  label: string;
-  excluded: true;
-}
-
-const PLANS: Plan[] = [
-  {
-    id: "starter",
-    name: "Starter",
-    tagline: "Serve and govern agents on a single source.",
-    Icon: Rocket,
-    priceMonthly: 49,
-    priceYearly: 490,
-    cta: "Get started",
-    highlights: [
-      "SDK + WebMCP tool serving",
-      "1 connected data source",
-      "Agent detection & basic authentication",
-      "Basic observability & analytics",
-      "25K agent requests / mo",
-      "Community support",
-    ],
-  },
-  {
-    id: "team",
-    name: "Team",
-    tagline: "Full governance for growing agent traffic.",
-    Icon: Users,
-    priceMonthly: 199,
-    priceYearly: 1990,
-    cta: "Start free trial",
-    highlighted: true,
-    badge: "Most popular",
-    highlights: [
-      "Everything in Starter, plus:",
-      "All data sources connected",
-      "Full auth, authz, memory & context",
-      "Full observability & audit trail",
-      "1M agent requests / mo",
-      "Email support",
-    ],
-  },
-  {
-    id: "business",
-    name: "Business",
-    tagline: "Enterprise-grade for established platforms.",
-    Icon: Building2,
-    priceMonthly: null,
-    priceYearly: null,
-    cta: "Contact sales",
-    highlights: [
-      "Everything in Team, plus:",
-      "Unlimited volume + licensed data enrichment",
-      "SSO / SAML + audit-grade export",
-      "SLA + dedicated onboarding",
-      "Custom data retention",
-      "Dedicated support + Slack",
-    ],
-  },
-];
-
-/* ----------------------- feature comparison matrix ------------------------ */
-
-type Cell = boolean | string;
-
-interface MatrixGroup {
-  group: string;
-  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
-}
-
-const DETECTION_TIP =
-  "Detection lanes: WebMCP-native (navigator.modelContext), Web Bot Auth–signed agents, and stealth Chromium fingerprinting.";
-
-const MATRIX: MatrixGroup[] = [
-  {
-    group: "SDK & governance",
-    rows: [
-      { label: "SDK / WebMCP tool serving", values: [true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
-      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
-    ],
-  },
-  {
-    group: "Measurement & analytics",
-    rows: [
-      { label: "Agent traffic measurement", values: [true, true, true] },
-      {
-        label: "Connected data sources",
-        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
-      },
-      { label: "Analytics dashboard", values: ["Basic", "Full", "Full"] },
-    ],
-  },
-  {
-    group: "Platform",
-    rows: [
-      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["2", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, true] },
-      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
-    ],
-  },
-];
+const ICONS: Record<PlanId, typeof Rocket> = {
+  starter: Rocket,
+  team: Users,
+  business: Building2,
+};
 
 /* --------------------------------- section -------------------------------- */
 
@@ -233,9 +113,10 @@ function SegBtn({
 
 /* ---------------------------------- cards --------------------------------- */
 
-function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
+function PlanCard({ plan, yearly }: { plan: PlanInfo; yearly: boolean }) {
   const dark = !!plan.highlighted;
   const price = plan.priceMonthly === null ? null : yearly ? plan.priceYearly : plan.priceMonthly;
+  const Icon = ICONS[plan.id];
 
   return (
     <motion.div
@@ -265,7 +146,7 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
           dark ? "bg-white/10 text-white" : "bg-brand-soft text-brand",
         )}
       >
-        <plan.Icon size={20} />
+        <Icon size={20} />
       </span>
 
       <h3 className={cn("mt-4 text-xl font-bold", dark ? "text-white" : "text-content")}>
@@ -308,25 +189,8 @@ function PlanCard({ plan, yearly }: { plan: Plan; yearly: boolean }) {
       {/* highlights */}
       <ul className="mt-7 space-y-3.5">
         {plan.highlights.map((item) => {
-          // Exclusion — muted Minus mark instead of the green check.
-          if (typeof item === "object") {
-            return (
-              <li key={item.label} className="flex items-start gap-3">
-                <span
-                  aria-label="not included"
-                  className={cn(
-                    "mt-0.5 grid h-5 w-5 shrink-0 place-items-center",
-                    dark ? "text-white/40" : "text-content-muted",
-                  )}
-                >
-                  <Minus size={14} aria-hidden />
-                </span>
-                <span className={cn("text-base", dark ? "text-white/40" : "text-content-muted")}>
-                  {item.label}
-                </span>
-              </li>
-            );
-          }
+          // A lead-in label ("Everything in Starter, plus:") renders as a
+          // muted sub-heading; everything else is a green-check feature.
           return item.endsWith("plus:") ? (
             <li
               key={item}

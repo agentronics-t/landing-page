@@ -3,6 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
+import { WebMcpProvider } from "@/components/webmcp/WebMcpProvider";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {children}
+        <WebMcpProvider />
         <Analytics />
       </body>
     </html>
