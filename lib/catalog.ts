@@ -6,121 +6,172 @@
  * human sees on the pricing page. Update pricing here.
  */
 
-export type PlanId = "starter" | "team" | "business";
+export type PlanId = "free" | "pro" | "business" | "enterprise";
+export type Currency = "USD" | "INR";
+export type Cycle = "monthly" | "yearly";
 export type Cell = boolean | string;
 
-export const YEARLY_DISCOUNT_PCT = 16;
+export const YEARLY_DISCOUNT_PCT = 16; // yearly = 10 × monthly
+export const CURRENCIES: Currency[] = ["USD", "INR"];
+
+export interface PlanPrice {
+  monthly: number;
+  yearly: number;
+}
 
 export interface PlanInfo {
   id: PlanId;
   name: string;
   tagline: string;
-  priceMonthly: number | null; // null = custom / contact sales
-  priceYearly: number | null;
+  /** Monthly active agents included; null = custom. */
+  maa: number | null;
+  /** null = custom / contact sales. Free is { monthly: 0, yearly: 0 }. */
+  prices: Record<Currency, PlanPrice> | null;
   cta: string;
   highlighted?: boolean;
   badge?: string;
-  /** A string ending in "plus:" is a lead-in label (e.g. "Everything in Starter, plus:"). */
+  /** A string ending in "plus:" is a lead-in label (e.g. "Everything in Free, plus:"). */
   highlights: string[];
 }
 
+/**
+ * Monthly active agent (MAA): a unique agent identity — a Web Bot Auth signer,
+ * agent API key, OAuth client or verified crawler — that authenticates at least
+ * once in a calendar month. Human visitors are free and unlimited.
+ */
+export const MAA_DEFINITION =
+  "A monthly active agent is a unique agent identity — a signer, API key, OAuth client or verified crawler — that authenticates at least once in a month. Human visitors are always free.";
+
 export const PLANS: PlanInfo[] = [
   {
-    id: "starter",
-    name: "Starter",
-    tagline: "Serve and govern agents on a single source.",
-    priceMonthly: 49,
-    priceYearly: 490,
-    cta: "Get started",
+    id: "free",
+    name: "Free",
+    tagline: "Authenticate your first agents.",
+    maa: 1_000,
+    prices: { USD: { monthly: 0, yearly: 0 }, INR: { monthly: 0, yearly: 0 } },
+    cta: "Start free",
     highlights: [
-      "SDK + WebMCP tool serving",
-      "1 connected data source",
-      "Agent detection & basic authentication",
-      "Basic observability & analytics",
-      "25K agent requests / mo",
+      "1,000 monthly active agents",
+      "Web Bot Auth, verified crawlers & agent API keys",
+      "WebMCP & browser agents",
+      "Allow or block unverified agents",
+      "7-day auth logs",
       "Community support",
     ],
   },
   {
-    id: "team",
-    name: "Team",
-    tagline: "Full governance for growing agent traffic.",
-    priceMonthly: 199,
-    priceYearly: 1990,
-    cta: "Start free trial",
+    id: "pro",
+    name: "Pro",
+    tagline: "For products agents already use.",
+    maa: 10_000,
+    prices: { USD: { monthly: 25, yearly: 250 }, INR: { monthly: 1_999, yearly: 19_990 } },
+    cta: "Upgrade to Pro",
     highlighted: true,
     badge: "Most popular",
     highlights: [
-      "Everything in Starter, plus:",
-      "All data sources connected",
-      "Full auth, authz, memory & context",
-      "Full observability & audit trail",
-      "1M agent requests / mo",
+      "Everything in Free, plus:",
+      "10,000 monthly active agents",
+      "OAuth2 agent tokens",
+      "Custom allow & block lists",
+      "Webhooks",
+      "30-day auth logs",
       "Email support",
     ],
   },
   {
     id: "business",
     name: "Business",
-    tagline: "Enterprise-grade for established platforms.",
-    priceMonthly: null,
-    priceYearly: null,
+    tagline: "Enterprise-grade agent identity.",
+    maa: 50_000,
+    prices: { USD: { monthly: 99, yearly: 990 }, INR: { monthly: 7_999, yearly: 79_990 } },
+    cta: "Upgrade to Business",
+    highlights: [
+      "Everything in Pro, plus:",
+      "50,000 monthly active agents",
+      "SSO/OIDC, SPIFFE & mTLS agent identity",
+      "90-day auth logs & audit export",
+      "20 team members",
+      "Priority support",
+    ],
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    tagline: "Custom volume, SLA and deployment.",
+    maa: null,
+    prices: null,
     cta: "Contact sales",
     highlights: [
-      "Everything in Team, plus:",
-      "Unlimited volume + licensed data enrichment",
-      "SSO / SAML + audit-grade export",
-      "SLA + dedicated onboarding",
-      "Custom data retention",
-      "Dedicated support + Slack",
+      "Everything in Business, plus:",
+      "Custom agent volume",
+      "SAML SSO for your team",
+      "99.9% uptime SLA",
+      "Dedicated support & onboarding",
+      "Private deployment options",
     ],
   },
 ];
 
 export interface MatrixGroup {
   group: string;
-  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
+  rows: { label: string; tip?: string; values: [Cell, Cell, Cell, Cell] }[];
 }
 
-export const DETECTION_TIP =
-  "Detection lanes: WebMCP-native (navigator.modelContext), Web Bot Auth–signed agents, and stealth Chromium fingerprinting.";
+export const WEB_BOT_AUTH_TIP =
+  "Cryptographically signed agent requests (IETF Web Bot Auth / RFC 9421) — how OpenAI's ChatGPT agent and other signed agents prove who they are.";
+export const CRAWLER_TIP =
+  "Search and AI crawlers verified by forward-confirmed reverse DNS, so a spoofed user agent never passes as Googlebot.";
 
 export const MATRIX: MatrixGroup[] = [
   {
-    group: "SDK & governance",
+    group: "Usage",
     rows: [
-      { label: "SDK / WebMCP tool serving", values: [true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
-      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
+      { label: "Monthly active agents", values: ["1,000", "10,000", "50,000", "Custom"] },
+      { label: "Sites", values: ["1", "3", "10", "Unlimited"] },
+      { label: "Auth log retention", values: ["7 days", "30 days", "90 days", "Custom"] },
+      { label: "Team members", values: ["1", "5", "20", "Unlimited"] },
     ],
   },
   {
-    group: "Measurement & analytics",
+    group: "Authentication methods",
     rows: [
-      { label: "Agent traffic measurement", values: [true, true, true] },
-      {
-        label: "Connected data sources",
-        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
-      },
-      { label: "Analytics dashboard", values: ["Basic", "Full", "Full"] },
+      { label: "Web Bot Auth (signed agents)", tip: WEB_BOT_AUTH_TIP, values: [true, true, true, true] },
+      { label: "Verified crawlers", tip: CRAWLER_TIP, values: [true, true, true, true] },
+      { label: "Agent API keys", values: [true, true, true, true] },
+      { label: "WebMCP & browser agents", values: [true, true, true, true] },
+      { label: "OAuth2 agent tokens", values: [false, true, true, true] },
+      { label: "SSO / OIDC agent identity", values: [false, false, true, true] },
+      { label: "SPIFFE & mTLS", values: [false, false, true, true] },
     ],
   },
   {
-    group: "Platform",
+    group: "Access rules & sessions",
     rows: [
-      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["2", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, true] },
-      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
+      { label: "Allow / block unverified agents", values: [true, true, true, true] },
+      { label: "Custom allow & block lists", values: [false, true, true, true] },
+      { label: "Auth logs & sessions", values: [true, true, true, true] },
+      { label: "Webhooks", values: [false, true, true, true] },
+      { label: "Audit log export", values: [false, false, true, true] },
+    ],
+  },
+  {
+    group: "Support",
+    rows: [
+      { label: "Support", values: ["Community", "Email", "Priority", "Dedicated"] },
+      { label: "Uptime SLA", values: [false, false, false, "99.9%"] },
+      { label: "SAML SSO for your team", values: [false, false, false, true] },
     ],
   },
 ];
+
+/** Format a price for display, e.g. "$25", "₹1,999". */
+export function formatPrice(amount: number, currency: Currency): string {
+  return new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
 
 /* ------------------------------ product overview ------------------------------ */
 
