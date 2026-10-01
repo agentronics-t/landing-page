@@ -2,21 +2,24 @@
 
 This is the authoritative spec the backend implements for plan gating: **which
 plan gets which capability, and at what limits**. Agentronics is authentication
-for AI agents. When the pricing page (`lib/catalog.ts`) and this document
+for AI agents — it authenticates and never blocks: agents that don't
+authenticate browse the customer's site as normal. When the pricing page (`lib/catalog.ts`) and this document
 disagree, this document wins — update both in the same PR.
 
 ## Plans
 
-| Plan       | USD / month | USD / year | INR / month | INR / year | Monthly active agents |
-|------------|------------:|-----------:|------------:|-----------:|----------------------:|
-| Free       | 0           | 0          | 0           | 0          | 1,000                 |
-| Pro        | 25          | 250        | 1,999       | 19,990     | 10,000                |
-| Business   | 99          | 990        | 7,999       | 79,990     | 50,000                |
-| Enterprise | custom      | custom     | custom      | custom     | custom                |
+All prices are in US dollars (USD only).
+
+| Plan       | USD / month | USD / year | Monthly active agents |
+|------------|------------:|-----------:|----------------------:|
+| Free       | 0           | 0          | 1,000                 |
+| Pro        | 25          | 250        | 10,000                |
+| Business   | 99          | 990        | 50,000                |
+| Enterprise | custom      | custom     | custom                |
 
 Yearly = 10 × monthly (16% off). Plan ids: `"free" | "pro" | "business" | "enterprise"`.
 Paid self-serve plans are billed by Razorpay Subscriptions — one Razorpay plan
-per (tier, cycle, currency), i.e. 8 plans (see the console's `lib/billing`).
+per (tier, cycle), i.e. 4 USD plans (see the console's `lib/billing`).
 
 ### Monthly active agents (MAA)
 
@@ -40,12 +43,11 @@ browser-verified subject. Unverified agents and human visitors never count.
 | SSO / OIDC agent identity             | —    | —   | ✓        | ✓          |
 | SPIFFE & mTLS                         | —    | —   | ✓        | ✓          |
 
-### Access rules & sessions
+### Logs & integrations
 
 | Capability                           | Free | Pro | Business | Enterprise |
 |--------------------------------------|:----:|:---:|:--------:|:----------:|
-| Allow / block unverified agents       | ✓    | ✓   | ✓        | ✓          |
-| Custom allow & block lists            | —    | ✓   | ✓        | ✓          |
+| Verified identity forwarded to app    | ✓    | ✓   | ✓        | ✓          |
 | Auth logs & sessions                  | ✓    | ✓   | ✓        | ✓          |
 | Webhooks                              | —    | ✓   | ✓        | ✓          |
 | Audit log export                      | —    | —   | ✓        | ✓          |
@@ -81,10 +83,9 @@ browser-verified subject. Unverified agents and human visitors never count.
 
 - Soft limit: the console shows usage vs. the plan's MAA and warns at 80% and
   100%.
-- **Never fail closed on human traffic.** Over the limit, newly seen agents are
-  still authenticated and logged; the account is flagged and asked to upgrade.
-  Hard enforcement (treating new agents as unverified) is Enterprise-contract
-  only and off by default.
+- **Never fail closed.** Over the limit, newly seen agents are still
+  authenticated and logged; the account is flagged and asked to upgrade. No
+  request to the customer's site is ever blocked because of a plan limit.
 
 ### Feature gates
 

@@ -24,11 +24,10 @@ function result(text: string, structuredContent?: unknown): McpToolResult {
 
 function priceLabel(p: PlanInfo): string {
   if (!p.prices) return "Custom (contact sales)";
-  if (p.prices.USD.monthly === 0) return "Free";
-  const { USD, INR } = p.prices;
+  if (p.prices.monthly === 0) return "Free";
   return (
-    `${formatPrice(USD.monthly, "USD")}/mo or ${formatPrice(USD.yearly, "USD")}/yr` +
-    ` (${formatPrice(INR.monthly, "INR")}/mo in India); yearly is ${YEARLY_DISCOUNT_PCT}% off`
+    `${formatPrice(p.prices.monthly)}/mo or ${formatPrice(p.prices.yearly)}/yr (USD);` +
+    ` yearly is ${YEARLY_DISCOUNT_PCT}% off`
   );
 }
 
@@ -63,12 +62,12 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "get_pricing",
       description:
-        "Get Agentronics pricing: plans priced by monthly active agents (MAA), with monthly and yearly prices in USD and INR and headline features. Yearly billing is 16% off.",
+        "Get Agentronics pricing: plans priced by monthly active agents (MAA), with monthly and yearly prices in USD and headline features. Yearly billing is 16% off.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute() {
         const lines = PLANS.map((p) => `• ${p.name} — ${priceLabel(p)}: ${p.tagline}`).join("\n");
         return result(`Agentronics plans (${MAA_DEFINITION}):\n${lines}`, {
-          currencies: ["USD", "INR"],
+          currency: "USD",
           yearlyDiscountPct: YEARLY_DISCOUNT_PCT,
           maaDefinition: MAA_DEFINITION,
           plans: PLANS.map(planPublic),
@@ -87,7 +86,7 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
             description: "Expected unique agent identities authenticating per month.",
           },
           needOAuth2: { type: "boolean", description: "Agents authenticate with OAuth2 client-credentials tokens." },
-          needCustomRules: { type: "boolean", description: "Custom allow/block lists or webhooks." },
+          needWebhooks: { type: "boolean", description: "Webhooks for agent sign-in events." },
           needEnterpriseIdentity: {
             type: "boolean",
             description: "Agent identity via SSO/OIDC, SPIFFE or mTLS.",
@@ -108,10 +107,10 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
           id = "business";
           if (args.needEnterpriseIdentity === true) reasons.push("SSO/OIDC, SPIFFE and mTLS agent identity start at Business.");
           if (maa > 10_000) reasons.push("Over 10,000 monthly active agents exceeds Pro.");
-        } else if (args.needOAuth2 === true || args.needCustomRules === true || maa > 1_000) {
+        } else if (args.needOAuth2 === true || args.needWebhooks === true || maa > 1_000) {
           id = "pro";
           if (args.needOAuth2 === true) reasons.push("OAuth2 agent tokens start at Pro.");
-          if (args.needCustomRules === true) reasons.push("Custom allow/block lists and webhooks start at Pro.");
+          if (args.needWebhooks === true) reasons.push("Webhooks start at Pro.");
           if (maa > 1_000) reasons.push("Over 1,000 monthly active agents exceeds Free.");
         } else {
           id = "free";

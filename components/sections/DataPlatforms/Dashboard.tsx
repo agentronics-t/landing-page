@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, Bot, ScrollText, KeyRound, ShieldCheck, Code2, Search } from "lucide-react";
+import { LayoutDashboard, Bot, ScrollText, KeyRound, Code2, Search } from "lucide-react";
 import { Logomark } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 
@@ -14,15 +14,14 @@ const NAV = [
   { label: "Agents", Icon: Bot },
   { label: "Auth logs", Icon: ScrollText },
   { label: "Authentication", Icon: KeyRound },
-  { label: "Access rules", Icon: ShieldCheck },
   { label: "API keys", Icon: Code2 },
 ];
 
-const AGENTS: { name: string; org: string; status: "verified" | "blocked"; active?: boolean }[] = [
+const AGENTS: { name: string; org: string; status: "verified" | "unverified"; active?: boolean }[] = [
   { name: "ChatGPT agent", org: "Web Bot Auth", status: "verified", active: true },
   { name: "Googlebot", org: "Verified crawler", status: "verified" },
   { name: "Booking agent", org: "API key", status: "verified" },
-  { name: "Googlebot", org: "Spoofed · rdns_mismatch", status: "blocked" },
+  { name: "Googlebot", org: "Spoofed · rdns_mismatch", status: "unverified" },
 ];
 
 export function Dashboard() {
@@ -102,10 +101,10 @@ export function Dashboard() {
                       style={
                         a.status === "verified"
                           ? { background: "var(--success-bg)", color: "var(--success)" }
-                          : { background: "var(--danger-bg)", color: "var(--danger)" }
+                          : { background: "var(--warning-bg)", color: "var(--warning)" }
                       }
                     >
-                      {a.status === "verified" ? "Verified" : "Blocked"}
+                      {a.status === "verified" ? "Verified" : "Unverified"}
                     </span>
                   </li>
                 ))}
@@ -122,7 +121,7 @@ export function Dashboard() {
               <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
                 <Mini label="Top method" value="Web Bot Auth" accent />
                 <Mini label="Unverified" value="4.8%" />
-                <Mini label="Blocked" value="1.2%" />
+                <Mini label="Verified" value="95.2%" />
               </div>
             </div>
           </div>
@@ -142,9 +141,9 @@ export function Dashboard() {
               </div>
             </div>
             <div className="rounded-lg border border-border p-3">
-              <p className="text-xs font-semibold text-content">Access rules</p>
+              <p className="text-xs font-semibold text-content">Methods on</p>
               <div className="mt-2 flex flex-wrap gap-1">
-                {["Block unverified", "Allow 12", "Block 3"].map((t) => (
+                {["Web Bot Auth", "Crawlers", "API keys"].map((t) => (
                   <span
                     key={t}
                     className="rounded-pill bg-surface-raised px-2 py-0.5 text-[10px] text-content-secondary"

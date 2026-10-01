@@ -9,11 +9,12 @@ import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 /**
  * "Every agent request, verified" — three steps on the left, and on the right
  * a live sign-in feed: agent requests arrive and resolve to verified /
- * unverified / blocked with the method and reason, exactly as the console's
- * auth logs show them. Illustrative data; reduced motion shows a static feed.
+ * unverified with the method and reason, exactly as the console's auth logs
+ * show them. Nothing is ever blocked — unverified agents browse as normal.
+ * Illustrative data; reduced motion shows a static feed.
  */
 
-type Result = "verified" | "unverified" | "blocked";
+type Result = "verified" | "unverified";
 
 interface FeedItem {
   agent: string;
@@ -26,24 +27,23 @@ interface FeedItem {
 const FEED: FeedItem[] = [
   { agent: "ChatGPT agent", detail: "https://chatgpt.com", method: "Web Bot Auth", result: "verified", reason: "ed25519 signature" },
   { agent: "Googlebot", detail: "crawl-66-249-66-1.googlebot.com", method: "Verified crawler", result: "verified", reason: "reverse DNS confirmed" },
-  { agent: "Googlebot", detail: "203.0.113.9", method: "Verified crawler", result: "blocked", reason: "rdns_mismatch — spoofed" },
+  { agent: "Googlebot", detail: "203.0.113.9", method: "Verified crawler", result: "unverified", reason: "rdns_mismatch — not really Google" },
   { agent: "Booking agent", detail: "key:booking-agent", method: "API key", result: "verified", reason: "agk_7URP… active" },
-  { agent: "scraper-bot/2.1", detail: "no credential", method: "—", result: "blocked", reason: "unverified agent" },
+  { agent: "scraper-bot/2.1", detail: "no credential", method: "—", result: "unverified", reason: "no proof — browses as normal" },
   { agent: "research-agent", detail: "oauth2:research-agent", method: "OAuth2", result: "verified", reason: "scope agent:browse" },
-  { agent: "GPTBot", detail: "52.230.152.4", method: "Verified crawler", result: "unverified", reason: "no rDNS method — allowed" },
+  { agent: "GPTBot", detail: "52.230.152.4", method: "Verified crawler", result: "unverified", reason: "no rDNS method" },
   { agent: "Bingbot", detail: "msnbot-157-55-39-1.search.msn.com", method: "Verified crawler", result: "verified", reason: "reverse DNS confirmed" },
 ];
 
 const STEPS = [
   { n: "1", title: "The agent presents proof", body: "A signed request, an API key, an OAuth2 token — or just a user agent that claims to be Googlebot." },
   { n: "2", title: "Agentronics verifies it", body: "Signatures against the signer's published keys, tokens against your issuer, crawler claims against reverse DNS." },
-  { n: "3", title: "You decide", body: "Verified agents get in with their identity attached. Unverified ones are allowed and logged, or blocked — your rule." },
+  { n: "3", title: "Your app knows who it is", body: "Verified agents reach your routes with their identity attached. Unverified ones browse as normal — Agentronics never blocks." },
 ];
 
 const RESULT_STYLE: Record<Result, { label: string; fg: string; bg: string }> = {
   verified: { label: "Verified", fg: "var(--success)", bg: "var(--success-bg)" },
   unverified: { label: "Unverified", fg: "var(--warning)", bg: "var(--warning-bg)" },
-  blocked: { label: "Blocked", fg: "var(--danger)", bg: "var(--danger-bg)" },
 };
 
 const VISIBLE = 5;

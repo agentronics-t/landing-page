@@ -13,7 +13,7 @@ import { SdkToDashboard } from "@/components/sections/SdkToDashboard";
 export const metadata: Metadata = {
   title: "Agentronics — Authentication for AI agents",
   description:
-    "Verify every AI agent on your site — signed agents, crawlers, API agents and browser agents — with any method: Web Bot Auth, API keys, OAuth2, SSO, SPIFFE, mTLS. Then decide what each one can do.",
+    "Verify every AI agent on your site — signed agents, crawlers, API agents and browser agents — with any method: Web Bot Auth, API keys, OAuth2, SSO, SPIFFE, mTLS. Agentronics never blocks: agents that don't authenticate browse as normal.",
 };
 
 /**

@@ -79,9 +79,9 @@ export function ThesisBand() {
         Give them an identity.
       </h2>
       <p className="mx-auto mt-5 max-w-[720px] text-pretty text-lg text-content-secondary">
-        Agents browse, compare, book and buy on your users&apos; behalf. Blocking them all loses customers;
+        Agents browse, compare, book and buy on your users&apos; behalf. Blocking them loses customers;
         trusting a user agent invites scrapers. Open standards — Web Bot Auth, OAuth2, mTLS — let
-        agents prove who they are. Agentronics checks the proof on every request.
+        agents prove who they are. Agentronics checks the proof on every request — and blocks no one.
       </p>
     </motion.div>
   );

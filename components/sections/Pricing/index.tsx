@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Building2, Check, Minus, Rocket, Sparkles, Users } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
@@ -13,7 +13,6 @@ import {
   YEARLY_DISCOUNT_PCT,
   formatPrice,
   type Cell,
-  type Currency,
   type Cycle,
   type PlanId,
   type PlanInfo,
@@ -23,7 +22,7 @@ import {
  * Pricing — Monthly Active Agent (MAA) tiers. Plan + matrix data lives in
  * lib/catalog (shared with the WebMCP pricing tools, so an agent can never
  * disagree with the page). Pro is the conversion target: centred emphasis and
- * the only solid CTA. Paid plans check out in the console (Razorpay) at
+ * the only solid CTA. All prices are USD. Paid plans check out in the console (Razorpay) at
  * <console>/billing; Free → sign-up; Enterprise → /book.
  */
 
@@ -45,31 +44,19 @@ function consoleOrigin(): string | null {
   }
 }
 
-function ctaHref(plan: PlanInfo, cycle: Cycle, currency: Currency): string {
+function ctaHref(plan: PlanInfo, cycle: Cycle): string {
   if (plan.id === "enterprise") return "/book";
   if (plan.id === "free") return "/sign-up";
   const origin = consoleOrigin();
   if (!origin) return "/sign-up";
-  const q = new URLSearchParams({ plan: plan.id, cycle, currency });
+  const q = new URLSearchParams({ plan: plan.id, cycle });
   return `${origin}/billing?${q.toString()}`;
-}
-
-/** Visitors in India see INR first; everyone else USD. Client-only (no hydration mismatch). */
-function guessCurrency(): Currency {
-  try {
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    return tz === "Asia/Kolkata" || tz === "Asia/Calcutta" ? "INR" : "USD";
-  } catch {
-    return "USD";
-  }
 }
 
 /* --------------------------------- section -------------------------------- */
 
 export function Pricing() {
   const [cycle, setCycle] = useState<Cycle>("monthly");
-  const [currency, setCurrency] = useState<Currency>("USD");
-  useEffect(() => setCurrency(guessCurrency()), []);
 
   return (
     <section
@@ -101,19 +88,6 @@ export function Pricing() {
               </span>
             </SegBtn>
           </div>
-          {/* USD / INR */}
-          <div
-            role="group"
-            aria-label="Currency"
-            className="inline-flex items-center gap-1 rounded-pill border border-border bg-surface p-1"
-          >
-            <SegBtn active={currency === "USD"} onClick={() => setCurrency("USD")}>
-              USD
-            </SegBtn>
-            <SegBtn active={currency === "INR"} onClick={() => setCurrency("INR")}>
-              INR
-            </SegBtn>
-          </div>
         </div>
       </div>
 
@@ -126,12 +100,12 @@ export function Pricing() {
         className="mx-auto mt-12 grid max-w-[1240px] grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4"
       >
         {PLANS.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} cycle={cycle} currency={currency} />
+          <PlanCard key={plan.id} plan={plan} cycle={cycle} />
         ))}
       </motion.div>
 
       <p className="mx-auto mt-6 max-w-[720px] text-center text-sm text-content-muted">
-        {MAA_DEFINITION} Prices exclude applicable taxes. Payments are processed securely by
+        {MAA_DEFINITION} Prices are in US dollars and exclude applicable taxes. Payments are processed securely by
         Razorpay.
       </p>
 
@@ -178,10 +152,10 @@ function SegBtn({
 
 /* ---------------------------------- cards --------------------------------- */
 
-function PlanCard({ plan, cycle, currency }: { plan: PlanInfo; cycle: Cycle; currency: Currency }) {
+function PlanCard({ plan, cycle }: { plan: PlanInfo; cycle: Cycle }) {
   const dark = !!plan.highlighted;
   const Icon = ICONS[plan.id];
-  const price = plan.prices ? plan.prices[currency][cycle] : null;
+  const price = plan.prices ? plan.prices[cycle] : null;
   const perMonthYearly = plan.prices && cycle === "yearly" && price ? Math.round(price / 12) : null;
 
   return (
@@ -230,7 +204,7 @@ function PlanCard({ plan, cycle, currency }: { plan: PlanInfo; cycle: Cycle; cur
             dark ? "text-white" : "text-content",
           )}
         >
-          {price === null ? "Custom" : formatPrice(price, currency)}
+          {price === null ? "Custom" : formatPrice(price)}
         </span>
         {price !== null && price > 0 && (
           <span className={cn("mb-1 text-base", dark ? "text-[#8b93a4]" : "text-content-muted")}>
@@ -240,7 +214,7 @@ function PlanCard({ plan, cycle, currency }: { plan: PlanInfo; cycle: Cycle; cur
       </div>
       <p className={cn("mt-1 min-h-5 text-sm", dark ? "text-[#8b93a4]" : "text-content-muted")}>
         {perMonthYearly !== null
-          ? `${formatPrice(perMonthYearly, currency)}/month, billed yearly`
+          ? `${formatPrice(perMonthYearly)}/month, billed yearly`
           : price === 0
             ? "Free forever"
             : ""}
@@ -249,7 +223,7 @@ function PlanCard({ plan, cycle, currency }: { plan: PlanInfo; cycle: Cycle; cur
       {/* CTA — Pro is the only solid action; the rest recede */}
       <div className="mt-5">
         <ButtonLink
-          href={ctaHref(plan, cycle, currency)}
+          href={ctaHref(plan, cycle)}
           prefetch={false}
           variant={dark ? "primary" : "ghost"}
           fullWidth

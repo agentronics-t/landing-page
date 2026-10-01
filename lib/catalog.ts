@@ -7,12 +7,12 @@
  */
 
 export type PlanId = "free" | "pro" | "business" | "enterprise";
-export type Currency = "USD" | "INR";
 export type Cycle = "monthly" | "yearly";
 export type Cell = boolean | string;
 
 export const YEARLY_DISCOUNT_PCT = 16; // yearly = 10 × monthly
-export const CURRENCIES: Currency[] = ["USD", "INR"];
+/** All prices are in US dollars. */
+export const CURRENCY = "USD";
 
 export interface PlanPrice {
   monthly: number;
@@ -25,8 +25,8 @@ export interface PlanInfo {
   tagline: string;
   /** Monthly active agents included; null = custom. */
   maa: number | null;
-  /** null = custom / contact sales. Free is { monthly: 0, yearly: 0 }. */
-  prices: Record<Currency, PlanPrice> | null;
+  /** USD. null = custom / contact sales. Free is { monthly: 0, yearly: 0 }. */
+  prices: PlanPrice | null;
   cta: string;
   highlighted?: boolean;
   badge?: string;
@@ -48,13 +48,13 @@ export const PLANS: PlanInfo[] = [
     name: "Free",
     tagline: "Authenticate your first agents.",
     maa: 1_000,
-    prices: { USD: { monthly: 0, yearly: 0 }, INR: { monthly: 0, yearly: 0 } },
+    prices: { monthly: 0, yearly: 0 },
     cta: "Start free",
     highlights: [
       "1,000 monthly active agents",
       "Web Bot Auth, verified crawlers & agent API keys",
       "WebMCP & browser agents",
-      "Allow or block unverified agents",
+      "Unlimited human visitors",
       "7-day auth logs",
       "Community support",
     ],
@@ -64,7 +64,7 @@ export const PLANS: PlanInfo[] = [
     name: "Pro",
     tagline: "For products agents already use.",
     maa: 10_000,
-    prices: { USD: { monthly: 25, yearly: 250 }, INR: { monthly: 1_999, yearly: 19_990 } },
+    prices: { monthly: 25, yearly: 250 },
     cta: "Upgrade to Pro",
     highlighted: true,
     badge: "Most popular",
@@ -72,7 +72,6 @@ export const PLANS: PlanInfo[] = [
       "Everything in Free, plus:",
       "10,000 monthly active agents",
       "OAuth2 agent tokens",
-      "Custom allow & block lists",
       "Webhooks",
       "30-day auth logs",
       "Email support",
@@ -83,7 +82,7 @@ export const PLANS: PlanInfo[] = [
     name: "Business",
     tagline: "Enterprise-grade agent identity.",
     maa: 50_000,
-    prices: { USD: { monthly: 99, yearly: 990 }, INR: { monthly: 7_999, yearly: 79_990 } },
+    prices: { monthly: 99, yearly: 990 },
     cta: "Upgrade to Business",
     highlights: [
       "Everything in Pro, plus:",
@@ -145,10 +144,9 @@ export const MATRIX: MatrixGroup[] = [
     ],
   },
   {
-    group: "Access rules & sessions",
+    group: "Logs & integrations",
     rows: [
-      { label: "Allow / block unverified agents", values: [true, true, true, true] },
-      { label: "Custom allow & block lists", values: [false, true, true, true] },
+      { label: "Verified identity forwarded to your app", values: [true, true, true, true] },
       { label: "Auth logs & sessions", values: [true, true, true, true] },
       { label: "Webhooks", values: [false, true, true, true] },
       { label: "Audit log export", values: [false, false, true, true] },
@@ -164,11 +162,11 @@ export const MATRIX: MatrixGroup[] = [
   },
 ];
 
-/** Format a price for display, e.g. "$25", "₹1,999". */
-export function formatPrice(amount: number, currency: Currency): string {
-  return new Intl.NumberFormat(currency === "INR" ? "en-IN" : "en-US", {
+/** Format a USD price for display, e.g. "$25". */
+export function formatPrice(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency,
+    currency: CURRENCY,
     maximumFractionDigits: 0,
   }).format(amount);
 }
@@ -178,7 +176,7 @@ export function formatPrice(amount: number, currency: Currency): string {
 export const PRODUCT_OVERVIEW = {
   name: "Agentronics",
   tagline: "Authentication for AI agents. Know which agents are real.",
-  what: "Agentronics is authentication for AI agents: it verifies every agent on your site — signed agents, crawlers, API agents and browser agents — with any method, and lets you decide what each one can do. A middleware does the verification; a console shows every agent sign-in.",
+  what: "Agentronics is authentication for AI agents: it verifies every agent on your site — signed agents, crawlers, API agents and browser agents — with any method. It never blocks: agents that don't authenticate browse the site as normal. A middleware does the verification; a console shows every agent sign-in.",
   webmcp:
     "WebMCP (navigator.modelContext) lets a page expose typed tools to visiting agents. Agentronics authenticates WebMCP and other in-page agents with its browser SDK, alongside the server middleware for agents that never run your JavaScript.",
   sdk: "The Agentronics SDK is Apache-2.0. `@agentronics/sdk/server` and `@agentronics/sdk/next` add agent-authentication middleware for Next.js, Express and any Fetch runtime; the browser SDK covers in-page agents.",
@@ -202,8 +200,8 @@ export const PRODUCT_OVERVIEW = {
       body: "Signatures against the signer's published keys, tokens against your issuer, crawler claims against reverse DNS.",
     },
     {
-      title: "You decide",
-      body: "Verified agents get in with their identity attached; unverified ones are allowed and logged, or blocked.",
+      title: "Your app knows who it is",
+      body: "Verified agents reach your routes with their identity attached. Everyone else browses as normal — nothing is blocked.",
     },
   ],
   links: {
@@ -268,10 +266,10 @@ export const DOCS_LINKS: DocLink[] = [
     keywords: ["webmcp", "browser", "modelcontext", "in-page", "react"],
   },
   {
-    title: "Access rules",
-    path: "/docs/access-rules",
-    summary: "Block unverified agents; keep allow and block lists.",
-    keywords: ["rules", "block", "allow", "allowlist", "blocklist", "access", "authorization"],
+    title: "How it works",
+    path: "/docs/concepts/how-it-works",
+    summary: "Authenticate, pass through, record — Agentronics never blocks.",
+    keywords: ["how it works", "flow", "headers", "identity", "block", "allow", "pass through"],
   },
   {
     title: "Auth logs & sessions",

@@ -48,10 +48,10 @@ const STEPS: Step[] = [
   },
   {
     n: "03",
-    kicker: "Authorize",
-    title: "Decide who gets in",
-    body: "Start in monitor mode, then block unverified agents and keep allow and block lists — previewed against last week's real traffic before you ship.",
-    tags: "ACCESS RULES · ALLOW · BLOCK",
+    kicker: "Identify",
+    title: "Your app knows who it is",
+    body: "Verified agents reach your routes with their identity attached. Agents that don't authenticate keep browsing as normal — Agentronics never blocks.",
+    tags: "IDENTITY HEADERS · NO BLOCKING",
   },
   {
     n: "04",

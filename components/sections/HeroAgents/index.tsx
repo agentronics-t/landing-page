@@ -44,7 +44,7 @@ export function HeroAgents() {
         </motion.h1>
         <motion.p variants={fadeUp} className="mt-6 max-w-[620px] text-pretty text-xl text-content-secondary">
           Anyone can claim to be ChatGPT or Googlebot. Agentronics verifies every agent on your
-          site, with any method, and lets you decide what it can do.
+          site, with any method — and never blocks the ones that don&apos;t sign in.
         </motion.p>
       </motion.div>
 

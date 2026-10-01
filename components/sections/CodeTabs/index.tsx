@@ -16,9 +16,8 @@ const TABS: { id: string; label: string; file: string; code: string }[] = [
     file: "middleware.ts",
     code: `import { agentronicsMiddleware } from '@agentronics/sdk/next'
 
-export default agentronicsMiddleware({
-  rules: { unverified: 'block' },
-})`,
+// every request continues — verified agents carry their identity
+export default agentronicsMiddleware()`,
   },
   {
     id: "express",
@@ -26,7 +25,7 @@ export default agentronicsMiddleware({
     file: "server.ts",
     code: `import { expressAgentAuth } from '@agentronics/sdk/server'
 
-app.use(expressAgentAuth({ rules: { unverified: 'block' } }))
+app.use(expressAgentAuth()) // always calls next()
 
 app.get('/api/products', (req, res) => {
   // req.agent → { status: 'verified', agent: { id, name, method } }
@@ -38,12 +37,13 @@ app.get('/api/products', (req, res) => {
     file: "worker.ts",
     code: `import { createAgentAuthHandler } from '@agentronics/sdk/server'
 
-const agentAuth = createAgentAuthHandler({ rules: { unverified: 'block' } })
+const agentAuth = createAgentAuthHandler()
 
 export default {
   async fetch(request: Request) {
     const out = await agentAuth(request)
-    return out.blocked ?? fetch(new Request(request, { headers: out.headers }))
+    // forward with x-agentronics-* identity headers attached
+    return fetch(new Request(request, { headers: out.headers }))
   },
 }`,
   },

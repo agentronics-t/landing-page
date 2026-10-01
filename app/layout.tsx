@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Agentronics — Authentication for AI agents",
   description:
-    "Agentronics is authentication for AI agents: verify every agent on your site — signed agents, crawlers, API agents and browser agents — with any method, and decide what each one can do.",
+    "Agentronics is authentication for AI agents: verify every agent on your site — signed agents, crawlers, API agents and browser agents — with any method. No blocking — agents that don't authenticate browse as normal.",
   metadataBase: new URL("https://agentronics.dev"),
   openGraph: {
     title: "Agentronics — Authentication for AI agents",
