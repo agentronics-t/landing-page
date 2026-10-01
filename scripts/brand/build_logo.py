@@ -22,7 +22,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from ttf import TTF, text_path  # noqa: E402
+from ttf import TTF, text_path  # noqa: E402,F401  (used by svg_lockup)
 
 # ---- spec (master pixel units) ---------------------------------------------
 S1, S2 = -0.608, 0.5
@@ -127,13 +127,14 @@ def svg_favicon():
 
 def main():
     root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    font = TTF(os.path.join(root, "node_modules/geist/dist/fonts/geist-sans/Geist-SemiBold.ttf"))
     out = os.path.join(root, "public", "brand")
     os.makedirs(out, exist_ok=True)
     files = {
         os.path.join(out, "agentronics-mark.svg"): svg_mark(),
-        os.path.join(out, "agentronics-logo-light.svg"): svg_lockup(font, INK_LIGHT),
-        os.path.join(out, "agentronics-logo-dark.svg"): svg_lockup(font, INK_DARK),
+        # Full lockups (mark + wordmark) are NOT generated: the brand wordmark
+        # uses its own typeface, which we don't have as a font file. Use the
+        # original public/logo-{light,dark}.png until it's supplied, then pass
+        # its path to svg_lockup() here.
         os.path.join(out, "agentronics-favicon.svg"): svg_favicon(),
         os.path.join(root, "app", "icon.svg"): svg_favicon(),
     }

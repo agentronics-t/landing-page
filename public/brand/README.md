@@ -6,16 +6,15 @@ truth. Edit the spec there and re-run; never hand-edit these files.
 | File | Use |
 |---|---|
 | `agentronics-mark.svg` | The "A" mark alone (129.56 × 100). Avatars, favicons, small spaces. |
-| `agentronics-logo-light.svg` | Mark + wordmark, dark ink — for light backgrounds. |
-| `agentronics-logo-dark.svg` | Mark + wordmark, light ink — for dark backgrounds. |
 | `agentronics-favicon.svg` | App icon: mark on a `#1f1c4b` rounded square. |
-| `../logo-*.png` | High-res PNG exports of the above, for tools that can't take SVG. |
+| `../logo-light.png`, `../logo-dark.png` | The original full logos (mark + wordmark in the brand typeface). |
+| `../logo-mark.png` | The mark alone, 512 px square PNG. |
 
 **Colours:** indigo `#5b4fd1`, amber `#e58313` — fixed in both themes (it's the
 logo, not a themed surface). Wordmark ink `#0e1017` (light) / `#f4f5f8` (dark).
 
-**Wordmark:** Geist SemiBold, lowercase, tracking −0.025em, as outlines (no
-font needed to render).
+**Wordmark:** the brand's own typeface (see the original logo PNGs). There is
+no vector lockup yet — supply the font file and `build_logo.py` can outline it.
 
 **Clear space:** keep at least the amber block's height clear on every side.
 **Minimum size:** mark 16 px tall; full lockup 20 px tall.
