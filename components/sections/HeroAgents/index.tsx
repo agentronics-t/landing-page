@@ -7,7 +7,7 @@ import { useCountUp } from "@/lib/useCountUp";
 import { StatCard } from "./StatCard";
 
 /**
- * SDK page hero — "the web is losing agent traffic". Theme-aware (follows the
+ * Home hero — authentication for AI agents. Theme-aware (follows the
  * light/dark toggle). The globe is a realistic earth on white; we crop it square
  * and radial-mask the background away so the sphere sits cleanly on the canvas
  * in either theme.
@@ -34,17 +34,17 @@ export function HeroAgents() {
         className="relative z-10 mx-auto flex max-w-content flex-col items-center px-[clamp(20px,5vw,48px)] pt-20 text-center md:pt-28"
       >
         <motion.div variants={fadeUp}>
-          <Eyebrow variant="accent">Current state · real agent data</Eyebrow>
+          <Eyebrow variant="accent">Authentication for AI agents</Eyebrow>
         </motion.div>
         <motion.h1
           variants={fadeUp}
           className="mt-5 max-w-4xl text-balance font-sans text-3xl font-bold tracking-display text-content sm:text-4xl md:text-5xl"
         >
-          The web is no longer just human.
+          Know which agents are real.
         </motion.h1>
         <motion.p variants={fadeUp} className="mt-6 max-w-[620px] text-pretty text-xl text-content-secondary">
-          Autonomous agents now drive a third of all web traffic. When they hit fragile, scraped HTML
-          they fail, retry, or leave — and you lose users, revenue, and signal.
+          Anyone can claim to be ChatGPT or Googlebot. Agentronics verifies every agent on your
+          site, with any method, and lets you decide what it can do.
         </motion.p>
       </motion.div>
 
@@ -75,7 +75,7 @@ export function HeroAgents() {
                 &lt;10<span className="text-accent">ms</span>
               </span>
             }
-            label="Agentic browsing latency"
+            label="To verify an agent, cached keys"
           />
         </div>
       </div>
@@ -87,7 +87,7 @@ export function HeroAgents() {
         <StatCard
           floatDelay={0.8}
           value={<span>&lt;10<span className="text-accent">ms</span></span>}
-          label="Agentic browsing latency"
+          label="To verify an agent, cached keys"
         />
       </div>
     </section>

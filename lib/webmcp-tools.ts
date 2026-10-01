@@ -150,12 +150,12 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "get_product_overview",
       description:
-        "Explain what Agentronics is, what WebMCP is, what the SDK does, and how it works in three steps.",
+        "Explain what Agentronics is (authentication for AI agents), which authentication methods it supports, and how a verification works in three steps.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute() {
         const o = PRODUCT_OVERVIEW;
         const steps = o.howItWorks.map((s, i) => `${i + 1}. ${s.title} — ${s.body}`).join("\n");
-        const text = `${o.name}: ${o.what}\n\nWebMCP: ${o.webmcp}\n\nSDK: ${o.sdk}\n\nHow it works:\n${steps}`;
+        const text = `${o.name}: ${o.what}\n\nMethods: ${o.methods.join(", ")}.\n\nSDK: ${o.sdk}\n\nHow it works:\n${steps}`;
         return result(text, o);
       },
     },
@@ -173,13 +173,16 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
       },
       execute(args) {
         const q = String(args.query ?? "").toLowerCase().trim();
-        const terms = q.split(/\s+/).filter(Boolean);
+        const STOP = new Set(["how", "do", "i", "a", "an", "the", "to", "my", "is", "can", "what", "with", "for", "of", "on", "in", "and", "or"]);
+        const terms = q.split(/[^a-z0-9.-]+/).filter((t) => t.length > 1 && !STOP.has(t));
+        const hay = (d: (typeof DOCS_LINKS)[number]) => `${d.title} ${d.summary} ${d.keywords.join(" ")}`.toLowerCase();
+        // Rarer terms count more (IDF): "googlebot" outweighs "verify", which is on most pages.
+        const idf = (t: string) => Math.log(1 + DOCS_LINKS.length / (1 + DOCS_LINKS.filter((d) => hay(d).includes(t)).length));
         const scored = DOCS_LINKS.map((doc) => {
-          const hay = `${doc.title} ${doc.summary} ${doc.keywords.join(" ")}`.toLowerCase();
           let score = 0;
           for (const t of terms) {
-            if (doc.keywords.some((k) => k.includes(t))) score += 3;
-            else if (hay.includes(t)) score += 1;
+            if (doc.keywords.some((k) => k.includes(t))) score += 3 * idf(t);
+            else if (hay(doc).includes(t)) score += idf(t);
           }
           return { doc, score };
         })

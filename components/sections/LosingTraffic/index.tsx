@@ -74,14 +74,14 @@ export function ThesisBand() {
       className="mx-auto max-w-3xl text-center"
     >
       <h2 className="text-3xl font-bold tracking-display text-content md:text-4xl">
-        Automation is here.
+        Agents are users now.
         <br />
-        Adapt or become irrelevant.
+        Give them an identity.
       </h2>
       <p className="mx-auto mt-5 max-w-[720px] text-pretty text-lg text-content-secondary">
-        Agents will access your data regardless of your infrastructure. WebMCP standardizes the
-        interface — simplifying agent integration, lowering compute costs for AI developers, and
-        creating new revenue streams for your platform.
+        Agents browse, compare, book and buy on your users&apos; behalf. Blocking them all loses customers;
+        trusting a user agent invites scrapers. Open standards — Web Bot Auth, OAuth2, mTLS — let
+        agents prove who they are. Agentronics checks the proof on every request.
       </p>
     </motion.div>
   );

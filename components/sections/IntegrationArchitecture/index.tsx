@@ -16,7 +16,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 /**
- * /sdk — Integration architecture as a scroll-driven process dial (Agnos-style):
+ * /sdk — How it works as a scroll-driven process dial (Agnos-style):
  * the section pins while a large circular dial rotates like a clock as you
  * scroll. Step-number diamond chips ride the dial's rim; the active step's
  * badge + copy sit fixed at the apex and crossfade on each step change.
@@ -34,31 +34,31 @@ interface Step {
 const STEPS: Step[] = [
   {
     n: "01",
-    kicker: "Initialization",
-    title: "Install SDK",
-    body: "Deploy the Agentronics SDK via npm or standard script tags. It automatically detects your site structure.",
-    tags: "SDK · INSTALL · AUTO-DETECT",
+    kicker: "Install",
+    title: "Add the middleware",
+    body: "npm install @agentronics/sdk and one line of middleware for Next.js, Express or any Fetch runtime. Human traffic passes straight through.",
+    tags: "SDK · MIDDLEWARE · 5 MINUTES",
   },
   {
     n: "02",
-    kicker: "Context & access",
-    title: "Memory & tool management",
-    body: "Give agents proper context and access — our memory tool carries sessions and preferences while WebMCP tool management governs exactly what each agent can reach.",
-    tags: "MEMORY · CONTEXT · WEBMCP · ACCESS",
+    kicker: "Authenticate",
+    title: "Verify every agent",
+    body: "Signed agents via Web Bot Auth, your own agents via API keys and OAuth2, crawlers via reverse DNS, browser agents in the page — the strongest proof wins.",
+    tags: "WEB BOT AUTH · API KEYS · OAUTH2 · CRAWLERS",
   },
   {
     n: "03",
-    kicker: "Observability",
-    title: "Observability & analytics",
-    body: "See how agents operate and why they take decisions — every call traced, every outcome scored, built for an agentic world.",
-    tags: "TRACES · ANALYTICS · DECISIONS",
+    kicker: "Authorize",
+    title: "Decide who gets in",
+    body: "Start in monitor mode, then block unverified agents and keep allow and block lists — previewed against last week's real traffic before you ship.",
+    tags: "ACCESS RULES · ALLOW · BLOCK",
   },
   {
     n: "04",
-    kicker: "Dashboard",
-    title: "Governance dashboard",
-    body: "Manage it all from one place — agent access, memory, WebMCP tools, and live traffic, governed and audited from a single dashboard.",
-    tags: "DASHBOARD · GOVERNANCE · CONTROL",
+    kicker: "Console",
+    title: "See every sign-in",
+    body: "Every agent, every method, every failure reason — auth logs, sessions and monthly active agents in the Agentronics console.",
+    tags: "AUTH LOGS · SESSIONS · AGENTS",
   },
 ];
 
@@ -104,9 +104,9 @@ export function IntegrationArchitecture() {
       {/* ------- mobile / reduced-motion fallback: stacked cards ------- */}
       <div className={cn("px-[clamp(20px,5vw,48px)] py-20", reduce ? "block" : "md:hidden")}>
         <div className="mx-auto max-w-content">
-          <Eyebrow>Process</Eyebrow>
+          <Eyebrow>Five minutes to verified</Eyebrow>
           <h2 className="mt-3 text-2xl font-bold tracking-title text-content md:text-3xl">
-            Integration architecture
+            How it works
           </h2>
           <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
             {STEPS.map((s) => (
@@ -126,9 +126,9 @@ export function IntegrationArchitecture() {
       {!reduce && (
         <div ref={trackRef} className="relative hidden h-[400vh] md:block">
           <div className="sticky top-0 flex h-screen flex-col items-center overflow-hidden px-[clamp(20px,5vw,48px)] pt-24">
-            <Eyebrow>Process</Eyebrow>
+            <Eyebrow>Five minutes to verified</Eyebrow>
             <h2 className="mt-3 text-3xl font-bold tracking-display text-content md:text-4xl">
-              Integration architecture
+              How it works
             </h2>
 
             {/* dial stage */}
@@ -217,7 +217,7 @@ export function IntegrationArchitecture() {
                       size="md"
                       className="pointer-events-auto mt-7"
                     >
-                      Start integrating
+                      Start free
                     </ButtonLink>
                   </motion.div>
                 </AnimatePresence>

@@ -16,9 +16,9 @@ import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
  */
 
 const CHECKLIST = [
-  "Monitor active agent sessions in real time.",
-  "Track specific tasks performed via the protocol.",
-  "Analyze performance metrics, latency, and API usage.",
+  "See every agent that signs in, and how it proved who it is.",
+  "Find out exactly why a sign-in failed.",
+  "Track monthly active agents against your plan.",
 ];
 
 interface Strand {
@@ -51,20 +51,20 @@ export function SdkToDashboard() {
           className="text-center"
         >
           <motion.div variants={fadeUp}>
-            <Eyebrow>Observability</Eyebrow>
+            <Eyebrow>Console</Eyebrow>
           </motion.div>
           <motion.h2
             variants={fadeUp}
             className="mt-4 text-3xl font-bold tracking-display text-content md:text-4xl"
           >
-            From SDK to dashboard
+            From middleware to console
           </motion.h2>
           <motion.p
             variants={fadeUp}
             className="mx-auto mt-4 max-w-[560px] text-pretty text-base text-content-secondary"
           >
-            Install the SDK in your backend once — every agent interaction streams live into the
-            Agentronics dashboard. Complete visibility into non-human traffic.
+            Every agent sign-in streams into the Agentronics console — who the agent is, how it proved
+            it, and what your rules let it do.
           </motion.p>
         </motion.div>
 
