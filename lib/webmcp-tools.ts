@@ -10,7 +10,9 @@ import {
   MATRIX,
   PRODUCT_OVERVIEW,
   DOCS_LINKS,
+  MAA_DEFINITION,
   YEARLY_DISCOUNT_PCT,
+  formatPrice,
   type PlanId,
   type PlanInfo,
 } from "@/lib/catalog";
@@ -21,8 +23,12 @@ function result(text: string, structuredContent?: unknown): McpToolResult {
 }
 
 function priceLabel(p: PlanInfo): string {
-  if (p.priceMonthly === null) return "Custom (contact sales)";
-  return `$${p.priceMonthly}/mo (billed yearly $${p.priceYearly}/yr, ${YEARLY_DISCOUNT_PCT}% off)`;
+  if (!p.prices) return "Custom (contact sales)";
+  if (p.prices.monthly === 0) return "Free";
+  return (
+    `${formatPrice(p.prices.monthly)}/mo or ${formatPrice(p.prices.yearly)}/yr (USD);` +
+    ` yearly is ${YEARLY_DISCOUNT_PCT}% off`
+  );
 }
 
 function planPublic(p: PlanInfo) {
@@ -30,9 +36,8 @@ function planPublic(p: PlanInfo) {
     id: p.id,
     name: p.name,
     tagline: p.tagline,
-    priceMonthly: p.priceMonthly,
-    priceYearly: p.priceYearly,
-    currency: "USD",
+    monthlyActiveAgents: p.maa,
+    prices: p.prices,
     cta: p.cta,
     highlights: p.highlights.filter((h) => !h.endsWith("plus:")),
   };
@@ -57,13 +62,14 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "get_pricing",
       description:
-        "Get Agentronics pricing: all plans with monthly and yearly prices (USD) and headline features. Yearly billing is 16% off.",
+        "Get Agentronics pricing: plans priced by monthly active agents (MAA), with monthly and yearly prices in USD and headline features. Yearly billing is 16% off.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute() {
         const lines = PLANS.map((p) => `• ${p.name} — ${priceLabel(p)}: ${p.tagline}`).join("\n");
-        return result(`Agentronics plans:\n${lines}`, {
+        return result(`Agentronics plans (${MAA_DEFINITION}):\n${lines}`, {
           currency: "USD",
           yearlyDiscountPct: YEARLY_DISCOUNT_PCT,
+          maaDefinition: MAA_DEFINITION,
           plans: PLANS.map(planPublic),
         });
       },
@@ -71,61 +77,47 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "recommend_plan",
       description:
-        "Recommend the best-fit Agentronics plan from a customer's needs (monthly agent request volume and which governance features they need), with the price and the reasons.",
+        "Recommend the best-fit Agentronics plan from a site's expected monthly active agents (unique agent identities per month) and the authentication features it needs, with the price and the reasons.",
       inputSchema: {
         type: "object",
         properties: {
-          monthlyAgentRequests: {
+          monthlyActiveAgents: {
             type: "number",
-            description: "Expected agent requests per month.",
+            description: "Expected unique agent identities authenticating per month.",
           },
-          needSSO: { type: "boolean", description: "Requires SSO / SAML." },
-          needAuthz: {
+          needOAuth2: { type: "boolean", description: "Agents authenticate with OAuth2 client-credentials tokens." },
+          needWebhooks: { type: "boolean", description: "Webhooks for agent sign-in events." },
+          needEnterpriseIdentity: {
             type: "boolean",
-            description: "Requires scoped authorization (per-agent permissions).",
+            description: "Agent identity via SSO/OIDC, SPIFFE or mTLS.",
           },
-          needMemory: {
-            type: "boolean",
-            description: "Requires agent memory & context transfer across sessions.",
-          },
-          dataSources: {
-            description: 'Number of connected data sources, or "all".',
-            oneOf: [{ type: "number" }, { type: "string", enum: ["all"] }],
-          },
+          needSla: { type: "boolean", description: "Contractual uptime SLA or SAML SSO for the team." },
         },
         additionalProperties: false,
       },
       execute(args) {
-        const reqs = typeof args.monthlyAgentRequests === "number" ? args.monthlyAgentRequests : 0;
-        const needSSO = args.needSSO === true;
-        const needAuthz = args.needAuthz === true;
-        const needMemory = args.needMemory === true;
-        const wantsAll =
-          args.dataSources === "all" ||
-          (typeof args.dataSources === "number" && args.dataSources > 1);
-
+        const maa = typeof args.monthlyActiveAgents === "number" ? args.monthlyActiveAgents : 0;
         const reasons: string[] = [];
         let id: PlanId;
-        if (needSSO || reqs > 1_000_000) {
+        if (args.needSla === true || maa > 50_000) {
+          id = "enterprise";
+          if (args.needSla === true) reasons.push("An SLA and SAML SSO are Enterprise features.");
+          if (maa > 50_000) reasons.push("Over 50,000 monthly active agents needs custom volume.");
+        } else if (args.needEnterpriseIdentity === true || maa > 10_000) {
           id = "business";
-          if (needSSO) reasons.push("SSO / SAML is Business-only.");
-          if (reqs > 1_000_000) reasons.push("Over 1M requests/mo exceeds Team's included volume.");
-        } else if (needAuthz || needMemory || wantsAll || reqs > 25_000) {
-          id = "team";
-          if (needAuthz) reasons.push("Scoped authorization starts at Team.");
-          if (needMemory) reasons.push("Agent memory & context transfer starts at Team.");
-          if (wantsAll) reasons.push("Multiple / all data sources start at Team.");
-          if (reqs > 25_000) reasons.push("Over 25K requests/mo exceeds Starter's included volume.");
+          if (args.needEnterpriseIdentity === true) reasons.push("SSO/OIDC, SPIFFE and mTLS agent identity start at Business.");
+          if (maa > 10_000) reasons.push("Over 10,000 monthly active agents exceeds Pro.");
+        } else if (args.needOAuth2 === true || args.needWebhooks === true || maa > 1_000) {
+          id = "pro";
+          if (args.needOAuth2 === true) reasons.push("OAuth2 agent tokens start at Pro.");
+          if (args.needWebhooks === true) reasons.push("Webhooks start at Pro.");
+          if (maa > 1_000) reasons.push("Over 1,000 monthly active agents exceeds Free.");
         } else {
-          id = "starter";
-          reasons.push("Single source, core SDK + governance, and volume within 25K/mo fit Starter.");
+          id = "free";
+          reasons.push("Up to 1,000 monthly active agents with Web Bot Auth, verified crawlers and agent API keys fits Free.");
         }
-
         const plan = planById(id);
-        const text =
-          `Recommended plan: ${plan.name} — ${priceLabel(plan)}.\n` +
-          `Why: ${reasons.join(" ")}`;
-        return result(text, {
+        return result(`Recommended plan: ${plan.name} — ${priceLabel(plan)}.\nWhy: ${reasons.join(" ")}`, {
           recommendedPlanId: id,
           plan: planPublic(plan),
           reasons,
@@ -157,12 +149,12 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "get_product_overview",
       description:
-        "Explain what Agentronics is, what WebMCP is, what the SDK does, and how it works in three steps.",
+        "Explain what Agentronics is (authentication for AI agents), which authentication methods it supports, and how a verification works in three steps.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute() {
         const o = PRODUCT_OVERVIEW;
         const steps = o.howItWorks.map((s, i) => `${i + 1}. ${s.title} — ${s.body}`).join("\n");
-        const text = `${o.name}: ${o.what}\n\nWebMCP: ${o.webmcp}\n\nSDK: ${o.sdk}\n\nHow it works:\n${steps}`;
+        const text = `${o.name}: ${o.what}\n\nMethods: ${o.methods.join(", ")}.\n\nSDK: ${o.sdk}\n\nHow it works:\n${steps}`;
         return result(text, o);
       },
     },
@@ -180,13 +172,16 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
       },
       execute(args) {
         const q = String(args.query ?? "").toLowerCase().trim();
-        const terms = q.split(/\s+/).filter(Boolean);
+        const STOP = new Set(["how", "do", "i", "a", "an", "the", "to", "my", "is", "can", "what", "with", "for", "of", "on", "in", "and", "or"]);
+        const terms = q.split(/[^a-z0-9.-]+/).filter((t) => t.length > 1 && !STOP.has(t));
+        const hay = (d: (typeof DOCS_LINKS)[number]) => `${d.title} ${d.summary} ${d.keywords.join(" ")}`.toLowerCase();
+        // Rarer terms count more (IDF): "googlebot" outweighs "verify", which is on most pages.
+        const idf = (t: string) => Math.log(1 + DOCS_LINKS.length / (1 + DOCS_LINKS.filter((d) => hay(d).includes(t)).length));
         const scored = DOCS_LINKS.map((doc) => {
-          const hay = `${doc.title} ${doc.summary} ${doc.keywords.join(" ")}`.toLowerCase();
           let score = 0;
           for (const t of terms) {
-            if (doc.keywords.some((k) => k.includes(t))) score += 3;
-            else if (hay.includes(t)) score += 1;
+            if (doc.keywords.some((k) => k.includes(t))) score += 3 * idf(t);
+            else if (hay(doc).includes(t)) score += idf(t);
           }
           return { doc, score };
         })

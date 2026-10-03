@@ -1,30 +1,27 @@
 "use client";
 
-import {
-  LayoutDashboard, Bot, Activity, Wrench, ShieldCheck, ScrollText, Search, Download,
-} from "lucide-react";
+import { LayoutDashboard, Bot, ScrollText, KeyRound, Code2, Search } from "lucide-react";
 import { Logomark } from "@/components/ui/Logo";
 import { cn } from "@/lib/cn";
 
 /**
- * Agentronics governance dashboard mock (Alytics-style layout: sidebar + KPI row
- * + agents list + traffic chart + bottom widgets). Token-driven so it follows
- * the theme. Static, illustrative numbers.
+ * Agentronics console mock — mirrors the real console's sections (Overview,
+ * Agents, Auth logs, Configure). Token-driven so it follows the theme. Static,
+ * illustrative numbers.
  */
 const NAV = [
-  { label: "Dashboard", Icon: LayoutDashboard, active: true },
+  { label: "Overview", Icon: LayoutDashboard, active: true },
   { label: "Agents", Icon: Bot },
-  { label: "Traffic", Icon: Activity },
-  { label: "Tools", Icon: Wrench },
-  { label: "Policies", Icon: ShieldCheck },
-  { label: "Audit log", Icon: ScrollText },
+  { label: "Auth logs", Icon: ScrollText },
+  { label: "Authentication", Icon: KeyRound },
+  { label: "API keys", Icon: Code2 },
 ];
 
-const AGENTS = [
-  { name: "GPTBot", org: "OpenAI", verified: true, active: true },
-  { name: "ClaudeBot", org: "Anthropic", verified: true },
-  { name: "PerplexityBot", org: "Perplexity", verified: true },
-  { name: "Bingbot", org: "Microsoft", verified: false },
+const AGENTS: { name: string; org: string; status: "verified" | "unverified"; active?: boolean }[] = [
+  { name: "ChatGPT agent", org: "Web Bot Auth", status: "verified", active: true },
+  { name: "Googlebot", org: "Verified crawler", status: "verified" },
+  { name: "Booking agent", org: "API key", status: "verified" },
+  { name: "Googlebot", org: "Spoofed · rdns_mismatch", status: "unverified" },
 ];
 
 export function Dashboard() {
@@ -70,9 +67,9 @@ export function Dashboard() {
         <div className="p-4">
           {/* KPI row */}
           <div className="grid grid-cols-3 gap-3">
-            <Kpi label="Agent sessions" value="62,000+" sub="Up vs last week" tone="up" />
-            <Kpi label="Verified rate" value="94%" sub="94 of 100 agents verified" tone="up" />
-            <Gauge label="Govern goal" pct={84} />
+            <Kpi label="Monthly active agents" value="8,412" sub="of 10,000 on Pro" tone="up" />
+            <Kpi label="Verified rate" value="94%" sub="of agent sign-ins · 7d" tone="up" />
+            <Gauge label="Plan usage" pct={84} />
           </div>
 
           {/* middle: agents + chart */}
@@ -80,13 +77,13 @@ export function Dashboard() {
             {/* agents list */}
             <div className="rounded-lg border border-border p-3">
               <div className="flex items-center justify-between">
-                <p className="text-xs font-semibold text-content">Top agents</p>
-                <span className="text-[10px] text-content-muted">Sort by traffic</span>
+                <p className="text-xs font-semibold text-content">Recently active agents</p>
+                <span className="text-[10px] text-content-muted">Last seen</span>
               </div>
               <ul className="mt-2 space-y-1.5">
                 {AGENTS.map((a) => (
                   <li
-                    key={a.name}
+                    key={a.name + a.org}
                     className={cn(
                       "flex items-center gap-2 rounded-md px-2 py-1.5",
                       a.active && "bg-brand-soft",
@@ -102,12 +99,12 @@ export function Dashboard() {
                     <span
                       className="rounded-pill px-1.5 py-0.5 text-[9px] font-medium"
                       style={
-                        a.verified
+                        a.status === "verified"
                           ? { background: "var(--success-bg)", color: "var(--success)" }
                           : { background: "var(--warning-bg)", color: "var(--warning)" }
                       }
                     >
-                      {a.verified ? "Verified" : "Detected"}
+                      {a.status === "verified" ? "Verified" : "Unverified"}
                     </span>
                   </li>
                 ))}
@@ -117,14 +114,14 @@ export function Dashboard() {
             {/* traffic chart */}
             <div className="rounded-lg border border-border p-3">
               <div className="flex items-center justify-between">
-                <p className="text-xs font-semibold text-content">Agent traffic</p>
+                <p className="text-xs font-semibold text-content">Agent sign-ins</p>
                 <span className="text-[10px] text-content-muted">Monthly</span>
               </div>
               <AreaChart />
               <div className="mt-2 grid grid-cols-3 gap-2 text-[10px]">
-                <Mini label="Peak month" value="November" accent />
-                <Mini label="Peak year" value="2026" />
-                <Mini label="Top tool" value="getOrders" />
+                <Mini label="Top method" value="Web Bot Auth" accent />
+                <Mini label="Unverified" value="4.8%" />
+                <Mini label="Verified" value="95.2%" />
               </div>
             </div>
           </div>
@@ -132,21 +129,21 @@ export function Dashboard() {
           {/* bottom widgets */}
           <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
             <div className="rounded-lg border border-border p-3">
-              <p className="text-xs font-semibold text-content">Tool calls</p>
+              <p className="text-xs font-semibold text-content">Verified sign-ins</p>
               <p className="mt-1 font-mono text-lg font-extrabold text-content">1.2M</p>
-              <p className="text-[10px] text-content-muted">across 8 governed tools</p>
+              <p className="text-[10px] text-content-muted">across 5 methods · 30d</p>
             </div>
             <div className="rounded-lg border border-border p-3">
-              <p className="text-xs font-semibold text-content">Top regions</p>
+              <p className="text-xs font-semibold text-content">By method</p>
               <div className="mt-2 space-y-1.5">
-                <Bar label="US" pct={86} />
-                <Bar label="EU" pct={52} />
+                <Bar label="WBA" pct={86} />
+                <Bar label="DNS" pct={52} />
               </div>
             </div>
             <div className="rounded-lg border border-border p-3">
-              <p className="text-xs font-semibold text-content">New integrations</p>
+              <p className="text-xs font-semibold text-content">Methods on</p>
               <div className="mt-2 flex flex-wrap gap-1">
-                {["Postgres", "REST API", "Webhooks"].map((t) => (
+                {["Web Bot Auth", "Crawlers", "API keys"].map((t) => (
                   <span
                     key={t}
                     className="rounded-pill bg-surface-raised px-2 py-0.5 text-[10px] text-content-secondary"
@@ -227,7 +224,7 @@ function Mini({ label, value, accent }: { label: string; value: string; accent?:
 function Bar({ label, pct }: { label: string; pct: number }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="w-5 text-[10px] text-content-muted">{label}</span>
+      <span className="w-7 text-[10px] text-content-muted">{label}</span>
       <div className="h-1.5 flex-1 overflow-hidden rounded-pill bg-surface-raised">
         <div className="h-full rounded-pill bg-brand" style={{ width: `${pct}%` }} />
       </div>

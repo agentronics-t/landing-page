@@ -2,31 +2,61 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, Check, Minus, Rocket, Users } from "lucide-react";
+import { Building2, Check, Minus, Rocket, Sparkles, Users } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
 import { cn } from "@/lib/cn";
-import { PLANS, MATRIX, type Cell, type PlanId, type PlanInfo } from "@/lib/catalog";
+import {
+  MAA_DEFINITION,
+  MATRIX,
+  PLANS,
+  YEARLY_DISCOUNT_PCT,
+  formatPrice,
+  type Cell,
+  type Cycle,
+  type PlanId,
+  type PlanInfo,
+} from "@/lib/catalog";
 
 /**
- * Pricing (spec: UI/pricing-page.md). Plan + matrix data lives in lib/catalog
- * (shared with the WebMCP `get_pricing` / `compare_features` tools, so an agent
- * can never disagree with the page). Agentronics is one product now — every
- * plan includes SDK / WebMCP serving. Center-anchor strategy: Team is the
- * conversion target — centered, "Most popular", dark surface + indigo glow,
- * and the only solid CTA. Self-serve CTAs → /sign-up; Contact sales → /book.
+ * Pricing — Monthly Active Agent (MAA) tiers. Plan + matrix data lives in
+ * lib/catalog (shared with the WebMCP pricing tools, so an agent can never
+ * disagree with the page). Pro is the conversion target: centred emphasis and
+ * the only solid CTA. All prices are USD. Paid plans check out in the console (Razorpay) at
+ * <console>/billing; Free → sign-up; Enterprise → /book.
  */
 
 const ICONS: Record<PlanId, typeof Rocket> = {
-  starter: Rocket,
-  team: Users,
-  business: Building2,
+  free: Sparkles,
+  pro: Rocket,
+  business: Users,
+  enterprise: Building2,
 };
+
+/** Console origin for checkout, from NEXT_PUBLIC_DASHBOARD_URL (any path on it). */
+function consoleOrigin(): string | null {
+  const raw = process.env.NEXT_PUBLIC_DASHBOARD_URL;
+  if (!raw) return null;
+  try {
+    return new URL(raw).origin;
+  } catch {
+    return null;
+  }
+}
+
+function ctaHref(plan: PlanInfo, cycle: Cycle): string {
+  if (plan.id === "enterprise") return "/book";
+  if (plan.id === "free") return "/sign-up";
+  const origin = consoleOrigin();
+  if (!origin) return "/sign-up";
+  const q = new URLSearchParams({ plan: plan.id, cycle });
+  return `${origin}/billing?${q.toString()}`;
+}
 
 /* --------------------------------- section -------------------------------- */
 
 export function Pricing() {
-  const [yearly, setYearly] = useState(false);
+  const [cycle, setCycle] = useState<Cycle>("monthly");
 
   return (
     <section
@@ -38,38 +68,45 @@ export function Pricing() {
         <h2 className="text-3xl font-bold tracking-display text-content md:text-4xl">
           Pricing that grows with your agent traffic
         </h2>
+        <p className="mx-auto mt-4 max-w-[620px] text-pretty text-lg text-content-secondary">
+          Pay for the agents that authenticate, not for your human visitors. Start free — upgrade
+          when agents become a real share of your traffic.
+        </p>
 
-        {/* Monthly / Yearly toggle */}
-        <div className="mt-8 inline-flex items-center gap-1 rounded-pill border border-border bg-surface p-1">
-          <SegBtn active={!yearly} onClick={() => setYearly(false)}>
-            Monthly
-          </SegBtn>
-          <SegBtn active={yearly} onClick={() => setYearly(true)}>
-            <span className="flex items-center gap-2">
-              Yearly
-              <span className="rounded-pill bg-brand-soft px-1.5 py-0.5 font-mono text-xs text-brand">
-                16% off
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {/* Monthly / Yearly */}
+          <div className="inline-flex items-center gap-1 rounded-pill border border-border bg-surface p-1">
+            <SegBtn active={cycle === "monthly"} onClick={() => setCycle("monthly")}>
+              Monthly
+            </SegBtn>
+            <SegBtn active={cycle === "yearly"} onClick={() => setCycle("yearly")}>
+              <span className="flex items-center gap-2">
+                Yearly
+                <span className="rounded-pill bg-brand-soft px-1.5 py-0.5 font-mono text-xs text-brand">
+                  {YEARLY_DISCOUNT_PCT}% off
+                </span>
               </span>
-            </span>
-          </SegBtn>
+            </SegBtn>
+          </div>
         </div>
       </div>
 
-      {/* plan cards — Team centered + dominant */}
+      {/* plan cards — Pro dominant */}
       <motion.div
         variants={stagger}
         initial="hidden"
         whileInView="show"
         viewport={inViewOnce}
-        className="mx-auto mt-12 grid max-w-[1040px] grid-cols-1 gap-5 md:grid-cols-3"
+        className="mx-auto mt-12 grid max-w-[1240px] grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4"
       >
         {PLANS.map((plan) => (
-          <PlanCard key={plan.id} plan={plan} yearly={yearly} />
+          <PlanCard key={plan.id} plan={plan} cycle={cycle} />
         ))}
       </motion.div>
 
-      <p className="mt-6 text-center text-sm text-content-muted">
-        Prices in USD. Annual billing saves 16%.
+      <p className="mx-auto mt-6 max-w-[720px] text-center text-sm text-content-muted">
+        {MAA_DEFINITION} Prices are in US dollars and exclude applicable taxes. Payments are processed securely by
+        Razorpay.
       </p>
 
       {/* feature comparison matrix */}
@@ -100,7 +137,9 @@ function SegBtn({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={cn(
         "rounded-pill px-4 py-1.5 text-base transition-colors focus-ring",
         active ? "bg-content text-surface" : "text-content-secondary hover:text-content",
@@ -113,10 +152,11 @@ function SegBtn({
 
 /* ---------------------------------- cards --------------------------------- */
 
-function PlanCard({ plan, yearly }: { plan: PlanInfo; yearly: boolean }) {
+function PlanCard({ plan, cycle }: { plan: PlanInfo; cycle: Cycle }) {
   const dark = !!plan.highlighted;
-  const price = plan.priceMonthly === null ? null : yearly ? plan.priceYearly : plan.priceMonthly;
   const Icon = ICONS[plan.id];
+  const price = plan.prices ? plan.prices[cycle] : null;
+  const perMonthYearly = plan.prices && cycle === "yearly" && price ? Math.round(price / 12) : null;
 
   return (
     <motion.div
@@ -152,7 +192,7 @@ function PlanCard({ plan, yearly }: { plan: PlanInfo; yearly: boolean }) {
       <h3 className={cn("mt-4 text-xl font-bold", dark ? "text-white" : "text-content")}>
         {plan.name}
       </h3>
-      <p className={cn("mt-1 text-base", dark ? "text-[#b6bcca]" : "text-content-secondary")}>
+      <p className={cn("mt-1 min-h-12 text-base", dark ? "text-[#b6bcca]" : "text-content-secondary")}>
         {plan.tagline}
       </p>
 
@@ -164,40 +204,43 @@ function PlanCard({ plan, yearly }: { plan: PlanInfo; yearly: boolean }) {
             dark ? "text-white" : "text-content",
           )}
         >
-          {price === null ? "Custom" : `$${price.toLocaleString("en-US")}`}
+          {price === null ? "Custom" : formatPrice(price)}
         </span>
-        {price !== null && (
+        {price !== null && price > 0 && (
           <span className={cn("mb-1 text-base", dark ? "text-[#8b93a4]" : "text-content-muted")}>
-            /{yearly ? "year" : "month"}
+            /{cycle === "yearly" ? "year" : "month"}
           </span>
         )}
       </div>
+      <p className={cn("mt-1 min-h-5 text-sm", dark ? "text-[#8b93a4]" : "text-content-muted")}>
+        {perMonthYearly !== null
+          ? `${formatPrice(perMonthYearly)}/month, billed yearly`
+          : price === 0
+            ? "Free forever"
+            : ""}
+      </p>
 
-      {/* CTA — Team is the only solid action; rails recede */}
-      <div className="mt-6">
-        {plan.id === "business" ? (
-          <ButtonLink href="/book" variant="ghost" fullWidth onDark={dark}>
-            {plan.cta}
-          </ButtonLink>
-        ) : (
-          <ButtonLink href="/sign-up" variant={dark ? "primary" : "ghost"} fullWidth glow={dark}>
-            {plan.cta}
-          </ButtonLink>
-        )}
+      {/* CTA — Pro is the only solid action; the rest recede */}
+      <div className="mt-5">
+        <ButtonLink
+          href={ctaHref(plan, cycle)}
+          prefetch={false}
+          variant={dark ? "primary" : "ghost"}
+          fullWidth
+          glow={dark}
+          onDark={dark}
+        >
+          {plan.cta}
+        </ButtonLink>
       </div>
 
       {/* highlights */}
       <ul className="mt-7 space-y-3.5">
-        {plan.highlights.map((item) => {
-          // A lead-in label ("Everything in Starter, plus:") renders as a
-          // muted sub-heading; everything else is a green-check feature.
-          return item.endsWith("plus:") ? (
+        {plan.highlights.map((item) =>
+          item.endsWith("plus:") ? (
             <li
               key={item}
-              className={cn(
-                "text-sm font-medium",
-                dark ? "text-white/60" : "text-content-muted",
-              )}
+              className={cn("text-sm font-medium", dark ? "text-white/60" : "text-content-muted")}
             >
               {item}
             </li>
@@ -214,8 +257,8 @@ function PlanCard({ plan, yearly }: { plan: PlanInfo; yearly: boolean }) {
                 {item}
               </span>
             </li>
-          );
-        })}
+          ),
+        )}
       </ul>
     </motion.div>
   );
@@ -248,7 +291,7 @@ function CellValue({ value }: { value: Cell }) {
 function ComparisonTable() {
   return (
     <div className="mt-8 overflow-x-auto rounded-xl border border-border bg-surface">
-      <table className="w-full min-w-[640px] border-collapse text-left">
+      <table className="w-full min-w-[760px] border-collapse text-left">
         <thead>
           <tr className="border-b border-border">
             <th scope="col" className="px-5 py-4 text-sm font-medium text-content-muted">
@@ -273,7 +316,7 @@ function ComparisonTable() {
             <tr className="border-b border-border bg-surface-raised">
               <th
                 scope="rowgroup"
-                colSpan={4}
+                colSpan={PLANS.length + 1}
                 className="px-5 py-2.5 font-mono text-xs uppercase tracking-caps text-content-muted"
               >
                 {group.group}

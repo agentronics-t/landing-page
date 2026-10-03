@@ -5,7 +5,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: "Product",
     links: [
-      { label: "SDK & WebMCP", href: "/" },
+      { label: "Agent authentication", href: "/" },
       { label: "Docs", href: "/docs" },
       { label: "Pricing", href: "/pricing" },
     ],
@@ -39,7 +39,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Logo size={26} href="/" />
             <p className="mt-4 max-w-[220px] text-sm text-content-secondary">
-              Engineered for technical rigor.
+              Authentication for AI agents.
             </p>
             <p className="mt-6 text-sm text-content-muted">
               © 2026 Agentronics. All rights reserved.

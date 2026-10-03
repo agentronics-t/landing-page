@@ -6,143 +6,202 @@
  * human sees on the pricing page. Update pricing here.
  */
 
-export type PlanId = "starter" | "team" | "business";
+export type PlanId = "free" | "pro" | "business" | "enterprise";
+export type Cycle = "monthly" | "yearly";
 export type Cell = boolean | string;
 
-export const YEARLY_DISCOUNT_PCT = 16;
+export const YEARLY_DISCOUNT_PCT = 16; // yearly = 10 × monthly
+/** All prices are in US dollars. */
+export const CURRENCY = "USD";
+
+export interface PlanPrice {
+  monthly: number;
+  yearly: number;
+}
 
 export interface PlanInfo {
   id: PlanId;
   name: string;
   tagline: string;
-  priceMonthly: number | null; // null = custom / contact sales
-  priceYearly: number | null;
+  /** Monthly active agents included; null = custom. */
+  maa: number | null;
+  /** USD. null = custom / contact sales. Free is { monthly: 0, yearly: 0 }. */
+  prices: PlanPrice | null;
   cta: string;
   highlighted?: boolean;
   badge?: string;
-  /** A string ending in "plus:" is a lead-in label (e.g. "Everything in Starter, plus:"). */
+  /** A string ending in "plus:" is a lead-in label (e.g. "Everything in Free, plus:"). */
   highlights: string[];
 }
 
+/**
+ * Monthly active agent (MAA): a unique agent identity — a Web Bot Auth signer,
+ * agent API key, OAuth client or verified crawler — that authenticates at least
+ * once in a calendar month. Human visitors are free and unlimited.
+ */
+export const MAA_DEFINITION =
+  "A monthly active agent is a unique agent identity — a signer, API key, OAuth client or verified crawler — that authenticates at least once in a month. Human visitors are always free.";
+
 export const PLANS: PlanInfo[] = [
   {
-    id: "starter",
-    name: "Starter",
-    tagline: "Serve and govern agents on a single source.",
-    priceMonthly: 49,
-    priceYearly: 490,
-    cta: "Get started",
+    id: "free",
+    name: "Free",
+    tagline: "Authenticate your first agents.",
+    maa: 1_000,
+    prices: { monthly: 0, yearly: 0 },
+    cta: "Start free",
     highlights: [
-      "SDK + WebMCP tool serving",
-      "1 connected data source",
-      "Agent detection & basic authentication",
-      "Basic observability & analytics",
-      "25K agent requests / mo",
+      "1,000 monthly active agents",
+      "Web Bot Auth, verified crawlers & agent API keys",
+      "WebMCP & browser agents",
+      "Unlimited human visitors",
+      "7-day auth logs",
       "Community support",
     ],
   },
   {
-    id: "team",
-    name: "Team",
-    tagline: "Full governance for growing agent traffic.",
-    priceMonthly: 199,
-    priceYearly: 1990,
-    cta: "Start free trial",
+    id: "pro",
+    name: "Pro",
+    tagline: "For products agents already use.",
+    maa: 10_000,
+    prices: { monthly: 25, yearly: 250 },
+    cta: "Upgrade to Pro",
     highlighted: true,
     badge: "Most popular",
     highlights: [
-      "Everything in Starter, plus:",
-      "All data sources connected",
-      "Full auth, authz, memory & context",
-      "Full observability & audit trail",
-      "1M agent requests / mo",
+      "Everything in Free, plus:",
+      "10,000 monthly active agents",
+      "OAuth2 agent tokens",
+      "Webhooks",
+      "30-day auth logs",
       "Email support",
     ],
   },
   {
     id: "business",
     name: "Business",
-    tagline: "Enterprise-grade for established platforms.",
-    priceMonthly: null,
-    priceYearly: null,
+    tagline: "Enterprise-grade agent identity.",
+    maa: 50_000,
+    prices: { monthly: 99, yearly: 990 },
+    cta: "Upgrade to Business",
+    highlights: [
+      "Everything in Pro, plus:",
+      "50,000 monthly active agents",
+      "SSO/OIDC, SPIFFE & mTLS agent identity",
+      "90-day auth logs & audit export",
+      "20 team members",
+      "Priority support",
+    ],
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    tagline: "Custom volume, SLA and deployment.",
+    maa: null,
+    prices: null,
     cta: "Contact sales",
     highlights: [
-      "Everything in Team, plus:",
-      "Unlimited volume + licensed data enrichment",
-      "SSO / SAML + audit-grade export",
-      "SLA + dedicated onboarding",
-      "Custom data retention",
-      "Dedicated support + Slack",
+      "Everything in Business, plus:",
+      "Custom agent volume",
+      "SAML SSO for your team",
+      "99.9% uptime SLA",
+      "Dedicated support & onboarding",
+      "Private deployment options",
     ],
   },
 ];
 
 export interface MatrixGroup {
   group: string;
-  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
+  rows: { label: string; tip?: string; values: [Cell, Cell, Cell, Cell] }[];
 }
 
-export const DETECTION_TIP =
-  "Detection lanes: WebMCP-native (navigator.modelContext), Web Bot Auth–signed agents, and stealth Chromium fingerprinting.";
+export const WEB_BOT_AUTH_TIP =
+  "Cryptographically signed agent requests (IETF Web Bot Auth / RFC 9421) — how OpenAI's ChatGPT agent and other signed agents prove who they are.";
+export const CRAWLER_TIP =
+  "Search and AI crawlers verified by forward-confirmed reverse DNS, so a spoofed user agent never passes as Googlebot.";
 
 export const MATRIX: MatrixGroup[] = [
   {
-    group: "SDK & governance",
+    group: "Usage",
     rows: [
-      { label: "SDK / WebMCP tool serving", values: [true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
-      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
+      { label: "Monthly active agents", values: ["1,000", "10,000", "50,000", "Custom"] },
+      { label: "Sites", values: ["1", "3", "10", "Unlimited"] },
+      { label: "Auth log retention", values: ["7 days", "30 days", "90 days", "Custom"] },
+      { label: "Team members", values: ["1", "5", "20", "Unlimited"] },
     ],
   },
   {
-    group: "Measurement & analytics",
+    group: "Authentication methods",
     rows: [
-      { label: "Agent traffic measurement", values: [true, true, true] },
-      {
-        label: "Connected data sources",
-        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
-      },
-      { label: "Analytics dashboard", values: ["Basic", "Full", "Full"] },
+      { label: "Web Bot Auth (signed agents)", tip: WEB_BOT_AUTH_TIP, values: [true, true, true, true] },
+      { label: "Verified crawlers", tip: CRAWLER_TIP, values: [true, true, true, true] },
+      { label: "Agent API keys", values: [true, true, true, true] },
+      { label: "WebMCP & browser agents", values: [true, true, true, true] },
+      { label: "OAuth2 agent tokens", values: [false, true, true, true] },
+      { label: "SSO / OIDC agent identity", values: [false, false, true, true] },
+      { label: "SPIFFE & mTLS", values: [false, false, true, true] },
     ],
   },
   {
-    group: "Platform",
+    group: "Logs & integrations",
     rows: [
-      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["2", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, true] },
-      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
+      { label: "Verified identity forwarded to your app", values: [true, true, true, true] },
+      { label: "Auth logs & sessions", values: [true, true, true, true] },
+      { label: "Webhooks", values: [false, true, true, true] },
+      { label: "Audit log export", values: [false, false, true, true] },
+    ],
+  },
+  {
+    group: "Support",
+    rows: [
+      { label: "Support", values: ["Community", "Email", "Priority", "Dedicated"] },
+      { label: "Uptime SLA", values: [false, false, false, "99.9%"] },
+      { label: "SAML SSO for your team", values: [false, false, false, true] },
     ],
   },
 ];
+
+/** Format a USD price for display, e.g. "$25". */
+export function formatPrice(amount: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: CURRENCY,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
 
 /* ------------------------------ product overview ------------------------------ */
 
 export const PRODUCT_OVERVIEW = {
   name: "Agentronics",
-  tagline: "Stop losing agent traffic. Make your site agent-native.",
-  what: "Agentronics is developer-facing infrastructure for the agent web: a WebMCP SDK that lets your site serve structured, governed tools to AI agents, plus a dashboard that governs and observes that traffic.",
+  tagline: "Authentication for AI agents. Know which agents are real.",
+  what: "Agentronics is authentication for AI agents: it verifies every agent on your site — signed agents, crawlers, API agents and browser agents — with any method. It never blocks: agents that don't authenticate browse the site as normal. A middleware does the verification; a console shows every agent sign-in.",
   webmcp:
-    "WebMCP is the emerging browser standard (navigator.modelContext) that lets a page expose typed tools to the AI agents that visit it — so agents call your capabilities directly instead of scraping the DOM.",
-  sdk: "The Agentronics SDK installs via npm or a script tag, auto-detects your site, and lets you declare your capabilities as typed WebMCP tools in a few lines.",
+    "WebMCP (navigator.modelContext) lets a page expose typed tools to visiting agents. Agentronics authenticates WebMCP and other in-page agents with its browser SDK, alongside the server middleware for agents that never run your JavaScript.",
+  sdk: "The Agentronics SDK is Apache-2.0. `@agentronics/sdk/server` and `@agentronics/sdk/next` add agent-authentication middleware for Next.js, Express and any Fetch runtime; the browser SDK covers in-page agents.",
+  methods: [
+    "Web Bot Auth (RFC 9421 signed requests)",
+    "Agent API keys",
+    "Verified crawlers (forward-confirmed reverse DNS)",
+    "OAuth2 client-credentials tokens",
+    "SSO / OIDC",
+    "SPIFFE",
+    "mTLS",
+    "WebMCP & browser agents",
+  ],
   howItWorks: [
     {
-      title: "Expose tools",
-      body: "Declare your site's capabilities as typed WebMCP tools — products, orders, bookings — in a few lines of SDK code.",
+      title: "The agent presents proof",
+      body: "A signed request, an API key, an OAuth2 token — or just a user agent claiming to be a crawler.",
     },
     {
-      title: "Agents load context",
-      body: "Visiting agents discover your tools and load them straight into context. No scraping, no guessing, no broken cursors.",
+      title: "Agentronics verifies it",
+      body: "Signatures against the signer's published keys, tokens against your issuer, crawler claims against reverse DNS.",
     },
     {
-      title: "Act in milliseconds",
-      body: "Agents call tools directly and complete tasks on your site in under 10ms — structured, governed, and fully logged.",
+      title: "Your app knows who it is",
+      body: "Verified agents reach your routes with their identity attached. Everyone else browses as normal — nothing is blocked.",
     },
   ],
   links: {
@@ -165,51 +224,57 @@ export interface DocLink {
 
 export const DOCS_LINKS: DocLink[] = [
   {
-    title: "Getting started",
-    path: "/docs",
-    summary: "Install the SDK, connect your site, and serve your first WebMCP tool.",
-    keywords: ["start", "getting started", "install", "setup", "quickstart", "begin"],
+    title: "Quickstart",
+    path: "/docs/getting-started",
+    summary: "Add the middleware and verify your first agent in five minutes.",
+    keywords: ["start", "getting started", "quickstart", "install", "setup", "begin", "middleware"],
   },
   {
-    title: "SDK installation",
-    path: "/docs/sdk/install",
-    summary: "Add the Agentronics SDK via npm or a script tag and initialize it.",
-    keywords: ["sdk", "install", "npm", "script tag", "init", "initialize", "package"],
+    title: "Authentication methods",
+    path: "/docs/auth/overview",
+    summary: "Every way an agent can prove who it is, by plan.",
+    keywords: ["auth", "authentication", "methods", "verify", "identity"],
   },
   {
-    title: "Defining WebMCP tools",
-    path: "/docs/webmcp/tools",
-    summary: "Declare typed tools with input schemas that agents can call.",
-    keywords: ["webmcp", "tools", "register", "schema", "navigator.modelcontext", "expose", "define"],
+    title: "Web Bot Auth",
+    path: "/docs/auth/web-bot-auth",
+    summary: "Verify cryptographically signed agent requests (RFC 9421).",
+    keywords: ["web bot auth", "signature", "signed", "rfc 9421", "http message signatures", "chatgpt"],
   },
   {
-    title: "Authentication",
-    path: "/docs/auth",
-    summary: "Verify and authenticate agents connecting to your tools.",
-    keywords: ["auth", "authentication", "verify", "web bot auth", "identity", "sign"],
+    title: "Agent API keys",
+    path: "/docs/auth/api-keys",
+    summary: "Issue keys to your agents and verify them on every request.",
+    keywords: ["api key", "keys", "agk", "token", "bearer"],
   },
   {
-    title: "Authorization & scopes",
-    path: "/docs/authz",
-    summary: "Scope exactly what each agent is permitted to reach.",
-    keywords: ["authz", "authorization", "permissions", "scopes", "access control", "rbac"],
+    title: "Verified crawlers",
+    path: "/docs/auth/verified-crawlers",
+    summary: "Tell real Googlebot from scrapers using reverse DNS.",
+    keywords: ["crawler", "googlebot", "bingbot", "bot", "reverse dns", "spoof", "user agent"],
   },
   {
-    title: "Memory & context",
-    path: "/docs/memory",
-    summary: "Carry sessions, preferences, and context across agent visits.",
-    keywords: ["memory", "context", "session", "preferences", "knaph", "state"],
+    title: "OAuth2",
+    path: "/docs/auth/oauth2",
+    summary: "Verify client-credentials tokens from your identity provider.",
+    keywords: ["oauth", "oauth2", "jwt", "token", "issuer", "scopes"],
   },
   {
-    title: "Observability & logs",
-    path: "/docs/observability",
-    summary: "Trace every agent call and audit outcomes.",
-    keywords: ["observability", "logs", "traces", "audit", "monitoring", "debug"],
+    title: "WebMCP & browser agents",
+    path: "/docs/auth/browser-agents",
+    summary: "Authenticate agents operating your pages.",
+    keywords: ["webmcp", "browser", "modelcontext", "in-page", "react"],
   },
   {
-    title: "Analytics",
-    path: "/docs/analytics",
-    summary: "Measure agent traffic and understand how agents use your site.",
-    keywords: ["analytics", "measure", "traffic", "metrics", "dashboard", "insights"],
+    title: "How it works",
+    path: "/docs/concepts/how-it-works",
+    summary: "Authenticate, pass through, record — Agentronics never blocks.",
+    keywords: ["how it works", "flow", "headers", "identity", "block", "allow", "pass through"],
+  },
+  {
+    title: "Auth logs & sessions",
+    path: "/docs/auth-logs",
+    summary: "Every agent sign-in and why it passed or failed.",
+    keywords: ["logs", "sessions", "audit", "events", "console", "dashboard"],
   },
 ];

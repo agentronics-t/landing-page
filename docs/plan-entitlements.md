@@ -1,109 +1,98 @@
 # Plan Entitlements — Source of Truth
 
-This document is the authoritative spec the backend must implement for plan
-gating: **which plan gets access to which capability**. Agentronics is one
-product — the SDK / WebMCP tooling (serving tools to agents) and the dashboard
-it feeds (governance, observability, analytics) — plus platform limits. When the
-pricing page and this document disagree, this document wins; update it in the
-same PR that changes pricing.
+This is the authoritative spec the backend implements for plan gating: **which
+plan gets which capability, and at what limits**. Agentronics is authentication
+for AI agents — it authenticates and never blocks: agents that don't
+authenticate browse the customer's site as normal. When the pricing page (`lib/catalog.ts`) and this document
+disagree, this document wins — update both in the same PR.
 
 ## Plans
 
-| Plan     | Monthly | Yearly (16% off) | Positioning |
-|----------|---------|------------------------|-------------|
-| Starter  | $49     | $490                   | Serve and govern agents on a single source. |
-| Team     | $199    | $1,990                 | Full governance for growing agent traffic. |
-| Business | Custom  | Custom                 | Enterprise-grade for established platforms. |
+All prices are in US dollars (USD only).
 
-Plan ids used everywhere in code: `"starter" | "team" | "business"`.
+| Plan       | USD / month | USD / year | Monthly active agents |
+|------------|------------:|-----------:|----------------------:|
+| Free       | 0           | 0          | 1,000                 |
+| Pro        | 25          | 250        | 10,000                |
+| Business   | 99          | 990        | 50,000                |
+| Enterprise | custom      | custom     | custom                |
 
-Every plan includes the SDK and the dashboard — there is no intelligence-only
-tier. Plans differ by scope of governance, volume, and support.
+Yearly = 10 × monthly (16% off). Plan ids: `"free" | "pro" | "business" | "enterprise"`.
+Paid self-serve plans are billed by Razorpay Subscriptions — one Razorpay plan
+per (tier, cycle), i.e. 4 USD plans (see the console's `lib/billing`).
 
-## Capability × Plan matrix
+### Monthly active agents (MAA)
 
-### SDK & governance
+A **monthly active agent** is a unique agent identity that authenticates
+successfully at least once in a calendar month (UTC). Identity =
+`metadata.subject` of an `auth.identity_presented` success event: a Web Bot
+Auth signer URL, `key:<agentId>`, `oauth2:<clientId>`, `crawler:<name>`, or a
+browser-verified subject. Unverified agents and human visitors never count.
 
-| Capability                              | Starter | Team | Business |
-|-----------------------------------------|:-------:|:----:|:--------:|
-| SDK install & site registration         | ✓       | ✓    | ✓        |
-| WebMCP tool serving                     | ✓       | ✓    | ✓        |
-| Tool management / registry              | ✓       | ✓    | ✓        |
-| Agent detection & fingerprinting        | ✓       | ✓    | ✓        |
-| Agent authentication                    | Basic   | Full | Full + SSO |
-| Authorization (scoped permissions)      | —       | ✓    | Advanced |
-| Agent memory & context transfer         | —       | ✓    | ✓        |
-| Observability & audit trail             | Basic   | Full | Audit-grade + export |
+## Capability × plan
 
-### Measurement & analytics
+### Authentication methods
 
-| Capability                              | Starter | Team | Business |
-|-----------------------------------------|:-------:|:----:|:--------:|
-| Agent-traffic measurement               | ✓       | ✓    | ✓        |
-| Analytics dashboard                     | Basic   | Full | Full     |
-| Data-source connectors                  | 1 source | All  | All + licensed enrichment |
+| Capability                           | Free | Pro | Business | Enterprise |
+|--------------------------------------|:----:|:---:|:--------:|:----------:|
+| Web Bot Auth (signed agents)          | ✓    | ✓   | ✓        | ✓          |
+| Verified crawlers (reverse DNS)       | ✓    | ✓   | ✓        | ✓          |
+| Agent API keys                        | ✓    | ✓   | ✓        | ✓          |
+| WebMCP & browser agents               | ✓    | ✓   | ✓        | ✓          |
+| OAuth2 agent tokens                   | —    | ✓   | ✓        | ✓          |
+| SSO / OIDC agent identity             | —    | —   | ✓        | ✓          |
+| SPIFFE & mTLS                         | —    | —   | ✓        | ✓          |
 
-Analytics is the dashboard view over what the SDK serves — there is nothing to
-measure until the SDK is installed and a data source is connected.
+### Logs & integrations
 
-### Platform limits
+| Capability                           | Free | Pro | Business | Enterprise |
+|--------------------------------------|:----:|:---:|:--------:|:----------:|
+| Verified identity forwarded to app    | ✓    | ✓   | ✓        | ✓          |
+| Auth logs & sessions                  | ✓    | ✓   | ✓        | ✓          |
+| Webhooks                              | —    | ✓   | ✓        | ✓          |
+| Audit log export                      | —    | —   | ✓        | ✓          |
 
-| Limit                | Starter    | Team       | Business  |
-|----------------------|:----------:|:----------:|:---------:|
-| Agent requests / mo  | 25K        | 1M         | Unlimited |
-| Data retention       | 30 days    | 90 days    | Custom    |
-| Team seats           | 2          | 10         | Unlimited |
-| SSO / SAML           | —          | —          | ✓         |
-| SLA & uptime         | —          | —          | ✓         |
-| Dedicated onboarding | —          | —          | ✓         |
-| Support              | Community  | Email      | Dedicated + Slack |
+### Limits & support
 
-SLA is **Business only**.
+| Limit                  | Free      | Pro    | Business | Enterprise |
+|------------------------|:---------:|:------:|:--------:|:----------:|
+| Monthly active agents  | 1,000     | 10,000 | 50,000   | custom     |
+| Sites                  | 1         | 3      | 10       | unlimited  |
+| Auth log retention     | 7 days    | 30 days| 90 days  | custom     |
+| Team members           | 1         | 5      | 20       | unlimited  |
+| Support                | Community | Email  | Priority | Dedicated  |
+| Uptime SLA             | —         | —      | —        | 99.9%      |
+| SAML SSO for the team  | —         | —      | —        | ✓          |
 
 ## Enforcement
 
-### Plan storage & propagation
+### Where the plan lives
 
-- Plan is stored in Clerk `publicMetadata.plan`, one of
-  `"starter" | "team" | "business"`.
-- It is mirrored into the **session JWT** (custom claim `plan`) so both the
-  Next.js middleware and the backend API gateway can read it without a DB hit.
-- The JWT is the read path for gating decisions; `publicMetadata` is the write
-  path (updated by billing webhooks). On plan change, force a token refresh so
-  the claim is current.
+- The tenant's plan is derived from `billing_subscriptions` in Neon: the most
+  recent subscription in `active`, `authenticated` or `pending` status sets the
+  plan; otherwise the tenant is on **Free**. (`pending` = a renewal charge is
+  being retried — the plan stays active during Razorpay's retry window; it
+  drops to Free when the subscription is `halted`, `cancelled`, `completed` or
+  `expired`.)
+- Razorpay webhooks are the source of truth for status. The checkout callback
+  is verified (HMAC of `payment_id|subscription_id`) and re-reads the
+  subscription from Razorpay before recording anything, so a forged callback
+  can't grant a plan.
 
-### API gateway
+### MAA limits
 
-- Each endpoint is tagged with a **required capability** (e.g.
-  `sdk.serve`, `sdk.authz`, `sdk.memory`).
-- A static map resolves **capability → minimum plan**.
-- If the caller's plan is below the minimum, respond **403** with an
-  upgrade-hint payload:
+- Soft limit: the console shows usage vs. the plan's MAA and warns at 80% and
+  100%.
+- **Never fail closed.** Over the limit, newly seen agents are still
+  authenticated and logged; the account is flagged and asked to upgrade. No
+  request to the customer's site is ever blocked because of a plan limit.
 
-  ```json
-  {
-    "error": "PLAN_UPGRADE_REQUIRED",
-    "capability": "sdk.authz",
-    "currentPlan": "starter",
-    "requiredPlan": "team"
-  }
-  ```
+### Feature gates
 
-### Quota enforcement
-
-- Per-plan **monthly request counters** keyed by account + billing period.
-- **Hard-stop** at the limit: further requests return 429 with an upgrade
-  prompt payload.
-- **Overage grace of 10%** above the plan limit before the hard stop engages
-  (e.g. Starter 25K → soft ceiling 27.5K), to avoid abrupt mid-month cutoffs.
-- Counters reset at the start of each billing period.
-
-### Downgrade / upgrade semantics
-
-- Feature flags **flip immediately** on plan change (both unlocks on upgrade and
-  restrictions on downgrade), driven by the refreshed JWT claim.
-- On downgrade, data retained **beyond the new retention window** is
-  **archived, not deleted, for 30 days**, giving the user a window to re-upgrade
-  or export before permanent deletion.
-- Seat counts over the new limit block new invites but do not forcibly remove
-  existing members; the account is flagged over-limit until reconciled.
+- The console hides / disables configuration for methods above the plan
+  (OAuth2 on Free; SSO, SPIFFE, mTLS below Business) with an upgrade prompt.
+- The gateway rejects saving configuration for a method above the plan with
+  **403** `PLAN_UPGRADE_REQUIRED` `{capability, currentPlan, requiredPlan}`.
+- Downgrades never delete configuration: gated methods stop being offered and
+  are re-enabled on upgrade. Logs beyond the new retention window are pruned by
+  the daily retention job.
