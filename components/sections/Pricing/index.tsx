@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, Check, Eye, Minus, Rocket, Users } from "lucide-react";
+import { Building2, Check, Minus, Rocket, Users, Zap } from "lucide-react";
 import { EyebrowPill } from "@/components/layout/Eyebrow";
 import { ButtonLink } from "@/components/ui/Button";
 import { fadeUp, inViewOnce, stagger } from "@/lib/motion";
@@ -11,15 +11,13 @@ import { cn } from "@/lib/cn";
 /**
  * Pricing (spec: UI/pricing-page.md). Center-anchor strategy: Team is the
  * conversion target — centered, "Most popular", dark surface + indigo glow,
- * and the only solid CTA. Observer/Starter/Business are positioning rails with
- * ghost CTAs. Observer is the intelligence-only tier: dashboard + analytics +
- * forecasting, but no SDK / WebMCP serving (that exclusion is rendered with a
- * muted Minus mark on the card). Full feature-comparison matrix below the
- * cards. Self-serve CTAs open the launching-soon popup (signup isn't live);
- * Contact sales → /book.
+ * and the only solid CTA. Lite/Starter/Business are positioning rails with
+ * ghost CTAs. Every plan is the SDK — Lite is the entry tier (no authorization
+ * or agent memory; that exclusion is rendered with a muted Minus mark on the
+ * card). Full feature-comparison matrix below the cards. Contact sales → /book.
  */
 
-type PlanId = "observer" | "starter" | "team" | "business";
+type PlanId = "lite" | "starter" | "team" | "business";
 
 interface Plan {
   id: PlanId;
@@ -43,40 +41,39 @@ interface Highlight {
 
 const PLANS: Plan[] = [
   {
-    id: "observer",
-    name: "Observer",
-    tagline: "Intelligence only — see what agents do on your site.",
-    Icon: Eye,
+    id: "lite",
+    name: "Lite",
+    tagline: "Make one site agent-ready.",
+    Icon: Zap,
     priceMonthly: 29,
     priceYearly: 290,
     cta: "Get started",
     highlights: [
-      "Intelligence dashboard & analytics",
-      "Agent traffic measurement",
-      "ML forecasting + statistical analysis",
-      "Natural-language insights (LLM)",
-      "Agent chat (conversational analytics)",
-      "1 connected data source",
-      { label: "No SDK / WebMCP serving", excluded: true },
-      "Email support",
+      "SDK + WebMCP tool serving (up to 10 tools)",
+      "Agent detection & fingerprinting",
+      "Basic authentication",
+      "Basic observability",
+      "10K agent requests / mo",
+      "Community support",
+      { label: "No authorization or agent memory", excluded: true },
     ],
   },
   {
     id: "starter",
     name: "Starter",
-    tagline: "Measure agent traffic on a single source.",
+    tagline: "Serve and govern agents on your site.",
     Icon: Rocket,
-    priceMonthly: 49,
-    priceYearly: 490,
+    priceMonthly: 89,
+    priceYearly: 890,
     cta: "Get started",
     highlights: [
-      "1 connected data source",
-      "SDK + WebMCP tool serving",
-      "ML forecasting + statistical analysis",
-      "Agent detection & basic authentication",
-      "Basic observability",
-      "25K agent requests / mo",
-      "Community support",
+      "Everything in Lite, plus:",
+      "Unlimited WebMCP tools",
+      "Authorization (scoped permissions)",
+      "Agent memory & context transfer",
+      "Observability & analytics",
+      "100K agent requests / mo",
+      "Email support",
     ],
   },
   {
@@ -91,12 +88,11 @@ const PLANS: Plan[] = [
     badge: "Most popular",
     highlights: [
       "Everything in Starter, plus:",
-      "All data sources connected",
-      "Natural-language insights + agent chat",
       "Full auth, authz, memory & context",
       "Full observability & audit trail",
       "1M agent requests / mo",
-      "Email support",
+      "10 team seats",
+      "Priority email support",
     ],
   },
   {
@@ -109,7 +105,7 @@ const PLANS: Plan[] = [
     cta: "Contact sales",
     highlights: [
       "Everything in Team, plus:",
-      "Unlimited volume + licensed data enrichment",
+      "Unlimited agent volume",
       "SSO / SAML + audit-grade export",
       "SLA + dedicated onboarding",
       "Custom data retention",
@@ -132,40 +128,27 @@ const DETECTION_TIP =
 
 const MATRIX: MatrixGroup[] = [
   {
-    group: "Measurement & analytics",
+    group: "SDK & governance",
     rows: [
-      { label: "Agent traffic measurement", values: [true, true, true, true] },
-      {
-        label: "Connected data sources",
-        values: ["1 source", "1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
-      },
-      { label: "ML forecasting", values: [true, true, true, true] },
-      { label: "Statistical analysis & anomaly detection", values: [true, true, true, true] },
-      { label: "Natural-language insights (LLM)", values: [true, false, true, true] },
-      { label: "Agent chat (conversational analytics)", values: [true, false, true, true] },
-    ],
-  },
-  {
-    group: "Governance",
-    rows: [
-      { label: "SDK / WebMCP tool serving", values: [false, true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [false, true, true, true] },
-      { label: "Authentication", values: [false, "Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, false, true, true] },
-      { label: "Observability & audit trail", values: [false, "Basic", "Full", "Audit-grade + export"] },
+      { label: "SDK / WebMCP tool serving", values: [true, true, true, true] },
+      { label: "WebMCP tools", values: ["Up to 10", "Unlimited", "Unlimited", "Unlimited"] },
+      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true, true] },
+      { label: "Authentication", values: ["Basic", "Basic", "Full", "Full + SSO"] },
+      { label: "Authorization (scoped permissions)", values: [false, true, true, "Advanced"] },
+      { label: "Agent memory & context transfer", values: [false, true, true, true] },
+      { label: "Observability & audit trail", values: ["Basic", "Standard", "Full", "Audit-grade + export"] },
     ],
   },
   {
     group: "Platform",
     rows: [
-      { label: "Agent requests / mo", values: [false, "25K", "1M", "Unlimited"] },
+      { label: "Agent requests / mo", values: ["10K", "100K", "1M", "Unlimited"] },
       { label: "Data retention", values: ["14 days", "30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["1", "2", "10", "Unlimited"] },
+      { label: "Team seats", values: ["1", "3", "10", "Unlimited"] },
       { label: "SSO / SAML", values: [false, false, false, true] },
       { label: "SLA & uptime guarantee", values: [false, false, false, true] },
       { label: "Dedicated onboarding", values: [false, false, false, true] },
-      { label: "Support", values: ["Email", "Community", "Email", "Dedicated + Slack"] },
+      { label: "Support", values: ["Community", "Email", "Priority email", "Dedicated + Slack"] },
     ],
   },
 ];
