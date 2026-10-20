@@ -32,6 +32,9 @@ const nextConfig = {
       // Keep the old routes working.
       { source: "/sdk", destination: "/", permanent: true },
       { source: "/intelligence", destination: "/", permanent: true },
+      // The console isn't open to the public yet: Login / Sign up go to the demo booking.
+      { source: "/sign-in/:path*", destination: "/book", permanent: false },
+      { source: "/sign-up/:path*", destination: "/book", permanent: false },
     ];
   },
   async rewrites() {
