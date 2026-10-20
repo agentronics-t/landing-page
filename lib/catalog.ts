@@ -6,7 +6,7 @@
  * human sees on the pricing page. Update pricing here.
  */
 
-export type PlanId = "starter" | "team" | "business";
+export type PlanId = "observer" | "starter" | "team" | "business";
 export type Cell = boolean | string;
 
 export const YEARLY_DISCOUNT_PCT = 16;
@@ -26,17 +26,36 @@ export interface PlanInfo {
 
 export const PLANS: PlanInfo[] = [
   {
+    id: "observer",
+    name: "Observer",
+    tagline: "Intelligence only — see what agents do on your site.",
+    priceMonthly: 29,
+    priceYearly: 290,
+    cta: "Get started",
+    highlights: [
+      "Intelligence dashboard & analytics",
+      "Agent traffic measurement",
+      "ML forecasting + statistical analysis",
+      "Natural-language insights (LLM)",
+      "Agent chat (conversational analytics)",
+      "1 connected data source",
+      "No SDK / WebMCP serving",
+      "Email support",
+    ],
+  },
+  {
     id: "starter",
     name: "Starter",
-    tagline: "Serve and govern agents on a single source.",
+    tagline: "Measure agent traffic on a single source.",
     priceMonthly: 49,
     priceYearly: 490,
     cta: "Get started",
     highlights: [
-      "SDK + WebMCP tool serving",
       "1 connected data source",
+      "SDK + WebMCP tool serving",
+      "ML forecasting + statistical analysis",
       "Agent detection & basic authentication",
-      "Basic observability & analytics",
+      "Basic observability",
       "25K agent requests / mo",
       "Community support",
     ],
@@ -53,6 +72,7 @@ export const PLANS: PlanInfo[] = [
     highlights: [
       "Everything in Starter, plus:",
       "All data sources connected",
+      "Natural-language insights + agent chat",
       "Full auth, authz, memory & context",
       "Full observability & audit trail",
       "1M agent requests / mo",
@@ -79,7 +99,7 @@ export const PLANS: PlanInfo[] = [
 
 export interface MatrixGroup {
   group: string;
-  rows: { label: string; tip?: string; values: [Cell, Cell, Cell] }[];
+  rows: { label: string; tip?: string; values: [Cell, Cell, Cell, Cell] }[];
 }
 
 export const DETECTION_TIP =
@@ -87,37 +107,40 @@ export const DETECTION_TIP =
 
 export const MATRIX: MatrixGroup[] = [
   {
-    group: "SDK & governance",
+    group: "Measurement & analytics",
     rows: [
-      { label: "SDK / WebMCP tool serving", values: [true, true, true] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true] },
-      { label: "Authentication", values: ["Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Full", "Audit-grade + export"] },
+      { label: "Agent traffic measurement", values: [true, true, true, true] },
+      {
+        label: "Connected data sources",
+        values: ["1 source", "1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
+      },
+      { label: "ML forecasting", values: [true, true, true, true] },
+      { label: "Statistical analysis & anomaly detection", values: [true, true, true, true] },
+      { label: "Natural-language insights (LLM)", values: [true, false, true, true] },
+      { label: "Agent chat (conversational analytics)", values: [true, false, true, true] },
     ],
   },
   {
-    group: "Measurement & analytics",
+    group: "Governance",
     rows: [
-      { label: "Agent traffic measurement", values: [true, true, true] },
-      {
-        label: "Connected data sources",
-        values: ["1 source", "All (Cloudflare, Profound, Scrunch)", "All + licensed enrichment"],
-      },
-      { label: "Analytics dashboard", values: ["Basic", "Full", "Full"] },
+      { label: "SDK / WebMCP tool serving", values: [false, true, true, true] },
+      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [false, true, true, true] },
+      { label: "Authentication", values: [false, "Basic", "Full", "Full + SSO"] },
+      { label: "Authorization (scoped permissions)", values: [false, false, true, "Advanced"] },
+      { label: "Agent memory & context transfer", values: [false, false, true, true] },
+      { label: "Observability & audit trail", values: [false, "Basic", "Full", "Audit-grade + export"] },
     ],
   },
   {
     group: "Platform",
     rows: [
-      { label: "Agent requests / mo", values: ["25K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["2", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, true] },
-      { label: "Support", values: ["Community", "Email", "Dedicated + Slack"] },
+      { label: "Agent requests / mo", values: [false, "25K", "1M", "Unlimited"] },
+      { label: "Data retention", values: ["14 days", "30 days", "90 days", "Custom"] },
+      { label: "Team seats", values: ["1", "2", "10", "Unlimited"] },
+      { label: "SSO / SAML", values: [false, false, false, true] },
+      { label: "SLA & uptime guarantee", values: [false, false, false, true] },
+      { label: "Dedicated onboarding", values: [false, false, false, true] },
+      { label: "Support", values: ["Email", "Community", "Email", "Dedicated + Slack"] },
     ],
   },
 ];
