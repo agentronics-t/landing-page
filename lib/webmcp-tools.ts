@@ -88,10 +88,6 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
             type: "boolean",
             description: "Requires agent memory & context transfer across sessions.",
           },
-          dataSources: {
-            description: 'Number of connected data sources, or "all".',
-            oneOf: [{ type: "number" }, { type: "string", enum: ["all"] }],
-          },
         },
         additionalProperties: false,
       },
@@ -100,9 +96,6 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
         const needSSO = args.needSSO === true;
         const needAuthz = args.needAuthz === true;
         const needMemory = args.needMemory === true;
-        const wantsAll =
-          args.dataSources === "all" ||
-          (typeof args.dataSources === "number" && args.dataSources > 1);
 
         const reasons: string[] = [];
         let id: PlanId;
@@ -110,15 +103,17 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
           id = "business";
           if (needSSO) reasons.push("SSO / SAML is Business-only.");
           if (reqs > 1_000_000) reasons.push("Over 1M requests/mo exceeds Team's included volume.");
-        } else if (needAuthz || needMemory || wantsAll || reqs > 25_000) {
+        } else if (reqs > 100_000) {
           id = "team";
-          if (needAuthz) reasons.push("Scoped authorization starts at Team.");
-          if (needMemory) reasons.push("Agent memory & context transfer starts at Team.");
-          if (wantsAll) reasons.push("Multiple / all data sources start at Team.");
-          if (reqs > 25_000) reasons.push("Over 25K requests/mo exceeds Starter's included volume.");
-        } else {
+          reasons.push("Over 100K requests/mo exceeds Starter's included volume.");
+        } else if (needAuthz || needMemory || reqs > 10_000) {
           id = "starter";
-          reasons.push("Single source, core SDK + governance, and volume within 25K/mo fit Starter.");
+          if (needAuthz) reasons.push("Scoped authorization starts at Starter.");
+          if (needMemory) reasons.push("Agent memory & context transfer starts at Starter.");
+          if (reqs > 10_000) reasons.push("Over 10K requests/mo exceeds Lite's included volume.");
+        } else {
+          id = "lite";
+          reasons.push("SDK + WebMCP tool serving, detection and basic auth within 10K requests/mo fit Lite.");
         }
 
         const plan = planById(id);
