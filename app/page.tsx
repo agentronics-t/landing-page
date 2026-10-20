@@ -3,50 +3,56 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ButtonLink } from "@/components/ui/Button";
 import { HeroAgents } from "@/components/sections/HeroAgents";
-import { AgentVerification } from "@/components/sections/AgentVerification";
 import { ThesisBand } from "@/components/sections/LosingTraffic";
-import { AuthMethods } from "@/components/sections/AuthMethods";
-import { IntegrationArchitecture } from "@/components/sections/IntegrationArchitecture";
-import { CodeTabs } from "@/components/sections/CodeTabs";
+import { WebMCPSolution } from "@/components/sections/WebMCPSolution";
 import { SdkToDashboard } from "@/components/sections/SdkToDashboard";
+import { IntegrationArchitecture } from "@/components/sections/IntegrationArchitecture";
 
 export const metadata: Metadata = {
-  title: "Agentronics — Authentication for AI agents",
+  title: "Agentronics — Stop losing agent traffic",
   description:
-    "Verify every AI agent on your site — signed agents, crawlers, API agents and browser agents — with any method: Web Bot Auth, API keys, OAuth2, SSO, SPIFFE, mTLS. Agentronics never blocks: agents that don't authenticate browse as normal.",
+    "Agents are everywhere and you're losing traffic to fragile scraping. The Agentronics SDK + WebMCP give agents a structured, governed interface to your site — with a dashboard to control it.",
 };
 
 /**
- * Home = the product: authentication for AI agents.
- * Hero → how a sign-in works → thesis → methods → how it works (dial) →
- * the code → the console → CTA.
+ * Home = the product: the SDK / WebMCP developer story, ending in the
+ * governance dashboard. Agentronics is one product now — the SDK and the
+ * dashboard it feeds. Pricing lives on /pricing.
  */
 export default function Home() {
   return (
     <>
       <Navbar heroDark={false} />
       <main>
+        {/* 1. globe hero — losing agent traffic (current state) */}
         <HeroAgents />
-        <AgentVerification />
 
-        <section className="bg-canvas px-[clamp(20px,5vw,48px)] py-16 md:py-20">
+        {/* 2. The WebMCP solution — how it works cards + live agent terminal */}
+        <WebMCPSolution />
+
+        {/* 3. value proposition / thesis */}
+        <section className="bg-canvas px-[clamp(20px,5vw,48px)] py-20 md:py-24">
           <ThesisBand />
         </section>
 
-        <AuthMethods />
+        {/* 4. integration architecture — scroll-driven process dial */}
         <IntegrationArchitecture />
-        <CodeTabs />
+
+        {/* 5. from SDK to dashboard */}
         <SdkToDashboard />
 
+        {/* CTA — blends with the page (no distinct band) */}
         <section className="bg-canvas px-[clamp(20px,5vw,48px)] py-20 text-center text-content md:py-24">
           <div className="mx-auto max-w-content">
-            <h2 className="text-3xl font-bold tracking-display md:text-4xl">Give every agent an identity</h2>
+            <h2 className="text-3xl font-bold tracking-display md:text-4xl">
+              Make your site agent-native
+            </h2>
             <p className="mx-auto mt-4 max-w-[520px] text-pretty text-lg text-content-secondary">
-              Free for your first 1,000 monthly active agents. Human visitors are always free.
+              Install the SDK, define your endpoints, and start governing agent traffic today.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <ButtonLink href="/sign-up" variant="primary" size="lg" glow>
-                Start free
+                Sign up
               </ButtonLink>
               <ButtonLink href="/book" variant="ghost" size="lg">
                 Book a demo
