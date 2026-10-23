@@ -37,7 +37,7 @@ export const PLANS: PlanInfo[] = [
       "Agent detection (crawlers, WebMCP, browser agents)",
       "Verified crawlers, self-declared agents, 3 API keys",
       "5K agent requests / mo · 7-day history",
-      "1 seat · Community support",
+      "1 team member · Community support",
     ],
   },
   {
@@ -53,7 +53,7 @@ export const PLANS: PlanInfo[] = [
       "Web Bot Auth & OAuth2 · 25 API keys",
       "Scoped permissions (5 policies) + site memory",
       "50K agent requests / mo · 30-day history",
-      "2 seats · Email support",
+      "2 team members · Email support",
     ],
   },
   {
@@ -71,7 +71,7 @@ export const PLANS: PlanInfo[] = [
       "Unlimited policies, rate limits, on-page enforcement",
       "Context transfer between agents",
       "250K agent requests / mo · 90-day history · webhook export",
-      "5 seats · Priority email support",
+      "5 team members · Priority email support",
     ],
   },
   {
@@ -85,7 +85,7 @@ export const PLANS: PlanInfo[] = [
       "Unlimited sites, runs and agent volume",
       "Custom identity provider",
       "Audit log + raw trace export",
-      "SSO / SAML for your team · unlimited seats",
+      "SSO / SAML for your team · unlimited team members",
       "Custom retention · SLA · Dedicated support + Slack",
     ],
   },
@@ -168,7 +168,7 @@ export const MATRIX: MatrixGroup[] = [
   {
     group: "Workspace & support",
     rows: [
-      { label: "Team seats", values: ["1", "2", "5", "Unlimited"] },
+      { label: "Team members", values: ["1", "2", "5", "Unlimited"] },
       { label: "SSO / SAML for the console", values: [false, false, false, true] },
       { label: "Support", values: ["Community", "Email", "Priority email", "Dedicated + Slack"] },
       { label: "SLA", values: [false, false, false, true] },
