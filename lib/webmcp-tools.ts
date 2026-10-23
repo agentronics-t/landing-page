@@ -10,7 +10,6 @@ import {
   MATRIX,
   PRODUCT_OVERVIEW,
   DOCS_LINKS,
-  YEARLY_DISCOUNT_PCT,
   type PlanId,
   type PlanInfo,
 } from "@/lib/catalog";
@@ -22,7 +21,8 @@ function result(text: string, structuredContent?: unknown): McpToolResult {
 
 function priceLabel(p: PlanInfo): string {
   if (p.priceMonthly === null) return "Custom (contact sales)";
-  return `$${p.priceMonthly}/mo (billed yearly $${p.priceYearly}/yr, ${YEARLY_DISCOUNT_PCT}% off)`;
+  if (p.priceMonthly === 0) return "Free";
+  return `$${p.priceMonthly}/mo, billed monthly`;
 }
 
 function planPublic(p: PlanInfo) {
@@ -31,7 +31,6 @@ function planPublic(p: PlanInfo) {
     name: p.name,
     tagline: p.tagline,
     priceMonthly: p.priceMonthly,
-    priceYearly: p.priceYearly,
     currency: "USD",
     cta: p.cta,
     highlights: p.highlights.filter((h) => !h.endsWith("plus:")),
@@ -57,13 +56,12 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "get_pricing",
       description:
-        "Get Agentronics pricing: all plans with monthly and yearly prices (USD) and headline features. Yearly billing is 16% off.",
+        "Get Agentronics pricing: all plans with monthly prices (USD) and headline features, including Agent Nick limits.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute() {
         const lines = PLANS.map((p) => `• ${p.name} — ${priceLabel(p)}: ${p.tagline}`).join("\n");
         return result(`Agentronics plans:\n${lines}`, {
           currency: "USD",
-          yearlyDiscountPct: YEARLY_DISCOUNT_PCT,
           plans: PLANS.map(planPublic),
         });
       },
@@ -79,41 +77,48 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
             type: "number",
             description: "Expected agent requests per month.",
           },
-          needSSO: { type: "boolean", description: "Requires SSO / SAML." },
+          sites: {
+            type: "number",
+            description: "How many websites (repositories) Agent Nick should make agent-ready.",
+          },
+          needSSO: { type: "boolean", description: "Requires SSO / SAML for the team's console." },
           needAuthz: {
             type: "boolean",
             description: "Requires scoped authorization (per-agent permissions).",
           },
           needMemory: {
             type: "boolean",
-            description: "Requires agent memory & context transfer across sessions.",
+            description: "Requires agent memory across sessions.",
           },
         },
         additionalProperties: false,
       },
       execute(args) {
         const reqs = typeof args.monthlyAgentRequests === "number" ? args.monthlyAgentRequests : 0;
+        const sites = typeof args.sites === "number" ? args.sites : 1;
         const needSSO = args.needSSO === true;
         const needAuthz = args.needAuthz === true;
         const needMemory = args.needMemory === true;
 
         const reasons: string[] = [];
         let id: PlanId;
-        if (needSSO || reqs > 1_000_000) {
-          id = "business";
-          if (needSSO) reasons.push("SSO / SAML is Business-only.");
-          if (reqs > 1_000_000) reasons.push("Over 1M requests/mo exceeds Team's included volume.");
-        } else if (reqs > 100_000) {
-          id = "team";
-          reasons.push("Over 100K requests/mo exceeds Starter's included volume.");
-        } else if (needAuthz || needMemory || reqs > 10_000) {
+        if (needSSO || reqs > 250_000 || sites > 3) {
+          id = "enterprise";
+          if (needSSO) reasons.push("SSO / SAML for the console is Enterprise-only.");
+          if (reqs > 250_000) reasons.push("Over 250K requests/mo exceeds Pro's included volume.");
+          if (sites > 3) reasons.push("More than 3 sites needs a custom plan.");
+        } else if (reqs > 50_000 || sites > 1) {
+          id = "pro";
+          if (reqs > 50_000) reasons.push("Over 50K requests/mo exceeds Starter's included volume.");
+          if (sites > 1) reasons.push("Pro covers up to 3 sites.");
+        } else if (needAuthz || needMemory || reqs > 5_000) {
           id = "starter";
           if (needAuthz) reasons.push("Scoped authorization starts at Starter.");
-          if (needMemory) reasons.push("Agent memory & context transfer starts at Starter.");
-          if (reqs > 10_000) reasons.push("Over 10K requests/mo exceeds Lite's included volume.");
+          if (needMemory) reasons.push("Agent memory starts at Starter.");
+          if (reqs > 5_000) reasons.push("Over 5K requests/mo exceeds Free's included volume.");
         } else {
-          id = "lite";
-          reasons.push("SDK + WebMCP tool serving, detection and basic auth within 10K requests/mo fit Lite.");
+          id = "free";
+          reasons.push("One site, detection, basic auth and up to 5 form tools within 5K requests/mo fit Free.");
         }
 
         const plan = planById(id);
