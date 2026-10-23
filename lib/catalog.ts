@@ -6,17 +6,17 @@
  * human sees on the pricing page. Update pricing here.
  */
 
-export type PlanId = "lite" | "starter" | "team" | "business";
+export type PlanId = "free" | "starter" | "pro" | "enterprise";
 export type Cell = boolean | string;
 
-export const YEARLY_DISCOUNT_PCT = 16;
+// Mirrors Dashboard/packages/intel-schema/src/plans.ts — the limits the console
+// and APIs enforce. Change both together.
 
 export interface PlanInfo {
   id: PlanId;
   name: string;
   tagline: string;
   priceMonthly: number | null; // null = custom / contact sales
-  priceYearly: number | null;
   cta: string;
   highlighted?: boolean;
   badge?: string;
@@ -26,71 +26,67 @@ export interface PlanInfo {
 
 export const PLANS: PlanInfo[] = [
   {
-    id: "lite",
-    name: "Lite",
-    tagline: "Make one site agent-ready.",
-    priceMonthly: 29,
-    priceYearly: 290,
-    cta: "Get started",
+    id: "free",
+    name: "Free",
+    tagline: "See your site through an agent's eyes.",
+    priceMonthly: 0,
+    cta: "Start free",
     highlights: [
-      "SDK + WebMCP tool serving (up to 10 tools)",
-      "Agent detection & fingerprinting",
-      "Basic authentication",
-      "Basic observability",
-      "10K agent requests / mo",
-      "Community support",
-      "No authorization or agent memory",
+      "Agent Nick: 1 site, 1 run / mo, up to 5 form tools",
+      "WebMCP tool serving + token-cost estimates",
+      "Agent detection (crawlers, WebMCP, browser agents)",
+      "Verified crawlers, self-declared agents, 3 API keys",
+      "5K agent requests / mo · 7-day history",
+      "1 seat · Community support",
     ],
   },
   {
     id: "starter",
     name: "Starter",
-    tagline: "Serve and govern agents on your site.",
-    priceMonthly: 89,
-    priceYearly: 890,
+    tagline: "Make your site agent-ready.",
+    priceMonthly: 19,
     cta: "Get started",
     highlights: [
-      "Everything in Lite, plus:",
-      "Unlimited WebMCP tools",
-      "Authorization (scoped permissions)",
-      "Agent memory & context transfer",
-      "Observability & analytics",
-      "100K agent requests / mo",
-      "Email support",
+      "Everything in Free, plus:",
+      "Agent Nick: 5 runs / mo, 15 tools incl. page actions & API calls",
+      "Automatic CI fixes + code-change alerts",
+      "Web Bot Auth & OAuth2 · 25 API keys",
+      "Scoped permissions (5 policies) + site memory",
+      "50K agent requests / mo · 30-day history",
+      "2 seats · Email support",
     ],
   },
   {
-    id: "team",
-    name: "Team",
-    tagline: "Full governance for growing agent traffic.",
-    priceMonthly: 199,
-    priceYearly: 1990,
-    cta: "Start free trial",
+    id: "pro",
+    name: "Pro",
+    tagline: "Govern every agent across your sites.",
+    priceMonthly: 49,
+    cta: "Get started",
     highlighted: true,
     badge: "Most popular",
     highlights: [
       "Everything in Starter, plus:",
-      "Full auth, authz, memory & context",
-      "Full observability & audit trail",
-      "1M agent requests / mo",
-      "10 team seats",
-      "Priority email support",
+      "Agent Nick: 3 sites, 30 runs / mo, unlimited tools",
+      "SSO/OIDC, SPIFFE, mTLS & browser-agent auth",
+      "Unlimited policies, rate limits, on-page enforcement",
+      "Context transfer between agents",
+      "250K agent requests / mo · 90-day history · webhook export",
+      "5 seats · Priority email support",
     ],
   },
   {
-    id: "business",
-    name: "Business",
-    tagline: "Enterprise-grade for established platforms.",
+    id: "enterprise",
+    name: "Enterprise",
+    tagline: "Custom limits, SSO and an SLA.",
     priceMonthly: null,
-    priceYearly: null,
     cta: "Contact sales",
     highlights: [
-      "Everything in Team, plus:",
-      "Unlimited agent volume",
-      "SSO / SAML + audit-grade export",
-      "SLA + dedicated onboarding",
-      "Custom data retention",
-      "Dedicated support + Slack",
+      "Everything in Pro, plus:",
+      "Unlimited sites, runs and agent volume",
+      "Custom identity provider",
+      "Audit log + raw trace export",
+      "SSO / SAML for your team · unlimited seats",
+      "Custom retention · SLA · Dedicated support + Slack",
     ],
   },
 ];
@@ -101,31 +97,81 @@ export interface MatrixGroup {
 }
 
 export const DETECTION_TIP =
-  "Detection lanes: WebMCP-native (navigator.modelContext), Web Bot Auth–signed agents, and stealth Chromium fingerprinting.";
+  "Search and AI crawlers (verified by reverse DNS), WebMCP agents and in-browser agents operating the page.";
 
 export const MATRIX: MatrixGroup[] = [
   {
-    group: "SDK & governance",
+    group: "Agent Nick — we write the code",
     rows: [
-      { label: "SDK / WebMCP tool serving", values: [true, true, true, true] },
-      { label: "WebMCP tools", values: ["Up to 10", "Unlimited", "Unlimited", "Unlimited"] },
-      { label: "Agent detection & fingerprinting", tip: DETECTION_TIP, values: [true, true, true, true] },
-      { label: "Authentication", values: ["Basic", "Basic", "Full", "Full + SSO"] },
-      { label: "Authorization (scoped permissions)", values: [false, true, true, "Advanced"] },
-      { label: "Agent memory & context transfer", values: [false, true, true, true] },
-      { label: "Observability & audit trail", values: ["Basic", "Standard", "Full", "Audit-grade + export"] },
+      { label: "Sites (repositories)", values: ["1", "1", "3", "Custom"] },
+      { label: "Runs / month (scan → pull request)", values: ["1", "5", "30", "Unlimited"] },
+      { label: "WebMCP tools per site", values: ["5", "15", "Unlimited", "Unlimited"] },
+      {
+        label: "Tool types",
+        values: ["Forms", "Forms, page actions, API calls", "+ Server actions", "All"],
+      },
+      { label: "Automatic CI fix", values: [false, true, true, true] },
+      { label: "Code-change alerts + one-click re-scan", values: [false, true, true, true] },
     ],
   },
   {
-    group: "Platform",
+    group: "WebMCP tools",
     rows: [
-      { label: "Agent requests / mo", values: ["10K", "100K", "1M", "Unlimited"] },
-      { label: "Data retention", values: ["14 days", "30 days", "90 days", "Custom"] },
-      { label: "Team seats", values: ["1", "3", "10", "Unlimited"] },
-      { label: "SSO / SAML", values: [false, false, false, true] },
-      { label: "SLA & uptime guarantee", values: [false, false, false, true] },
-      { label: "Dedicated onboarding", values: [false, false, false, true] },
+      { label: "Tool serving + registry sync", values: [true, true, true, true] },
+      { label: "Token-cost estimate per tool / page", values: [true, true, true, true] },
+      { label: "Tool groups + progressive disclosure", values: [false, true, true, true] },
+    ],
+  },
+  {
+    group: "Detect",
+    rows: [
+      { label: "Agent detection", tip: DETECTION_TIP, values: [true, true, true, true] },
+      { label: "Agent signature updates", values: ["Monthly", "Weekly", "Live", "Live"] },
+    ],
+  },
+  {
+    group: "Auth",
+    rows: [
+      { label: "Verified crawlers, self-declared agents, X-Agent header", values: [true, true, true, true] },
+      { label: "Agent API keys", values: ["3", "25", "Unlimited", "Unlimited"] },
+      { label: "Web Bot Auth (signed requests), OAuth2", values: [false, true, true, true] },
+      { label: "SSO/OIDC, SPIFFE, mTLS, browser-agent tokens", values: [false, false, true, true] },
+      { label: "Custom identity provider", values: [false, false, false, true] },
+    ],
+  },
+  {
+    group: "Authz",
+    rows: [
+      { label: "Scoped permissions (policies)", values: [false, "5", "Unlimited", "Unlimited"] },
+      { label: "Per-agent rate limits", values: [false, false, true, true] },
+      { label: "On-page (DOM) enforcement", values: [false, false, true, true] },
+      { label: "Per-tool access from Agent Nick enforced", values: [false, true, true, true] },
+    ],
+  },
+  {
+    group: "Knaph — memory & context",
+    rows: [
+      { label: "Site memory", values: [false, true, true, true] },
+      { label: "Context transfer between agents / sessions", values: [false, false, true, true] },
+    ],
+  },
+  {
+    group: "Observability",
+    rows: [
+      { label: "Agent requests recorded / month", values: ["5K", "50K", "250K", "Custom"] },
+      { label: "Data retention", values: ["7 days", "30 days", "90 days", "Custom"] },
+      { label: "Logs + analytics", values: [true, true, true, true] },
+      { label: "Webhook export", values: [false, false, true, true] },
+      { label: "Audit log + raw trace export", values: [false, false, false, true] },
+    ],
+  },
+  {
+    group: "Workspace & support",
+    rows: [
+      { label: "Team seats", values: ["1", "2", "5", "Unlimited"] },
+      { label: "SSO / SAML for the console", values: [false, false, false, true] },
       { label: "Support", values: ["Community", "Email", "Priority email", "Dedicated + Slack"] },
+      { label: "SLA", values: [false, false, false, true] },
     ],
   },
 ];
