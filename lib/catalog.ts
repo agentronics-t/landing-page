@@ -50,8 +50,8 @@ export const PLANS: PlanInfo[] = [
       "Everything in Free, plus:",
       "Agent Nick: 5 runs / mo, 15 tools incl. page actions & API calls",
       "Automatic CI fixes + code-change alerts",
-      "Web Bot Auth & OAuth2 · 25 API keys",
-      "Scoped permissions (5 policies) + site memory",
+      "Web Bot Auth & OAuth 2.1 · 25 agent API keys",
+      "5 rules (allow / review / deny) + procedural memory",
       "50K agent requests / mo · 30-day history",
       "2 team members · Email support",
     ],
@@ -67,7 +67,6 @@ export const PLANS: PlanInfo[] = [
     highlights: [
       "Everything in Starter, plus:",
       "Agent Nick: 3 sites, 30 runs / mo, unlimited tools",
-      "SSO/OIDC, SPIFFE, mTLS & browser-agent auth",
       "Unlimited policies, rate limits, on-page enforcement",
       "Context transfer between agents",
       "250K agent requests / mo · 90-day history · webhook export",
@@ -83,7 +82,6 @@ export const PLANS: PlanInfo[] = [
     highlights: [
       "Everything in Pro, plus:",
       "Unlimited sites, runs and agent volume",
-      "Custom identity provider",
       "Audit log + raw trace export",
       "SSO / SAML for your team · unlimited team members",
       "Custom retention · SLA · Dedicated support + Slack",
@@ -97,7 +95,7 @@ export interface MatrixGroup {
 }
 
 export const DETECTION_TIP =
-  "Search and AI crawlers (verified by reverse DNS), WebMCP agents and in-browser agents operating the page.";
+  "WebMCP agents, browser-automation and vision-model agents operating the page, self-declared agents, and search and AI crawlers.";
 
 export const MATRIX: MatrixGroup[] = [
   {
@@ -119,6 +117,7 @@ export const MATRIX: MatrixGroup[] = [
     rows: [
       { label: "Tool serving + registry sync", values: [true, true, true, true] },
       { label: "Token-cost estimate per tool / page", values: [true, true, true, true] },
+      { label: "Tool status (callable / failed) + call health", values: [true, true, true, true] },
       { label: "Tool groups + progressive disclosure", values: [false, true, true, true] },
     ],
   },
@@ -132,17 +131,16 @@ export const MATRIX: MatrixGroup[] = [
   {
     group: "Auth",
     rows: [
-      { label: "Verified crawlers, self-declared agents, X-Agent header", values: [true, true, true, true] },
+      { label: "Verified crawlers (published IP ranges + reverse DNS)", values: [true, true, true, true] },
       { label: "Agent API keys", values: ["3", "25", "Unlimited", "Unlimited"] },
-      { label: "Web Bot Auth (signed requests), OAuth2", values: [false, true, true, true] },
-      { label: "SSO/OIDC, SPIFFE, mTLS, browser-agent tokens", values: [false, false, true, true] },
-      { label: "Custom identity provider", values: [false, false, false, true] },
+      { label: "Web Bot Auth (signed requests)", values: [false, true, true, true] },
+      { label: "OAuth 2.1 (incl. agents acting for a user)", values: [false, true, true, true] },
     ],
   },
   {
     group: "Authz",
     rows: [
-      { label: "Scoped permissions (policies)", values: [false, "5", "Unlimited", "Unlimited"] },
+      { label: "Rules: allow / review (ask the person) / deny", values: [false, "5", "Unlimited", "Unlimited"] },
       { label: "Per-agent rate limits", values: [false, false, true, true] },
       { label: "On-page (DOM) enforcement", values: [false, false, true, true] },
       { label: "Per-tool access from Agent Nick enforced", values: [false, true, true, true] },
@@ -151,6 +149,7 @@ export const MATRIX: MatrixGroup[] = [
   {
     group: "Knaph — memory & context",
     rows: [
+      { label: "Procedural memory (AI-written tool descriptions)", values: [false, true, true, true] },
       { label: "Site memory", values: [false, true, true, true] },
       { label: "Context transfer between agents / sessions", values: [false, false, true, true] },
     ],
