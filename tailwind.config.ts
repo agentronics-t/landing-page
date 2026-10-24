@@ -1,13 +1,12 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Agentronics design tokens (BUILD_SPEC §4.2).
- * Colors resolve to CSS vars defined in app/globals.css (:root + .dark),
- * so every utility is theme-aware. Never hardcode hex in components.
+ * Agentronics "Circuit Copper" tokens. Colors resolve to CSS vars in
+ * app/globals.css; `.tone-dark` remaps them for PCB Black sections, so every
+ * utility works on both. Never hardcode hex in components.
  */
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
-  darkMode: "class",
   theme: {
     extend: {
       colors: {
@@ -20,9 +19,9 @@ const config: Config = {
         "content-secondary": "var(--content-secondary)",
         "content-muted": "var(--content-muted)",
         brand: "var(--brand)",
-        "brand-solid": "var(--brand-solid)",
         "brand-soft": "var(--brand-soft)",
         accent: "var(--accent)",
+        "accent-hover": "var(--accent-hover)",
         "accent-content": "var(--accent-content)",
         ring: "var(--ring)",
         success: "var(--success)",
@@ -31,49 +30,51 @@ const config: Config = {
         "warning-bg": "var(--warning-bg)",
         danger: "var(--danger)",
         "danger-bg": "var(--danger-bg)",
-        info: "var(--info)",
-        "info-bg": "var(--info-bg)",
         "code-bg": "var(--code-bg)",
         "code-fg": "var(--code-fg)",
-        // raw near-black for the dark "infrastructure" bands
-        "neutral-950": "#06070e",
-        "neutral-900": "#0e1017",
+        pcb: "var(--pcb-black)",
+        bone: "var(--bone)",
+        copper: "var(--copper)",
+        verdigris: "var(--verdigris)",
+        "verdigris-deep": "var(--verdigris-deep)",
+        fog: "var(--fog)",
+        seam: "var(--seam)",
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-sans)", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "SF Mono", "Menlo", "monospace"],
       },
+      // Guide type scale: hero 56–64, sections 36–40, body 17–18, subtext 14–15, code 14.
       fontSize: {
-        xs: ["11px", "1.4"],
-        sm: ["12px", "1.4"],
-        base: ["14px", "1.5"],
-        md: ["15px", "1.4"],
-        lg: ["18px", "1.3"],
-        xl: ["22px", "1.3"],
-        "2xl": ["28px", "1.2"],
-        "3xl": ["40px", "1.1"],
-        "4xl": ["56px", "1.05"],
-        "5xl": ["72px", "1.02"],
+        xs: ["12px", "1.5"],
+        sm: ["14px", "1.5"],
+        base: ["15px", "1.55"],
+        md: ["17px", "1.6"],
+        lg: ["18px", "1.6"],
+        xl: ["22px", "1.35"],
+        "2xl": ["28px", "1.25"],
+        "3xl": ["38px", "1.2"],
+        "4xl": ["56px", "1.1"],
+        "5xl": ["64px", "1.1"],
       },
       letterSpacing: {
-        display: "-0.02em",
-        title: "-0.01em",
-        caps: "0.08em",
+        display: "-0.025em",
+        title: "-0.015em",
+        caps: "0.1em",
       },
       borderRadius: {
-        sm: "7px",
-        md: "9px",
+        sm: "6px",
+        md: "8px",
         lg: "12px",
-        xl: "14px",
+        xl: "16px",
         pill: "999px",
       },
       boxShadow: {
-        card: "none",
-        raise: "0 8px 24px -12px rgba(14,16,23,.18)",
-        glow: "0 8px 24px -10px var(--brand)",
+        raise: "var(--shadow-raise)",
       },
       maxWidth: {
-        content: "1080px",
+        content: "1120px",
       },
       transitionTimingFunction: {
         out: "cubic-bezier(0.2,0,0,1)",

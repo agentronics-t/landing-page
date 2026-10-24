@@ -1,32 +1,30 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { Section, SectionHeading } from "@/components/layout/Section";
 import { CalendlyEmbed } from "@/components/booking/CalendlyEmbed";
 
 export const metadata: Metadata = {
   title: "Book a demo — Agentronics",
-  description: "Schedule a technical deep dive with the Agentronics engineering team.",
+  description: "Talk to the Agentronics team: we'll check your site live and show you what agents see and how to fix it.",
 };
 
 export default function BookPage() {
   return (
     <>
-      <Navbar heroDark={false} />
-      <main className="bg-canvas px-[clamp(20px,5vw,48px)] pb-20 pt-28">
-        <div className="mx-auto max-w-content">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-display text-content md:text-4xl">
-              Schedule a technical deep dive
-            </h1>
-            <p className="mx-auto mt-4 max-w-[640px] text-pretty text-lg text-content-secondary">
-              Connect directly with our engineering team to explore integration architectures, custom SDK
-              implementations, and data-pipeline modeling tailored to your stack.
-            </p>
-          </div>
-          <div className="mx-auto mt-10 max-w-3xl">
+      <Navbar />
+      <main>
+        <Section className="pt-32 md:pt-36">
+          <SectionHeading
+            center
+            eyebrow="Book a demo"
+            title="Let's make your site ready for agents."
+            lead="30 minutes with the team. We check your site live, walk through what agents see, and show you how the fixes land in your code."
+          />
+          <div className="mx-auto mt-12 max-w-3xl">
             <CalendlyEmbed />
           </div>
-        </div>
+        </Section>
       </main>
       <Footer />
     </>

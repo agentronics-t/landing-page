@@ -8,7 +8,7 @@ const DISMISS_KEY = "ag-webmcp-badge";
 
 /**
  * Small, dismissible corner badge that shows this site is itself agent-native:
- * it lists the WebMCP tools the page exposes via `navigator.modelContext`.
+ * it lists the WebMCP tools the page exposes via `document.modelContext`.
  * Pure showcase — the tools work whether or not the badge is shown.
  */
 export function AgentReadyBadge({ tools }: { tools: ToolDescriptor[] }) {
@@ -65,8 +65,8 @@ export function AgentReadyBadge({ tools }: { tools: ToolDescriptor[] }) {
           </div>
           <p className="px-4 pt-3 text-xs text-content-secondary">
             This site exposes typed tools to visiting AI agents via{" "}
-            <code className="font-mono text-[11px] text-content">navigator.modelContext</code> — no
-            scraping needed.
+            <code className="font-mono text-[11px] text-content">document.modelContext</code>, so they
+            don&apos;t have to scrape it.
           </p>
           <ul className="max-h-[240px] overflow-y-auto px-2 py-2">
             {tools.map((t) => (
@@ -80,7 +80,7 @@ export function AgentReadyBadge({ tools }: { tools: ToolDescriptor[] }) {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 rounded-pill border border-border bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] px-3.5 py-2 shadow-raise backdrop-blur-md transition-colors hover:border-brand focus-ring"
+          className="flex items-center gap-2 rounded-pill border border-border bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] px-3.5 py-2 shadow-raise backdrop-blur-md transition-colors hover:border-verdigris focus-ring"
         >
           <Zap size={14} className="text-brand" />
           <span className="text-xs font-medium text-content">Agent-ready</span>

@@ -3,171 +3,114 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import { Button, ButtonLink } from "@/components/ui/Button";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { ButtonLink } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 const LINKS = [
-  { label: "Product", href: "/" },
-  { label: "Docs", href: "/docs" },
-  { label: "Book a demo", href: "/book" },
+  { label: "How it works", href: "/#how-it-works" },
   { label: "Pricing", href: "/pricing" },
+  { label: "Developers", href: "/developers" },
+  { label: "Docs", href: "/docs" },
 ];
 
 /**
- * Scroll-condensing nav (spec 09A). At the top it spans full width and blends
- * into the hero; past 24px it visibly contracts into a centered floating pill
- * (narrower max-width + pill radius + surface blur + raise shadow). Animated via
- * explicit Framer values (not layout) so the contraction reads clearly.
+ * Sits on the page's first band: `dark` when that band is PCB Black (home,
+ * scan, developers). Past 24px it becomes a solid bar of the same tone. No
+ * Copper here: the page's own hero holds the one primary action.
  */
-export function Navbar({ heroDark = true }: { heroDark?: boolean }) {
+export function Navbar({ dark = false }: { dark?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const reduce = useReducedMotion();
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled((prev) => {
-        const y = window.scrollY;
-        if (!prev && y >= 24) return true;
-        if (prev && y <= 8) return false;
-        return prev;
-      });
-    };
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const lightText = heroDark && !scrolled;
-
-  // animate geometry only (smooth contract); chrome (bg/border/shadow) is
-  // theme-aware via className so it works in both light and dark.
-  const animate = scrolled
-    ? { maxWidth: 1026, paddingLeft: 15, paddingRight: 15, paddingTop: 9, paddingBottom: 9, marginTop: 13, borderRadius: 999 }
-    : { maxWidth: 1368, paddingLeft: 44, paddingRight: 44, paddingTop: 20, paddingBottom: 20, marginTop: 0, borderRadius: 0 };
-
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex justify-center">
-      <motion.nav
-        initial={false}
-        animate={reduce ? undefined : animate}
-        transition={{ duration: 0.3, ease: [0.2, 0, 0, 1] }}
-        className={cn(
-          "flex w-full items-center justify-between gap-4 border backdrop-blur transition-[background-color,border-color,box-shadow] duration-300",
-          scrolled
-            ? "border-border bg-[color-mix(in_srgb,var(--surface)_82%,transparent)] shadow-raise"
-            : "border-transparent",
-        )}
-      >
-        <Logo onDark={lightText} size={26} />
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300",
+        dark && "tone-dark",
+        scrolled ? "border-b border-border bg-[color-mix(in_srgb,var(--canvas)_88%,transparent)] backdrop-blur-md" : "bg-transparent",
+      )}
+    >
+      <nav className="mx-auto flex h-16 max-w-[1240px] items-center justify-between gap-4 px-4 sm:px-[clamp(20px,4vw,40px)]">
+        <Logo />
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1 md:flex">
           {LINKS.map((link) => {
-            const active = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+            const active = link.href !== "/#how-it-works" && pathname.startsWith(link.href);
             return (
               <li key={link.label}>
                 <Link
                   href={link.href}
                   className={cn(
-                    "relative rounded-md px-3.5 py-2 text-base transition-colors focus-ring",
-                    lightText
-                      ? "text-white/80 hover:text-white"
-                      : "text-content-secondary hover:text-content",
-                    active && (lightText ? "text-white" : "text-content"),
+                    "rounded-md px-3 py-2 text-base text-content-secondary transition-colors hover:text-content focus-ring",
+                    active && "text-content",
                   )}
                 >
                   {link.label}
-                  {active && (
-                    <span
-                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-brand"
-                      aria-hidden
-                    />
-                  )}
                 </Link>
               </li>
             );
           })}
         </ul>
 
-        <div className="hidden items-center gap-2 lg:flex">
-          <ButtonLink href="/sign-in" variant="ghost" size="sm" onDark={lightText}>
-            Login
+        <div className="hidden items-center gap-2 md:flex">
+          <ButtonLink href="/sign-in" variant="ghost" size="sm">
+            Log in
           </ButtonLink>
-          <ButtonLink href="/sign-up" variant="primary" size="sm">
-            Sign up
+          <ButtonLink href="/book" variant="outline" size="sm">
+            Book a demo
           </ButtonLink>
-          <ThemeToggle onDark={lightText} />
         </div>
 
-        {/* mobile actions */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle onDark={lightText} />
-          <button
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
-            className={cn("rounded-md p-2 focus-ring", lightText ? "text-white" : "text-content")}
-          >
-            <Menu size={22} />
-          </button>
-        </div>
-      </motion.nav>
+        <button
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          className="rounded-md p-2 text-content focus-ring md:hidden"
+        >
+          <Menu size={22} />
+        </button>
+      </nav>
 
-      {/* mobile sheet */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-canvas lg:hidden"
-          >
-            <div className="flex items-center justify-between px-[clamp(20px,5vw,48px)] py-4">
-              <Logo size={24} />
-              <button
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-                className="rounded-md p-2 text-content focus-ring"
-              >
-                <X size={22} />
-              </button>
-            </div>
-            <motion.ul
-              initial="hidden"
-              animate="show"
-              variants={{ show: { transition: { staggerChildren: 0.05 } } }}
-              className="flex flex-col gap-1 px-[clamp(20px,5vw,48px)] pt-6"
-            >
-              {LINKS.map((link) => (
-                <motion.li
-                  key={link.label}
-                  variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+      {open && (
+        <div className="tone-dark fixed inset-0 z-50 flex flex-col md:hidden">
+          <div className="flex h-16 items-center justify-between px-4">
+            <Logo />
+            <button onClick={() => setOpen(false)} aria-label="Close menu" className="rounded-md p-2 text-content focus-ring">
+              <X size={22} />
+            </button>
+          </div>
+          <ul className="flex flex-col gap-1 px-4 pt-6">
+            {LINKS.map((link) => (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="flex min-h-[48px] items-center font-display text-2xl font-semibold text-content"
                 >
-                  <Link
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="flex min-h-[44px] items-center text-xl text-content"
-                  >
-                    {link.label}
-                  </Link>
-                </motion.li>
-              ))}
-            </motion.ul>
-            <div className="mt-8 flex flex-col gap-3 px-[clamp(20px,5vw,48px)]">
-              <ButtonLink href="/sign-in" variant="ghost" fullWidth onClick={() => setMenuOpen(false)}>
-                Login
-              </ButtonLink>
-              <ButtonLink href="/sign-up" variant="primary" fullWidth onClick={() => setMenuOpen(false)}>
-                Sign up
-              </ButtonLink>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-auto flex flex-col gap-3 p-4 pb-8">
+            <ButtonLink href="/#scan" variant="primary" fullWidth onClick={() => setOpen(false)}>
+              Check my site free
+            </ButtonLink>
+            <ButtonLink href="/book" variant="outline" fullWidth onClick={() => setOpen(false)}>
+              Book a demo
+            </ButtonLink>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
