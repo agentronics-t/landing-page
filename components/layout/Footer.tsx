@@ -5,67 +5,61 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: "Product",
     links: [
-      { label: "SDK & WebMCP", href: "/" },
-      { label: "Docs", href: "/docs" },
+      { label: "Free site check", href: "/#scan" },
+      { label: "How it works", href: "/#how-it-works" },
       { label: "Pricing", href: "/pricing" },
+    ],
+  },
+  {
+    heading: "Developers",
+    links: [
+      { label: "SDK overview", href: "/developers" },
+      { label: "Docs", href: "/docs" },
+      { label: "GitHub", href: "https://github.com/agentronics-t" },
     ],
   },
   {
     heading: "Company",
     links: [
-      { label: "Mission", href: "/#mission" },
-      { label: "Vision", href: "/#vision" },
-      { label: "Team", href: "/#team" },
-      { label: "Contact", href: "/book" },
-    ],
-  },
-  {
-    heading: "Connect",
-    links: [
-      { label: "Twitter / X", href: "https://x.com/agentronics" },
+      { label: "Book a demo", href: "/book" },
+      { label: "X / Twitter", href: "https://x.com/agentronics" },
       { label: "LinkedIn", href: "https://www.linkedin.com/company/agentronicss" },
-      { label: "GitHub", href: "https://github.com/agentronics-t" },
-      { label: "Email", href: "/book" },
     ],
   },
 ];
 
+/** PCB Black, like the hero: the page closes on the board it opened on. */
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-surface-raised">
-      <div className="mx-auto max-w-content px-[clamp(20px,5vw,48px)] pb-12 pt-16">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
-          {/* brand block */}
-          <div className="col-span-2 md:col-span-1">
-            <Logo size={26} href="/" />
-            <p className="mt-4 max-w-[220px] text-sm text-content-secondary">
-              Engineered for technical rigor.
-            </p>
-            <p className="mt-6 text-sm text-content-muted">
-              © 2026 Agentronics. All rights reserved.
-            </p>
-          </div>
-
-          {COLUMNS.map((col) => (
-            <div key={col.heading}>
-              <h4 className="font-mono text-xs uppercase tracking-caps text-content-muted">
-                {col.heading}
-              </h4>
-              <ul className="mt-4 space-y-3">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-base text-content-secondary transition-colors hover:text-content focus-ring rounded-sm"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    <footer className="tone-dark border-t border-border px-4 sm:px-[clamp(20px,5vw,48px)]">
+      <div className="mx-auto grid max-w-content grid-cols-2 gap-10 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="col-span-2 md:col-span-1">
+          <Logo />
+          <p className="mt-4 max-w-[260px] text-sm text-content-muted">
+            Make your website ready for AI agents.
+          </p>
         </div>
+        {COLUMNS.map((col) => (
+          <div key={col.heading}>
+            <h4 className="font-mono text-xs uppercase tracking-caps text-content-muted">{col.heading}</h4>
+            <ul className="mt-4 space-y-3">
+              {col.links.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="rounded-sm text-sm text-content-secondary transition-colors hover:text-content focus-ring">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="mx-auto flex max-w-content items-center justify-between border-t border-border py-6 text-xs text-content-muted">
+        <span>© 2026 Agentronics</span>
+        <span className="flex items-center gap-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-verdigris" aria-hidden />
+          This site is agent-ready
+        </span>
       </div>
     </footer>
   );

@@ -3,57 +3,85 @@
 @tailwind utilities;
 
 /* ============================================================
-   Agentronics design tokens (canonical — BUILD_SPEC §4.1)
+   Agentronics — "Circuit Copper" (agentronics-design-guide.md)
+   Copper = the action (CTAs, circuit traces only).
+   Verdigris = the result (done / ready / good, nothing else).
+   Sections alternate Bone and PCB Black; a dark section gets
+   `.tone-dark`, which remaps every role token below (in the components
+   layer, so a utility like bg-transparent can still override its background).
    ============================================================ */
 :root {
-  /* Indigo (primary brand) */
-  --indigo-50: #f0effe; --indigo-100: #e4e2fd; --indigo-200: #cbc7fb; --indigo-300: #aaa3f7;
-  --indigo-400: #8d85f2; --indigo-500: #736ced; --indigo-600: #5a4fd9; --indigo-700: #4a3fc0;
-  --indigo-800: #3d349c; --indigo-900: #332d7b; --indigo-950: #201c4d;
-  /* Amber (accent) */
-  --amber-50: #fff8ec; --amber-100: #ffedcc; --amber-200: #ffd99a; --amber-300: #ffc25c;
-  --amber-400: #ffad33; --amber-500: #ff9e1c; --amber-600: #e8830a; --amber-700: #c06605;
-  --amber-800: #984f0c; --amber-900: #7c420f; --amber-950: #432104;
-  /* Cool-slate neutral */
-  --neutral-50: #f6f7f9; --neutral-100: #eceef2; --neutral-200: #dadde5; --neutral-300: #bcc2ce;
-  --neutral-400: #939bac; --neutral-500: #6c7588; --neutral-600: #515a6c; --neutral-700: #3b4350;
-  --neutral-800: #262b35; --neutral-900: #0e1017; --neutral-950: #06070e;
+  --pcb-black: #0d1a16;
+  --bone: #f5f1e8;
+  --copper: #e8763a;
+  --copper-hover: #f08a52;
+  --verdigris: #2bb39a;
+  --verdigris-deep: #12715f;
+  --fog: #5e6b66;
+  --seam: #ddd6c8;
 
-  /* Role tokens — LIGHT */
-  --canvas: #f6f7f9; --surface: #ffffff; --surface-raised: #f6f7f9;
-  --border: #e3e6ec; --border-strong: #cbd0da;
-  --content: #0e1017; --content-secondary: #515a6c; --content-muted: #828a9b;
-  --brand: #736ced;        /* identity / accents / glow — NOT for white text */
-  --brand-solid: #5a4fd9;  /* interactive fill w/ white text (AA 5.9:1) */
-  --brand-soft: #f0effe;   /* tinted container */
-  --accent: #ff9e1c; --accent-content: #06070e;
-  --ring: #736ced;
-  /* Semantic — kept separate from brand */
-  --success: #18935a; --success-bg: #e7f6ee; --warning: #d97706; --warning-bg: #fdf2e0;
-  --danger: #d92d3c; --danger-bg: #fdecec; --info: #2081c3; --info-bg: #e6f2fb;
-  /* Code island */
-  --code-bg: #0e1017; --code-fg: #e4e2fd; --code-comment: #6c7588; --code-property: #ff9e1c;
+  --canvas: var(--bone);
+  --surface: #fbf8f2;
+  --surface-raised: #efe9dd;
+  --border: var(--seam);
+  --border-strong: #c9c0ae;
+  --content: var(--pcb-black);
+  --content-secondary: #3e4b46;
+  --content-muted: var(--fog);
 
-  /* Radii */
-  --radius-sm: 7px; --radius-md: 9px; --radius-lg: 12px; --radius-xl: 14px; --radius-pill: 999px;
-  /* Shadows — flat by default; the ONLY signature shadow is the brand glow */
-  --shadow-card: none;
-  --shadow-raise: 0 8px 24px -12px rgba(14, 16, 23, .18);
-  --shadow-glow: 0 8px 24px -10px var(--brand);
-  --ring-focus: 0 0 0 3px color-mix(in srgb, var(--ring) 28%, transparent);
-  /* Motion */
+  /* links + highlighted words on light */
+  --brand: var(--verdigris-deep);
+  --brand-soft: #e2eee8;
+  --ring: var(--verdigris-deep);
+
+  --accent: var(--copper);
+  --accent-hover: var(--copper-hover);
+  --accent-content: var(--pcb-black);
+
+  --success: var(--verdigris-deep); --success-bg: #e2eee8;
+  --warning: #8a5a00; --warning-bg: #f4e7c8;
+  --danger: #b42318; --danger-bg: #f8e3df;
+
+  --trace: var(--copper);
+  --node: var(--verdigris);
+  --trace-off: #b9b2a3;
+
+  --code-bg: var(--pcb-black);
+  --code-fg: #e9e4d8;
+  --code-comment: #7c8a84;
+  --code-key: var(--verdigris);
+  --code-string: #d7c9a8;
+
+  --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px; --radius-pill: 999px;
+  --shadow-raise: 0 10px 30px -14px rgba(13, 26, 22, .28);
+  --ring-focus: 0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent);
   --ease-out: cubic-bezier(0.2, 0, 0, 1); --dur-fast: .15s; --dur-med: .25s;
 }
 
-.dark {
-  --canvas: #06070e; --surface: #0e1017; --surface-raised: #181c24;
-  --border: #262b35; --border-strong: #3b4350;
-  --content: #f4f5f8; --content-secondary: #b6bcca; --content-muted: #8b93a4;
-  --brand: #8d85f2; --brand-solid: #5a4fd9; --brand-soft: #1a1840;
-  --accent: #ffae33; --accent-content: #06070e; --ring: #8d85f2;
-  --success: #34d399; --success-bg: #0e2a1d; --warning: #fbbf24; --warning-bg: #2e2106;
-  --danger: #f76e72; --danger-bg: #2c1315; --info: #38bdf8; --info-bg: #0a2433;
-  --code-bg: #0a0b12; --code-fg: #cbc7fb;
+@layer components {
+  .tone-dark {
+    --canvas: var(--pcb-black);
+    --surface: #132620;
+    --surface-raised: #1a2f28;
+    --border: #253a33;
+    --border-strong: #36504a;
+    --content: var(--bone);
+    --content-secondary: #c4cbc6;
+    --content-muted: #8e9b95;
+
+    --brand: var(--verdigris);
+    --brand-soft: #123a31;
+    --ring: var(--verdigris);
+
+    --success: var(--verdigris); --success-bg: #123a31;
+    --warning: #e0b04a; --warning-bg: #2e2510;
+    --danger: #f07a6b; --danger-bg: #3a1a16;
+
+    --trace-off: #3a4d46;
+    --code-bg: #08120f;
+    background: var(--canvas);
+    color: var(--content);
+  }
 }
 
 /* ============================================================
@@ -74,79 +102,50 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
-  background: color-mix(in srgb, var(--brand) 24%, transparent);
+h1, h2, h3, h4 {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  text-wrap: balance;
 }
 
-/* DS focus ring helper */
+::selection {
+  background: color-mix(in srgb, var(--verdigris) 30%, transparent);
+}
+
 .focus-ring:focus-visible {
   outline: none;
   box-shadow: var(--ring-focus);
-  border-color: var(--ring);
 }
 
-/* Marquee (Integrations §08) — paused under reduced motion via JS prop */
-@keyframes marquee-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+/* Circuit traces: a path lights up copper as it draws in. */
+@keyframes trace-draw {
+  from { stroke-dashoffset: var(--len, 600); }
+  to { stroke-dashoffset: 0; }
 }
-@keyframes marquee-right {
-  from { transform: translateX(-50%); }
-  to { transform: translateX(0); }
+.trace-live {
+  stroke-dasharray: var(--len, 600);
+  animation: trace-draw 1.6s var(--ease-out) both;
 }
-.marquee-track {
-  display: flex;
-  width: max-content;
-  will-change: transform;
+@keyframes node-pulse {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
 }
-.marquee-left { animation: marquee-left 40s linear infinite; }
-.marquee-right { animation: marquee-right 40s linear infinite; }
-.marquee-paused { animation-play-state: paused; }
+.node-pulse { animation: node-pulse 2.4s ease-in-out infinite; }
 
-/* Vertical marquee (data-platform rail) */
-@keyframes marquee-up {
-  from { transform: translateY(0); }
-  to { transform: translateY(-50%); }
+/* Scanning indicator */
+@keyframes scan-sweep {
+  0% { left: -35%; }
+  100% { left: 100%; }
 }
-.marquee-col {
-  display: flex;
-  flex-direction: column;
-  height: max-content;
-  will-change: transform;
-}
-.marquee-up { animation: marquee-up 22s linear infinite; }
-
-/* Blinking caret for the typing editor (§05) */
-@keyframes caret-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-.caret {
-  display: inline-block;
-  width: 2px;
-  height: 1.1em;
-  background: var(--accent);
-  margin-left: 1px;
-  vertical-align: text-bottom;
-  animation: caret-blink 1s step-end infinite;
-}
-
-/* Indeterminate progress bar (auth interstitial §10E) */
-@keyframes indeterminate {
-  0% { left: -40%; width: 40%; }
-  50% { left: 30%; width: 50%; }
-  100% { left: 100%; width: 40%; }
-}
-.progress-indeterminate::after {
+.scan-sweep::after {
   content: "";
   position: absolute;
-  top: 0; bottom: 0;
-  background: var(--brand);
-  border-radius: var(--radius-pill);
-  animation: indeterminate 1.4s var(--ease-out) infinite;
+  top: 0; bottom: 0; width: 35%;
+  background: linear-gradient(90deg, transparent, var(--copper), transparent);
+  animation: scan-sweep 1.3s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .marquee-left, .marquee-right, .marquee-up, .caret, .progress-indeterminate::after { animation: none; }
+  .trace-live, .node-pulse, .scan-sweep::after { animation: none; }
+  .trace-live { stroke-dasharray: none; }
 }

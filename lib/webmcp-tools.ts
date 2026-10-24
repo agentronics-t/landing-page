@@ -43,6 +43,8 @@ const DESTINATIONS: Record<string, string> = {
   home: PRODUCT_OVERVIEW.links.home,
   pricing: PRODUCT_OVERVIEW.links.pricing,
   docs: PRODUCT_OVERVIEW.links.docs,
+  developers: PRODUCT_OVERVIEW.links.developers,
+  scan: PRODUCT_OVERVIEW.links.scan,
   book: PRODUCT_OVERVIEW.links.bookDemo,
   "book-demo": PRODUCT_OVERVIEW.links.bookDemo,
   "sign-up": PRODUCT_OVERVIEW.links.signUp,
@@ -206,6 +208,36 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
       },
     },
 
+    {
+      name: "check_agent_readiness",
+      title: "Check a website for AI agents",
+      description:
+        "Run the free Agentronics check on any public website: a 0–100 score for how well AI agents can find, read and use it, with what's broken and how to fix it. Takes up to 30 seconds.",
+      inputSchema: {
+        type: "object",
+        properties: { url: { type: "string", description: "The website to check, e.g. example.com." } },
+        required: ["url"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true },
+      async execute(args) {
+        const res = await fetch("/api/scan", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ url: String(args.url ?? "") }),
+        });
+        const data = await res.json().catch(() => ({ error: "The check failed." }));
+        if (!res.ok) return { content: [{ type: "text", text: data.error ?? "The check failed." }], isError: true };
+        const broken = (data.checks as { status: string; label: string; fix?: string }[]).filter((c) => c.status === "fail" || c.status === "warn");
+        const text =
+          `${data.host} scores ${data.score}/100 for AI agents ` +
+          `(${data.categories.map((c: { label: string; score: number }) => `${c.label} ${c.score}`).join(", ")}).\n` +
+          (broken.length ? `To fix:\n${broken.map((c) => `• ${c.label}: ${c.fix ?? ""}`).join("\n")}` : "Nothing to fix.") +
+          `\nFull report: /scan?url=${encodeURIComponent(data.host)}`;
+        return result(text, data);
+      },
+    },
+
     /* ----------------------------- action tools ----------------------------- */
     {
       name: "book_demo",
@@ -241,13 +273,13 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "navigate_to",
       description:
-        "Navigate the visitor to a page on the Agentronics site: home, pricing, docs, book (demo), sign-up, or sign-in.",
+        "Navigate the visitor to a page on the Agentronics site: home, scan (free site check), pricing, developers, docs, book (demo), sign-up, or sign-in.",
       inputSchema: {
         type: "object",
         properties: {
           destination: {
             type: "string",
-            enum: ["home", "pricing", "docs", "book", "sign-up", "sign-in"],
+            enum: ["home", "scan", "pricing", "developers", "docs", "book", "sign-up", "sign-in"],
             description: "Where to go.",
           },
         },
@@ -259,7 +291,7 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
         const path = DESTINATIONS[key];
         if (!path) {
           return result(
-            `Unknown destination "${args.destination}". Valid: home, pricing, docs, book, sign-up, sign-in.`,
+            `Unknown destination "${args.destination}". Valid: home, scan, pricing, developers, docs, book, sign-up, sign-in.`,
             undefined,
           );
         }

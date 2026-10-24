@@ -1,0 +1,20 @@
+# Agentronics
+
+> Agentronics makes websites ready for AI agents. A free check scores how well AI agents can find, read and use a site; Agent Nick then writes the fixes (WebMCP tools, labels, structured data) into the site's code as a pull request; and the SDK and console let the owner see which agents visit and decide what each may do.
+
+## Product
+
+- [Free AI agent check](https://agentronics.dev/scan): score any public website out of 100 across Find, Read and Act, with fixes. No signup.
+- [Pricing](https://agentronics.dev/pricing): Free, Starter $19/mo, Pro $49/mo, Enterprise custom. USD, billed monthly.
+- [Book a demo](https://agentronics.dev/book)
+
+## Developers
+
+- [SDK overview](https://agentronics.dev/developers): WebMCP tools, detection, authentication, authorization, procedural memory, observability.
+- [Getting started](https://agentronics.dev/docs/getting-started): install @agentronics/sdk and publish a governed WebMCP tool.
+- [Authentication](https://agentronics.dev/docs/auth/overview): verified crawlers, agent API keys, Web Bot Auth, OAuth 2.1.
+- [Authorization](https://agentronics.dev/docs/authorization): allow, deny, or ask the person on the page first.
+
+## Agent tools on this site
+
+This site registers WebMCP tools on document.modelContext: get_pricing, recommend_plan, compare_features, get_product_overview, search_docs, check_agent_readiness, book_demo, start_signup, navigate_to.

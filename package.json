@@ -11,14 +11,11 @@
   "dependencies": {
     "@clerk/nextjs": "^6.9.6",
     "@vercel/analytics": "^2.0.1",
-    "framer-motion": "^11.15.0",
-    "geist": "^1.7.2",
-    "gsap": "^3.12.5",
     "lucide-react": "^0.469.0",
     "next": "^15.5.20",
+    "node-html-parser": "^7.1.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "three": "^0.171.0"
+    "react-dom": "^18.3.1"
   },
   "overrides": {
     "postcss": "^8.5.10"
@@ -27,7 +24,6 @@
     "@types/node": "^20.17.10",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
-    "@types/three": "^0.171.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.20",
