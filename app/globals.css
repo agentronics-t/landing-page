@@ -14,11 +14,16 @@
   --pcb-black: #0d1a16;
   --bone: #f5f1e8;
   --copper: #e8763a;
-  --copper-hover: #f08a52;
+  --copper-hover: color-mix(in srgb, #e8763a 94%, #000); /* 6% darker */
   --verdigris: #2bb39a;
   --verdigris-deep: #12715f;
   --fog: #5e6b66;
   --seam: #ddd6c8;
+  /* score bands only (spec v3 §5.1) — always paired with a text label */
+  --rust: #c2452d;
+  --amber: #d9a441;
+  --fog-light: #9aa6a1; /* subtext on dark: Fog on PCB Black fails AA */
+  --bone-200: #ede7da;  /* card surface */
 
   --canvas: var(--bone);
   --surface: #fbf8f2;
@@ -55,7 +60,14 @@
   --radius-sm: 6px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px; --radius-pill: 999px;
   --shadow-raise: 0 10px 30px -14px rgba(13, 26, 22, .28);
   --ring-focus: 0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent);
-  --ease-out: cubic-bezier(0.2, 0, 0, 1); --dur-fast: .15s; --dur-med: .25s;
+  /* motion (spec v3 §5.3): UI 100–500 ms, longer only for the demo */
+  --dur-instant: 100ms; --dur-fast: 150ms; --dur-base: 250ms; --dur-med: 250ms;
+  --dur-slow: 400ms; --dur-slower: 700ms; --dur-story: 900ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.55, 0, 1, 0.45);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --stagger: 80ms;
+  --measure: 65ch;
 }
 
 @layer components {
@@ -67,7 +79,7 @@
     --border-strong: #36504a;
     --content: var(--bone);
     --content-secondary: #c4cbc6;
-    --content-muted: #8e9b95;
+    --content-muted: var(--fog-light);
 
     --brand: var(--verdigris);
     --brand-soft: #123a31;
@@ -112,8 +124,8 @@ h1, h2, h3, h4 {
 }
 
 .focus-ring:focus-visible {
-  outline: none;
-  box-shadow: var(--ring-focus);
+  outline: 3px solid var(--verdigris);
+  outline-offset: 2px;
 }
 
 /* Circuit traces: a path lights up copper as it draws in. */
@@ -144,8 +156,25 @@ h1, h2, h3, h4 {
   animation: scan-sweep 1.3s linear infinite;
 }
 
+/* typing caret (demo thought log) */
+@keyframes caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.caret { display: inline-block; width: 7px; height: 1.05em; margin-left: 2px; vertical-align: text-bottom; background: currentColor; animation: caret-blink 1s step-end infinite; }
+
+/* Reveal on enter (useInView adds .is-in): opacity + 16px rise */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out); }
+.reveal.is-in { opacity: 1; transform: none; }
+
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+.shake { animation: shake 240ms var(--ease-in-out) 2; }
+@keyframes pulse-once { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+.pulse-once { animation: pulse-once var(--dur-slow) var(--ease-out); }
+@keyframes shine { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .trace-live, .node-pulse, .scan-sweep::after { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important; scroll-behavior: auto !important;
+  }
   .trace-live { stroke-dasharray: none; }
+  .reveal { opacity: 1; transform: none; }
 }

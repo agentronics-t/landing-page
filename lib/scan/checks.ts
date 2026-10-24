@@ -490,5 +490,6 @@ export async function scanSite(target: URL): Promise<ScanReport> {
     score: total ? Math.round((earned / total) * 100) : 0,
     categories,
     checks,
+    stats: { forms: wall.blocked ? 0 : root.querySelectorAll("form").length },
   };
 }

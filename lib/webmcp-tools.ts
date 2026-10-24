@@ -210,9 +210,9 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
 
     {
       name: "check_agent_readiness",
-      title: "Check a website for AI agents",
+      title: "Get a website's Agent Readiness Score",
       description:
-        "Run the free Agentronics check on any public website: a 0–100 score for how well AI agents can find, read and use it, with what's broken and how to fix it. Takes up to 30 seconds.",
+        "Get the free Agent Readiness Score (0–100) for any public website: how well AI agents can find, read and act on it, with what's broken and how to fix it. Takes up to 30 seconds.",
       inputSchema: {
         type: "object",
         properties: { url: { type: "string", description: "The website to check, e.g. example.com." } },
@@ -230,7 +230,7 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
         if (!res.ok) return { content: [{ type: "text", text: data.error ?? "The check failed." }], isError: true };
         const broken = (data.checks as { status: string; label: string; fix?: string }[]).filter((c) => c.status === "fail" || c.status === "warn");
         const text =
-          `${data.host} scores ${data.score}/100 for AI agents ` +
+          `${data.host} has an Agent Readiness Score of ${data.score}/100 ` +
           `(${data.categories.map((c: { label: string; score: number }) => `${c.label} ${c.score}`).join(", ")}).\n` +
           (broken.length ? `To fix:\n${broken.map((c) => `• ${c.label}: ${c.fix ?? ""}`).join("\n")}` : "Nothing to fix.") +
           `\nFull report: /scan?url=${encodeURIComponent(data.host)}`;

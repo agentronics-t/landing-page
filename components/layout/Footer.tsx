@@ -5,7 +5,7 @@ const COLUMNS: { heading: string; links: { label: string; href: string }[] }[] =
   {
     heading: "Product",
     links: [
-      { label: "Free site check", href: "/#scan" },
+      { label: "Free Agent Readiness Score", href: "/#scan" },
       { label: "How it works", href: "/#how-it-works" },
       { label: "Pricing", href: "/pricing" },
     ],
@@ -54,12 +54,15 @@ export function Footer() {
           </div>
         ))}
       </div>
-      <div className="mx-auto flex max-w-content items-center justify-between border-t border-border py-6 text-xs text-content-muted">
+      <div className="mx-auto flex max-w-content flex-wrap items-center justify-between gap-3 border-t border-border py-6 text-xs text-content-muted sm:pb-20">
         <span>© 2026 Agentronics</span>
-        <span className="flex items-center gap-2">
+        <Link
+          href="/scan?url=agentronics.dev"
+          className="inline-flex items-center gap-2 rounded-pill border border-border px-3 py-1.5 text-content transition-colors hover:border-verdigris focus-ring"
+        >
           <span className="h-1.5 w-1.5 rounded-full bg-verdigris" aria-hidden />
-          This site is agent-ready
-        </span>
+          Agent Readiness Score: 100/100 ✓
+        </Link>
       </div>
     </footer>
   );

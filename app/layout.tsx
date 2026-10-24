@@ -13,11 +13,11 @@ const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variab
 export const metadata: Metadata = {
   title: "Agentronics — Make your website ready for AI agents",
   description:
-    "AI assistants now browse, compare and buy for your customers. Agentronics checks how agents see your site, fixes what's broken, and makes sure they can understand and use it.",
+    "Get your free Agent Readiness Score: 12 checks on whether ChatGPT, Claude and Gemini can find, read and act on your site. Agent Nick writes the fixes as a pull request you approve.",
   metadataBase: new URL("https://agentronics.dev"),
   openGraph: {
     title: "Make your website ready for AI agents",
-    description: "Check how AI agents see your site in 30 seconds. Free, no signup.",
+    description: "Get your free Agent Readiness Score in 30 seconds. Score out of 100, no signup.",
     type: "website",
   },
 };
