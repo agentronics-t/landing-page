@@ -1,11 +1,11 @@
 # Agentronics
 
-> Agentronics makes websites ready for AI agents. A free check scores how well AI agents can find, read and use a site; Agent Nick then writes the fixes (WebMCP tools, labels, structured data) into the site's code as a pull request; and the SDK and console let the owner see which agents visit and decide what each may do.
+> Agentronics makes websites ready for AI agents. The free Agent Readiness Score (0–100, 12 checks) shows how well AI agents can find, read and act on a site; Agent Nick then writes the fixes (WebMCP tools, labels, structured data) into the site's code as a pull request; and the SDK and console let the owner see which agents visit and decide what each may do.
 
 ## Product
 
-- [Free AI agent check](https://agentronics.dev/scan): score any public website out of 100 across Find, Read and Act, with fixes. No signup.
-- [Pricing](https://agentronics.dev/pricing): Free, Starter $19/mo, Pro $49/mo, Enterprise custom. USD, billed monthly.
+- [Free Agent Readiness Score](https://agentronics.dev/scan): score any public website out of 100 across Find, Read and Act, with fixes. No signup.
+- [Pricing](https://agentronics.dev/pricing): Free, Starter $19/mo (most popular), Pro $49/mo, Enterprise custom. USD, billed monthly; Free needs no card.
 - [Book a demo](https://agentronics.dev/book)
 
 ## Developers

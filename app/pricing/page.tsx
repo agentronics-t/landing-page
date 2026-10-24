@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Section, SectionHeading } from "@/components/layout/Section";
+import { Section } from "@/components/layout/Section";
+import { PricingFootnote, PricingHeading } from "@/components/home/PricingPreview";
 import { PlanCards } from "@/components/pricing/PlanCards";
 import { ComparisonTable } from "@/components/pricing/ComparisonTable";
 import { FinalCta } from "@/components/home/FinalCta";
@@ -9,7 +10,7 @@ import { FinalCta } from "@/components/home/FinalCta";
 export const metadata: Metadata = {
   title: "Pricing — Agentronics",
   description:
-    "Start free. Agent Nick writes WebMCP tools into your site, then Starter at $19/mo and Pro at $49/mo add more sites, tools and agent governance. Enterprise plans are custom.",
+    "Start free with your Agent Readiness Score and Agent Nick. Starter $19/mo (most popular) and Pro $49/mo add more fix rounds, agent actions, rules and history. Enterprise plans are custom.",
 };
 
 export default function PricingPage() {
@@ -18,16 +19,11 @@ export default function PricingPage() {
       <Navbar />
       <main>
         <Section className="pt-32 md:pt-36" innerClassName="max-w-[1280px]">
-          <SectionHeading
-            center
-            eyebrow="Pricing"
-            title="Start free. Pay when agents start paying off."
-            lead="Every plan includes Agent Nick, which writes the fixes into your site and opens a pull request."
-          />
-          <PlanCards className="mt-14" />
-          <p className="mx-auto mt-8 max-w-[680px] text-center text-sm text-content-muted">
-            Prices in USD, billed monthly. Limits never block agents: at a limit your site keeps working and we stop recording
-            until next month.
+          <PricingHeading as="h1" />
+          <PlanCards className="mt-12" />
+          <PricingFootnote compare={false} />
+          <p className="mx-auto mt-2 max-w-[680px] text-center text-sm text-content-muted">
+            Limits never block agents: at a limit your site keeps working and we stop recording until next month.
           </p>
         </Section>
         <Section className="pt-0 md:pt-0">

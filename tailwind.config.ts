@@ -39,6 +39,10 @@ const config: Config = {
         "verdigris-deep": "var(--verdigris-deep)",
         fog: "var(--fog)",
         seam: "var(--seam)",
+        rust: "var(--rust)",
+        amber: "var(--amber)",
+        "fog-light": "var(--fog-light)",
+        "bone-200": "var(--bone-200)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
@@ -57,6 +61,7 @@ const config: Config = {
         "3xl": ["38px", "1.2"],
         "4xl": ["56px", "1.1"],
         "5xl": ["64px", "1.1"],
+        "6xl": ["72px", "1.05"],
       },
       letterSpacing: {
         display: "-0.025em",
@@ -75,6 +80,7 @@ const config: Config = {
       },
       maxWidth: {
         content: "1120px",
+        measure: "65ch",
       },
       transitionTimingFunction: {
         out: "cubic-bezier(0.2,0,0,1)",

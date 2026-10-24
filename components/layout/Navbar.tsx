@@ -16,28 +16,42 @@ const LINKS = [
 ];
 
 /**
- * Sits on the page's first band: `dark` when that band is PCB Black (home,
- * scan, developers). Past 24px it becomes a solid bar of the same tone. No
- * Copper here: the page's own hero holds the one primary action.
+ * Spec v3 §3.1: 64px, 4 links + 1 CTA (Hick's law). Transparent over a dark
+ * hero (`dark`); past 80px of scroll it becomes Bone with a Seam border.
+ * `ctaAfter` = id of the hero's score input: the Copper "Get my score" CTA
+ * only appears once that input has left the viewport. Without it, the CTA
+ * always shows.
  */
-export function Navbar({ dark = false }: { dark?: boolean }) {
+export function Navbar({ dark = false, ctaAfter }: { dark?: boolean; ctaAfter?: string }) {
   const [scrolled, setScrolled] = useState(false);
+  const [showCta, setShowCta] = useState(!ctaAfter);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 80);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!ctaAfter) return;
+    const el = document.getElementById(ctaAfter);
+    if (!el || typeof IntersectionObserver === "undefined") return setShowCta(true);
+    const io = new IntersectionObserver(([e]) => setShowCta(!e.isIntersecting), { threshold: 0 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ctaAfter]);
+
+  const onDark = dark && !scrolled;
+
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color] duration-300",
-        dark && "tone-dark",
-        scrolled ? "border-b border-border bg-[color-mix(in_srgb,var(--canvas)_88%,transparent)] backdrop-blur-md" : "bg-transparent",
+        "fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-[var(--dur-base)]",
+        onDark ? "tone-dark border-transparent !bg-transparent" : "border-transparent bg-transparent",
+        scrolled && "border-seam !bg-[color-mix(in_srgb,var(--bone)_94%,transparent)] backdrop-blur-md",
       )}
     >
       <nav className="mx-auto flex h-16 max-w-[1240px] items-center justify-between gap-4 px-4 sm:px-[clamp(20px,4vw,40px)]">
@@ -66,8 +80,17 @@ export function Navbar({ dark = false }: { dark?: boolean }) {
           <ButtonLink href="/sign-in" variant="ghost" size="sm">
             Log in
           </ButtonLink>
-          <ButtonLink href="/book" variant="outline" size="sm">
-            Book a demo
+          <ButtonLink
+            href="/#scan"
+            size="sm"
+            aria-hidden={!showCta}
+            tabIndex={showCta ? undefined : -1}
+            className={cn(
+              "transition-[opacity,transform] duration-[var(--dur-base)]",
+              showCta ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0",
+            )}
+          >
+            Get my score
           </ButtonLink>
         </div>
 
@@ -100,13 +123,15 @@ export function Navbar({ dark = false }: { dark?: boolean }) {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/sign-in" onClick={() => setOpen(false)} className="flex min-h-[48px] items-center font-display text-2xl font-semibold text-content">
+                Log in
+              </Link>
+            </li>
           </ul>
-          <div className="mt-auto flex flex-col gap-3 p-4 pb-8">
-            <ButtonLink href="/#scan" variant="primary" fullWidth onClick={() => setOpen(false)}>
-              Check my site free
-            </ButtonLink>
-            <ButtonLink href="/book" variant="outline" fullWidth onClick={() => setOpen(false)}>
-              Book a demo
+          <div className="mt-auto p-4 pb-8">
+            <ButtonLink href="/#scan" fullWidth onClick={() => setOpen(false)}>
+              Get my score
             </ButtonLink>
           </div>
         </div>
