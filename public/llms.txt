@@ -33,3 +33,10 @@
 
 - [SDK overview](https://www.agentronics.dev/developers): WebMCP tools, detection, authentication, authorization, procedural memory, observability.
 - [Docs](https://www.agentronics.dev/docs) and the [quickstart](https://www.agentronics.dev/docs/getting-started): install @agentronics/sdk and publish a governed WebMCP tool.
+
+## Policies
+
+- [Terms of Service](https://www.agentronics.dev/terms)
+- [Privacy Policy](https://www.agentronics.dev/privacy)
+- [Refund & Cancellation Policy](https://www.agentronics.dev/refunds): cancel any paid plan anytime; it stays active until the end of the paid month; no refunds for partial months.
+- [Contact](https://www.agentronics.dev/contact): agentronics.help@gmail.com

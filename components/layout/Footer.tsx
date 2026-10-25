@@ -9,6 +9,8 @@ const LINKS = [
   { label: "Log in", href: "/login" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
+  { label: "Refunds", href: "/refunds" },
+  { label: "Contact", href: "/contact" },
 ];
 
 /** The home page's footer (public/home.html). The badge opens the home scanner on this site. */
