@@ -24,25 +24,45 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+    return [
+      { source: "/:path*", headers: SECURITY_HEADERS },
+      // The home page is public/home.html, or index.md for Accept: text/markdown.
+      { source: "/", headers: [{ key: "Vary", value: "Accept" }] },
+      { source: "/index.md", headers: [{ key: "Content-Type", value: "text/markdown; charset=utf-8" }] },
+      { source: "/llms.txt", headers: [{ key: "Content-Type", value: "text/plain; charset=utf-8" }] },
+      { source: "/.well-known/api-catalog", headers: [{ key: "Content-Type", value: "application/linkset+json" }] },
+    ];
   },
   async redirects() {
     return [
-      // Agentronics is one product now — the SDK story is the home page.
-      // Keep the old routes working.
+      // Old routes.
       { source: "/sdk", destination: "/", permanent: true },
       { source: "/intelligence", destination: "/", permanent: true },
       // The console isn't open to the public yet: Login / Sign up go to the demo booking.
       { source: "/sign-in/:path*", destination: "/book", permanent: false },
       { source: "/sign-up/:path*", destination: "/book", permanent: false },
+      // The home page links to these names; query strings (?plan=…) pass through.
+      { source: "/signup", destination: "/book", permanent: false },
+      { source: "/login", destination: "/book", permanent: false },
+      { source: "/demo", destination: "/book", permanent: false },
+      // The scanner lives on the home page now: /scan?url=x → /?url=x, which runs it.
+      { source: "/scan", destination: "/", permanent: true },
     ];
   },
   async rewrites() {
-    return [
-      { source: "/docs", destination: `${DOCS_ZONE}/docs` },
-      { source: "/docs/:path+", destination: `${DOCS_ZONE}/docs/:path+` },
-      { source: "/docs-static/:path+", destination: `${DOCS_ZONE}/docs-static/:path+` },
-    ];
+    return {
+      // The home page is the redesign's static page (public/home.html), served
+      // as-is for pixel parity. Agents that ask for Markdown get index.md.
+      beforeFiles: [
+        { source: "/", has: [{ type: "header", key: "accept", value: ".*text/markdown.*" }], destination: "/index.md" },
+        { source: "/", destination: "/home.html" },
+      ],
+      afterFiles: [
+        { source: "/docs", destination: `${DOCS_ZONE}/docs` },
+        { source: "/docs/:path+", destination: `${DOCS_ZONE}/docs/:path+` },
+        { source: "/docs-static/:path+", destination: `${DOCS_ZONE}/docs-static/:path+` },
+      ],
+    };
   },
 };
 

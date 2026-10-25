@@ -37,12 +37,12 @@ export function AgentReadyBadge({ tools }: { tools: ToolDescriptor[] }) {
   return (
     <div className="fixed bottom-4 right-4 z-40 hidden sm:block">
       {open ? (
-        <div className="w-[320px] overflow-hidden rounded-xl border border-border bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] shadow-raise backdrop-blur-md">
-          <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <div className="w-[320px] overflow-hidden rounded-[16px] border-2 border-ink bg-paper shadow-hard">
+          <div className="flex items-center justify-between border-b-2 border-ink px-4 py-3">
             <span className="flex items-center gap-2">
-              <Zap size={15} className="text-brand" />
-              <span className="text-sm font-semibold text-content">Agent-ready</span>
-              <span className="rounded-pill bg-brand-soft px-1.5 py-0.5 font-mono text-[10px] text-brand">
+              <Zap size={15} className="rounded bg-lime p-0.5 text-ink" />
+              <span className="font-display text-sm font-semibold text-ink">Agent-ready</span>
+              <span className="rounded-full border border-ink bg-lime px-1.5 py-0.5 font-mono text-[10px] text-ink">
                 {tools.length} tools
               </span>
             </span>
@@ -50,14 +50,14 @@ export function AgentReadyBadge({ tools }: { tools: ToolDescriptor[] }) {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Collapse"
-                className="rounded-md p-1 text-content-muted hover:text-content focus-ring"
+                className="rounded-md p-1 text-content-muted hover:text-ink"
               >
                 <ChevronRight size={15} className="rotate-90" />
               </button>
               <button
                 onClick={dismiss}
                 aria-label="Dismiss"
-                className="rounded-md p-1 text-content-muted hover:text-content focus-ring"
+                className="rounded-md p-1 text-content-muted hover:text-ink"
               >
                 <X size={15} />
               </button>
@@ -80,11 +80,11 @@ export function AgentReadyBadge({ tools }: { tools: ToolDescriptor[] }) {
       ) : (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 rounded-pill border border-border bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] px-3.5 py-2 shadow-raise backdrop-blur-md transition-colors hover:border-verdigris focus-ring"
+          className="flex items-center gap-2 rounded-full border-2 border-ink bg-paper px-3.5 py-2 shadow-hard transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5"
         >
-          <Zap size={14} className="text-brand" />
-          <span className="text-xs font-medium text-content">Agent-ready</span>
-          <span className="rounded-pill bg-brand-soft px-1.5 py-0.5 font-mono text-[10px] text-brand">
+          <Zap size={14} className="rounded bg-lime p-0.5 text-ink" />
+          <span className="font-display text-xs font-semibold text-ink">Agent-ready</span>
+          <span className="rounded-full border border-ink bg-lime px-1.5 py-0.5 font-mono text-[10px] text-ink">
             {tools.length} WebMCP tools
           </span>
         </button>

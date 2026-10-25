@@ -1,52 +1,24 @@
-import Link from "next/link";
-import { cn } from "@/lib/cn";
-
 // The Agentronics "A": an apex with one long left leg and a crossbar that
-// returns into the right leg. Traced from the brand master (2000×2000) and
-// cropped to the mark, so the viewBox is exactly the glyph.
+// returns into the right leg, in lime on a red rounded square. Traced from the
+// brand master (2000×2000); public/home-assets/favicon.svg is the same mark.
 export const MARK_PATH = "M458 0L835 660L317 660L368 570L664 570L458 209L119 800L0 800Z";
-export const MARK_VIEWBOX = "0 0 835 800";
-const COPPER = "#E8763A";
 
-/** The mark alone. Brand colour is baked in: this is the logo, not a themed surface. */
-export function Logomark({ size = 26, className }: { size?: number; className?: string }) {
+/** The logo square alone. Colours are baked in: this is the logo, not a themed surface. */
+export function Logomark({ className = "logo__mark" }: { className?: string }) {
   return (
-    <svg
-      width={(size * 835) / 800}
-      height={size}
-      viewBox={MARK_VIEWBOX}
-      className={className}
-      role="img"
-      aria-label="Agentronics"
-    >
-      <path d={MARK_PATH} fill={COPPER} />
+    <svg className={className} viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="9" fill="#FF4D1F" />
+      <path transform="translate(8 8.33) scale(.019162)" d={MARK_PATH} fill="#D4FF3A" />
     </svg>
   );
 }
 
-interface LogoProps {
-  href?: string | null;
-  size?: number;
-  showWordmark?: boolean;
-  className?: string;
-}
-
-/** Mark + wordmark. The wordmark takes the surrounding text colour, so it reads on Bone and PCB Black. */
-export function Logo({ href = "/", size = 22, showWordmark = true, className }: LogoProps) {
-  const content = (
-    <span className={cn("inline-flex shrink-0 items-center gap-2.5 leading-none text-content", className)}>
-      <Logomark size={size} className="block shrink-0" />
-      {showWordmark && (
-        <span className="font-display text-[20px] font-bold leading-none tracking-title">agentronics</span>
-      )}
-    </span>
-  );
-
-  return href ? (
-    <Link href={href} className="focus-ring rounded-md" aria-label="Agentronics home">
-      {content}
-    </Link>
-  ) : (
-    content
+/** Mark + wordmark, the home page's `.logo`. `light` is the footer's white wordmark. */
+export function Logo({ href = "/", light = false }: { href?: string; light?: boolean }) {
+  return (
+    <a className={light ? "logo logo--light" : "logo"} href={href} aria-label="Agentronics home">
+      <Logomark />
+      <span>agentronics</span>
+    </a>
   );
 }

@@ -1,25 +1,31 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Funnel_Display, Funnel_Sans, Martian_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
 import { WebMcpProvider } from "@/components/webmcp/WebMcpProvider";
+import { SiteEffects } from "@/components/layout/SiteEffects";
 import { PLANS } from "@/lib/catalog";
 import "./globals.css";
+// The design system (the home page's stylesheet), after Tailwind so its base rules win.
+import "../public/home-assets/styles.css";
 
-const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display", display: "swap" });
-const sans = Inter({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-sans", display: "swap" });
-const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-mono", display: "swap" });
+const display = Funnel_Display({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+const sans = Funnel_Sans({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const mono = Martian_Mono({ subsets: ["latin"], axes: ["wdth"], variable: "--font-mono", display: "swap" });
 
+// The home page (public/home.html) has its own head; these are for every other page.
 export const metadata: Metadata = {
-  title: "Agentronics — Make your website ready for AI agents",
+  title: "Agentronics: Make your website ready for AI agents",
   description:
-    "Get your free Agent Readiness Score: 12 checks on whether ChatGPT, Claude and Gemini can find, read and act on your site. Agent Nick writes the fixes as a pull request you approve.",
-  metadataBase: new URL("https://agentronics.dev"),
+    "Get your free Agent Readiness Score in 30 seconds. See if AI agents can find, read and act on your website, then let Agent Nick fix it with a pull request you approve.",
+  metadataBase: new URL("https://www.agentronics.dev"),
+  icons: { icon: "/home-assets/favicon.svg" },
   openGraph: {
-    title: "Make your website ready for AI agents",
-    description: "Get your free Agent Readiness Score in 30 seconds. Score out of 100, no signup.",
+    title: "Can AI agents buy from you? Get your Agent Readiness Score.",
+    description: "Free scan, 30 seconds. Agent Nick fixes what's broken in a pull request you approve.",
     type: "website",
   },
+  other: { "theme-color": "#0B0B0C" },
 };
 
 /**
@@ -36,17 +42,18 @@ const ORG_JSON_LD = {
   "@graph": [
     {
       "@type": "Organization",
+      "@id": "https://www.agentronics.dev/#org",
       name: "Agentronics",
-      url: "https://agentronics.dev",
-      logo: "https://agentronics.dev/brand/agentronics-mark.svg",
+      url: "https://www.agentronics.dev/",
+      logo: "https://www.agentronics.dev/home-assets/favicon.svg",
       sameAs: ["https://x.com/agentronics", "https://www.linkedin.com/company/agentronicss", "https://github.com/agentronics-t"],
     },
     {
       "@type": "SoftwareApplication",
       name: "Agentronics",
-      applicationCategory: "DeveloperApplication",
+      applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      description: "Checks how AI agents see a website, fixes what's broken, and governs what agents can do.",
+      publisher: { "@id": "https://www.agentronics.dev/#org" },
       offers: PLANS.filter((p) => p.priceMonthly !== null).map((p) => ({
         "@type": "Offer",
         name: p.name,
@@ -60,9 +67,13 @@ const ORG_JSON_LD = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const body = (
     <html lang="en" className={`${display.variable} ${sans.variable} ${mono.variable}`}>
-      <body className="font-sans text-md">
+      <body>
+        <a className="skip" href="#main">
+          Skip to content
+        </a>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }} />
         {children}
+        <SiteEffects />
         <WebMcpProvider />
         <Analytics />
       </body>

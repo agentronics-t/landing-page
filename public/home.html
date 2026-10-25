@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agentronics: Make your website ready for AI agents</title>
+<meta name="description" content="Get your free Agent Readiness Score in 30 seconds. See if AI agents can find, read and act on your website, then let Agent Nick fix it with a pull request you approve.">
+<link rel="canonical" href="https://www.agentronics.dev/">
+<link rel="alternate" type="text/markdown" href="/index.md" title="Markdown version for AI agents">
+<link rel="api-catalog" href="/.well-known/api-catalog">
+<link rel="icon" href="/home-assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0B0B0C">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Can AI agents buy from you? Get your Agent Readiness Score.">
+<meta property="og:description" content="Free scan, 30 seconds. Agent Nick fixes what's broken in a pull request you approve.">
+<meta property="og:url" content="https://www.agentronics.dev/">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="https://www.agentronics.dev/opengraph-image">
+<meta name="twitter:image" content="https://www.agentronics.dev/opengraph-image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:wght@300..800&family=Martian+Mono:wdth,wght@75..112.5,300..700&display=swap">
+<link rel="stylesheet" href="/home-assets/styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.agentronics.dev/#org",
+      "name": "Agentronics",
+      "url": "https://www.agentronics.dev/",
+      "logo": "https://www.agentronics.dev/home-assets/favicon.svg",
+      "description": "Agentronics makes company websites ready for AI agents. It scores how well AI agents can use your site, then fixes the problems for you."
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.agentronics.dev/#site",
+      "url": "https://www.agentronics.dev/",
+      "name": "Agentronics",
+      "publisher": { "@id": "https://www.agentronics.dev/#org" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "Agentronics",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "url": "https://www.agentronics.dev/",
+      "publisher": { "@id": "https://www.agentronics.dev/#org" },
+      "description": "Agent Readiness Score (0–100), Agent Nick fix pull requests, agent actions, access rules, verification, analytics and monitoring.",
+      "offers": [
+        { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "url": "https://www.agentronics.dev/#pricing" },
+        { "@type": "Offer", "name": "Starter", "price": "19", "priceCurrency": "USD", "url": "https://www.agentronics.dev/#pricing",
+          "priceSpecification": { "@type": "UnitPriceSpecification", "price": "19", "priceCurrency": "USD", "unitCode": "MON" } },
+        { "@type": "Offer", "name": "Pro", "price": "49", "priceCurrency": "USD", "url": "https://www.agentronics.dev/#pricing",
+          "priceSpecification": { "@type": "UnitPriceSpecification", "price": "49", "priceCurrency": "USD", "unitCode": "MON" } },
+        { "@type": "Offer", "name": "Enterprise", "description": "Custom pricing", "url": "https://www.agentronics.dev/demo" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "What does the Agent Readiness Score measure?", "acceptedAnswer": { "@type": "Answer", "text": "A number from 0 to 100 from 12 checks in three groups: can agents find your site, read it, and act on it. Each check shows what's wrong and how to fix it." } },
+        { "@type": "Question", "name": "Do I have to give you access to my code?", "acceptedAnswer": { "@type": "Answer", "text": "Not for the score, which only reads public pages. For fixes, you install the Agentronics GitHub App on the repositories you choose. Every change arrives as a pull request your team reviews before merging." } },
+        { "@type": "Question", "name": "Can I trust AI-written code?", "acceptedAnswer": { "@type": "Answer", "text": "You don't have to trust it blindly. Every change is a normal pull request with an explanation, and your team reviews it before merging." } },
+        { "@type": "Question", "name": "Will this change how my site looks?", "acceptedAnswer": { "@type": "Answer", "text": "No. Fixes are invisible to people." } },
+        { "@type": "Question", "name": "Will it hurt or help my Google rankings?", "acceptedAnswer": { "@type": "Answer", "text": "It won't hurt. Many fixes are things search engines already reward. llms.txt is for AI tools, and Google ignores it for rankings. Agents never see different content from people." } },
+        { "@type": "Question", "name": "Are AI agents really visiting websites?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. AI-referred visits to US retail sites rose about 693% in the 2025 holidays (Adobe Analytics), and those visitors converted better. Your dashboard shows which agents visit your own site." } },
+        { "@type": "Question", "name": "Which AI agents does this help?", "acceptedAnswer": { "@type": "Answer", "text": "Any agent that reads web pages, such as ChatGPT, Claude, Perplexity and Gemini. Browsers supporting WebMCP can also call your site's actions directly." } },
+        { "@type": "Question", "name": "Can agents do things I don't want?", "acceptedAnswer": { "@type": "Answer", "text": "No. For each action you choose allow, ask first, or deny." } },
+        { "@type": "Question", "name": "How long does setup take? Do I need a developer?", "acceptedAnswer": { "@type": "Answer", "text": "The score takes 30 seconds, and connecting GitHub takes minutes. Someone who can approve a pull request reviews the changes." } },
+        { "@type": "Question", "name": "My score is already high. Do I still need this?", "acceptedAnswer": { "@type": "Answer", "text": "Maybe not today. But sites change, and one new form can break agent access. Paid plans re-check after every code change and alert you." } },
+        { "@type": "Question", "name": "Is Free really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Free is $0 for one site, with Agent Nick included. Merged fixes stay in your code even if you later cancel a paid plan." } }
+      ]
+    }
+  ]
+}
+</script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="/home-assets/app.js"></script>
+<script>
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+addEventListener('agentronics:track', function (e) {
+  var data = Object.assign({}, e.detail), name = data.name;
+  delete data.name;
+  window.va('event', { name: name, data: data });
+});
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav" data-nav>
+  <div class="wrap nav__inner">
+    <a class="logo" href="#top" aria-label="Agentronics home">
+      <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#FF4D1F"/><path transform="translate(8 8.33) scale(.019162)" d="M458 0L835 660L317 660L368 570L664 570L458 209L119 800L0 800Z" fill="#D4FF3A"/></svg>
+      <span>agentronics</span>
+    </a>
+    <nav class="nav__links" aria-label="Main">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="/developers">Developers</a>
+      <a href="/docs">Docs</a>
+    </nav>
+    <div class="nav__right">
+      <a class="nav__login" href="/login">Log in</a>
+      <a class="btn btn--go btn--sm" href="#score" data-goto-score>Get my score</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" aria-labelledby="hero-title" data-spotlight>
+  <div class="hero__dots" aria-hidden="true"></div>
+  <div class="hero__dots hero__dots--lit" aria-hidden="true"></div>
+
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="pill" data-intro>
+        <span class="pill__dot" aria-hidden="true"></span>
+        AI-referred retail visits <b>+693%</b>
+        <span class="pill__src">Adobe · holiday 2025</span>
+      </p>
+
+      <h1 class="h1" id="hero-title" aria-label="Can AI agents buy from you?">
+        <span class="line" aria-hidden="true"><span class="line__in">Can AI agents</span></span>
+        <span class="line" aria-hidden="true"><span class="line__in"><span class="rotator" data-rotator><span class="rotator__word is-on">buy from</span><span class="rotator__word">book with</span><span class="rotator__word">find</span><span class="rotator__word">choose</span></span> you?</span></span>
+      </h1>
+
+      <p class="lede" data-intro>Agents now shop, compare and book for people. Most websites stop them cold, and never see it happen.</p>
+
+      <form class="scanform" action="./" method="get" data-scan-form data-intro novalidate>
+        <label class="scanform__label" for="hero-url">Get your free Agent Readiness Score</label>
+        <div class="scanform__row">
+          <div class="scanform__field">
+            <span class="scanform__prefix" aria-hidden="true">https://</span>
+            <input id="hero-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" required>
+          </div>
+          <button class="btn btn--go btn--lg" type="submit" data-magnetic>
+            <span class="btn__text">Get my score</span>
+            <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p class="scanform__error" role="alert" hidden>Enter a website like yourcompany.com</p>
+        <ul class="ticks">
+          <li>Score out of 100</li><li>Free</li><li>No signup</li><li>30 seconds</li>
+        </ul>
+      </form>
+    </div>
+
+    <!-- Human view vs agent view -->
+    <div class="hero__visual" data-intro aria-hidden="true">
+      <div class="duo" data-duo>
+        <div class="duo__bar">
+          <span class="duo__dots"><i></i><i></i><i></i></span>
+          <span class="duo__url">yourstore.com/trail-runner</span>
+        </div>
+        <div class="duo__stage" data-duo-stage>
+          <!-- What people see -->
+          <div class="duo__layer duo__human">
+            <div class="pm__img">
+              <svg viewBox="0 0 220 130" class="pm__shoe">
+                <path d="M20 94c0-14 12-23 30-27l34-8c11-17 23-27 37-27 10 0 15 9 25 19 14 14 33 20 49 26 10 4 10 19 2 23H32c-8 0-12-2-12-6Z" fill="#0B0B0C"/>
+                <path d="M13 100h194c2 8-4 15-12 15H27c-9 0-15-7-14-15Z" style="fill:var(--lime)" stroke="#0B0B0C" stroke-width="3"/>
+                <path d="M98 52l10 9M108 45l10 9M118 39l10 9" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="168" cy="76" r="5" fill="#fff"/>
+              </svg>
+            </div>
+            <div class="pm__info">
+              <span class="pm__brand">STRIDE CO.</span>
+              <span class="pm__title">Trail Runner 2</span>
+              <span class="pm__stars">★★★★★ <small>2,481</small></span>
+              <span class="pm__price">$129</span>
+              <span class="pm__sizes"><i>8</i><i class="on">9</i><i>10</i><i>11</i></span>
+              <span class="pm__actions">
+                <i class="pm__cart"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11h10.2L20 8H7"/><circle cx="9.5" cy="19" r="1.4"/><circle cx="16.5" cy="19" r="1.4"/></svg></i>
+                <i class="pm__heart"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg></i>
+              </span>
+              <span class="pm__email">Email for 10% off</span>
+            </div>
+          </div>
+
+          <!-- What agents see -->
+          <div class="duo__layer duo__agent">
+            <div class="pm__img ag__box"><code>&lt;img alt=""&gt;</code><em class="flag">no description</em></div>
+            <div class="pm__info">
+              <span class="ag__line ok"><code>h1</code> Trail Runner 2 <b>✓</b></span>
+              <span class="ag__line"><code>price</code> <span class="ag__empty"></span> <em class="flag">empty · loads with JS</em></span>
+              <span class="ag__line"><code>div div div div</code> <em class="flag">sizes not selectable</em></span>
+              <span class="ag__line"><code>&lt;button&gt;</code> ??? <code>&lt;button&gt;</code> ??? <em class="flag">no labels</em></span>
+              <span class="ag__line"><code>&lt;input&gt;</code> <em class="flag">unlabeled field</em></span>
+              <span class="ag__log">&gt; can’t find price. trying competitor.com…</span>
+            </div>
+          </div>
+
+          <div class="duo__beam" data-duo-beam>
+            <span class="duo__tag duo__tag--agent">Agent view</span>
+            <span class="duo__tag duo__tag--human">Human view</span>
+          </div>
+        </div>
+      </div>
+      <div class="chip-float">
+        <span class="chip-float__num">39</span>
+        <span class="chip-float__txt"><b>Not ready</b><small>Agent Readiness · yourstore.com</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-label="Works with any AI agent that reads the web: ChatGPT, Claude, Gemini, Perplexity and AI browsers. Supports WebMCP.">
+  <div class="marquee__track" aria-hidden="true">
+    <span>Works with every agent that reads the web</span><i>✦</i><span>ChatGPT</span><i>✦</i><span>Claude</span><i>✦</i><span>Gemini</span><i>✦</i><span>Perplexity</span><i>✦</i><span>AI browsers</span><i>✦</i><span>WebMCP support</span><i>✦</i>
+    <span>Works with every agent that reads the web</span><i>✦</i><span>ChatGPT</span><i>✦</i><span>Claude</span><i>✦</i><span>Gemini</span><i>✦</i><span>Perplexity</span><i>✦</i><span>AI browsers</span><i>✦</i><span>WebMCP support</span><i>✦</i>
+  </div>
+</div>
+
+<!-- ============ THE SHIFT ============ -->
+<section class="section shift" aria-labelledby="shift-title">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">The shift</p>
+      <h2 class="h2" id="shift-title">Your next customer might not be a person. <span class="mark">It’s their AI agent.</span></h2>
+    </div>
+    <div class="stats">
+      <figure class="stat" data-reveal>
+        <span class="stat__num"><span data-count="693" data-prefix="+">+693</span><sup>%</sup></span>
+        <figcaption>AI-referred visits to US retail sites<small>Adobe Analytics · holiday 2025 vs 2024</small></figcaption>
+      </figure>
+      <figure class="stat" data-reveal>
+        <span class="stat__num"><span data-count="54">54</span><sup>%</sup></span>
+        <figcaption>better conversion from those visitors<small>Adobe · May 2026</small></figcaption>
+      </figure>
+      <figure class="stat stat--red" data-reveal>
+        <span class="stat__num"><span data-count="4">4</span><sup>%</sup></span>
+        <figcaption>of top sites state AI rules in robots.txt<small>Cloudflare · top 200,000 domains · Apr 2026</small></figcaption>
+      </figure>
+    </div>
+    <p class="footnote" data-reveal>AI-referred visits are people arriving from assistants like ChatGPT, Gemini and Perplexity. Almost no one is ready for them yet. <b>That’s your head start.</b></p>
+  </div>
+</section>
+
+<!-- ============ THE PROBLEM ============ -->
+<section class="section dark problem" aria-labelledby="problem-title">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">The invisible problem</p>
+      <h2 class="h2" id="problem-title">Agents get stuck. <span class="t-red">Silently.</span></h2>
+    </div>
+
+    <div class="problem__grid">
+      <ol class="blockers">
+        <li data-reveal><span class="blockers__you">Prices load with JavaScript</span><span class="blockers__agent">sees an empty price</span></li>
+        <li data-reveal><span class="blockers__you">Icon-only buttons</span><span class="blockers__agent">can’t tell buy from close</span></li>
+        <li data-reveal><span class="blockers__you">Unlabeled form fields</span><span class="blockers__agent">can’t fill them in</span></li>
+        <li data-reveal><span class="blockers__you">No machine-readable summary</span><span class="blockers__agent">doesn’t know what you sell</span></li>
+        <li data-reveal><span class="blockers__you">No sitemap, llms.txt or AI rules</span><span class="blockers__agent">can’t find its way</span></li>
+      </ol>
+
+      <figure class="term" data-reveal data-agentlog>
+        <div class="term__bar"><span class="duo__dots"><i></i><i></i><i></i></span><span>agent · live</span></div>
+        <pre class="term__body" aria-hidden="true"><code data-agentlog-out></code><span class="term__caret"></span></pre>
+        <figcaption class="visually-hidden">An AI agent is asked to buy trail runners. On your site it finds an empty price and an unlabeled button, gives up, and buys from a competitor instead.</figcaption>
+      </figure>
+    </div>
+
+    <p class="kicker" data-reveal>No error. No alert. <b>Just a sale you never knew you lost.</b></p>
+  </div>
+</section>
+
+<!-- ============ SCANNER ============ -->
+<section class="section scanner" id="score" aria-labelledby="score-title">
+  <div class="wrap">
+    <div class="section-head section-head--center" data-reveal>
+      <p class="eyebrow">Free · No signup · 30 seconds</p>
+      <h2 class="h2" id="score-title">What’s your <span class="mark">Agent Readiness Score?</span></h2>
+      <p class="sub">12 checks. Three questions: can agents <b>find</b> you, <b>read</b> you, and <b>act</b> on your site?</p>
+    </div>
+
+    <div class="console" data-console data-state="idle">
+      <form class="scanform scanform--console" action="./" method="get" data-scan-form data-main-scan novalidate
+            toolname="get_agent_readiness_score"
+            tooldescription="Scan a public website and return its Agent Readiness Score from 0 to 100, with 12 pass/fail checks grouped into Find, Read and Act.">
+        <label class="scanform__label" for="scan-url">Website to scan</label>
+        <div class="scanform__row">
+          <div class="scanform__field">
+            <span class="scanform__prefix" aria-hidden="true">https://</span>
+            <input id="scan-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" required>
+          </div>
+          <button class="btn btn--go btn--lg" type="submit">
+            <span class="btn__text">Get my score</span>
+            <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p class="scanform__error" role="alert" hidden>Enter a website like yourcompany.com</p>
+      </form>
+
+      <div class="console__body">
+        <div class="gauge" data-gauge>
+          <svg class="gauge__svg" viewBox="0 0 220 128" aria-hidden="true">
+            <path class="gauge__seg gauge__seg--red" pathLength="100" d="M20 112a90 90 0 0 1 180 0" style="stroke-dasharray:39.3 100;stroke-dashoffset:0"/>
+            <path class="gauge__seg gauge__seg--amber" pathLength="100" d="M20 112a90 90 0 0 1 180 0" style="stroke-dasharray:29.3 100;stroke-dashoffset:-40.4"/>
+            <path class="gauge__seg gauge__seg--lime" pathLength="100" d="M20 112a90 90 0 0 1 180 0" style="stroke-dasharray:29.6 100;stroke-dashoffset:-70.4"/>
+            <path class="gauge__fill" pathLength="100" d="M20 112a90 90 0 0 1 180 0" data-gauge-fill/>
+            <g class="gauge__ticks"><text x="77" y="16">40</text><text x="172" y="31">70</text></g>
+          </svg>
+          <div class="gauge__readout">
+            <span class="gauge__num" data-gauge-num>?</span><span class="gauge__of">/100</span>
+          </div>
+          <p class="gauge__band" data-gauge-band>Your Agent Readiness Score</p>
+          <p class="gauge__site" data-gauge-site>Paste any URL above</p>
+        </div>
+
+        <div class="checks">
+          <div class="checks__col" data-group="find">
+            <div class="checks__head"><span><b>Find</b> Can agents find you?</span><span class="checks__score" data-group-score>–</span></div>
+            <div class="checks__bar"><i data-group-bar></i></div>
+            <ol>
+              <li class="check" data-check="reachable"><span class="check__icon"></span><span class="check__title">Agents can reach your site</span></li>
+              <li class="check" data-check="robots"><span class="check__icon"></span><span class="check__title">AI rules in robots.txt</span></li>
+              <li class="check" data-check="sitemap"><span class="check__icon"></span><span class="check__title">Sitemap</span></li>
+              <li class="check" data-check="llms"><span class="check__icon"></span><span class="check__title">llms.txt guide for AI tools</span></li>
+            </ol>
+          </div>
+          <div class="checks__col" data-group="read">
+            <div class="checks__head"><span><b>Read</b> Can they understand it?</span><span class="checks__score" data-group-score>–</span></div>
+            <div class="checks__bar"><i data-group-bar></i></div>
+            <ol>
+              <li class="check" data-check="ssr"><span class="check__icon"></span><span class="check__title">Content readable without JavaScript</span></li>
+              <li class="check" data-check="schema"><span class="check__icon"></span><span class="check__title">Structured data (schema.org)</span></li>
+              <li class="check" data-check="meta"><span class="check__icon"></span><span class="check__title">Clear title, description and headings</span></li>
+              <li class="check" data-check="markdown"><span class="check__icon"></span><span class="check__title">Markdown version for agents</span></li>
+            </ol>
+          </div>
+          <div class="checks__col" data-group="act">
+            <div class="checks__head"><span><b>Act</b> Can they book, buy, sign up?</span><span class="checks__score" data-group-score>–</span></div>
+            <div class="checks__bar"><i data-group-bar></i></div>
+            <ol>
+              <li class="check" data-check="buttons"><span class="check__icon"></span><span class="check__title">Buttons and links have labels</span></li>
+              <li class="check" data-check="forms"><span class="check__icon"></span><span class="check__title">Form fields have labels</span></li>
+              <li class="check" data-check="paths"><span class="check__icon"></span><span class="check__title">Key actions are real links</span></li>
+              <li class="check" data-check="actions"><span class="check__icon"></span><span class="check__title">Agent actions declared (WebMCP / API)</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="console__status" aria-live="polite">
+        <span data-status>Ready when you are.</span>
+        <span class="console__timer" data-timer></span>
+      </div>
+
+      <!-- Filled in by app.js after a scan -->
+      <div class="report" data-report hidden></div>
+    </div>
+
+    <div class="bands" data-reveal>
+      <div class="band band--red"><b>0–40 · Not ready</b><span>Most agents skip you for a competitor.</span></div>
+      <div class="band band--amber"><b>41–70 · Partly ready</b><span>Agents find you, then get stuck.</span></div>
+      <div class="band band--lime"><b>71–100 · Agent-ready</b><span>Agents read your site and finish tasks.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLUTION ============ -->
+<section class="section solution" id="product" aria-labelledby="solution-title">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">The difference</p>
+      <h2 class="h2" id="solution-title">Others tell you what’s broken. <span class="mark">Agentronics fixes it.</span></h2>
+    </div>
+
+    <div class="stack">
+      <!-- 01 Measure -->
+      <article class="stack__card card-measure" data-stack>
+        <div class="stack__copy">
+          <p class="stack__num">01 · Measure</p>
+          <h3 class="h3">See your site through an agent’s eyes.</h3>
+          <p>One score, 0–100. Every failed check comes with the fix.</p>
+        </div>
+        <div class="stack__visual mini-groups" aria-hidden="true">
+          <div class="mini-groups__row"><span>Find</span><div class="mini-bar"><i style="--v:54%"></i></div><b>54</b></div>
+          <div class="mini-groups__row"><span>Read</span><div class="mini-bar mini-bar--red"><i style="--v:23%"></i></div><b>23</b></div>
+          <div class="mini-groups__row"><span>Act</span><div class="mini-bar"><i style="--v:40%"></i></div><b>40</b></div>
+          <div class="mini-groups__total"><span>Sample · example.com</span><b class="t-red">39<small>/100</small></b></div>
+        </div>
+      </article>
+
+      <!-- 02 Fix -->
+      <article class="stack__card card-fix dark" data-stack>
+        <div class="stack__copy">
+          <p class="stack__num">02 · Fix</p>
+          <h3 class="h3">Agent Nick writes the fixes. <span class="t-lime">You click Merge.</span></h3>
+          <p>Our AI agent writes the code and opens a pull request that explains every change. Included in every plan, even Free.</p>
+        </div>
+        <div class="stack__visual pr" data-pr aria-hidden="true">
+          <div class="pr__head">
+            <span class="pr__avatar">N</span>
+            <span><b>agent-nick</b> opened pull request <b>#42</b></span>
+            <span class="pr__state" data-pr-state>Open</span>
+          </div>
+          <p class="pr__title">Make site agent-ready</p>
+          <ul class="pr__files">
+            <li><i>+</i><code>llms.txt</code><span>guide for AI tools</span></li>
+            <li><i>+</i><code>sitemap.xml</code><span>every page, findable</span></li>
+            <li><i>+</i><code>schema.org</code><span>products &amp; prices</span></li>
+            <li><i>~</i><code>aria-label</code><span>14 icon buttons</span></li>
+            <li><i>~</i><code>&lt;label&gt;</code><span>6 form fields</span></li>
+          </ul>
+          <div class="pr__foot">
+            <span class="pr__checks">✓ All checks passed</span>
+            <span class="pr__merge" data-pr-merge>Merge pull request</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 03 Control -->
+      <article class="stack__card card-control" data-stack>
+        <div class="stack__copy">
+          <p class="stack__num">03 · Control</p>
+          <h3 class="h3">You decide what agents can do.</h3>
+          <p>Allow, ask first or deny, per action. See which agents visit. Get an alert when a deploy breaks agent access.</p>
+        </div>
+        <div class="stack__visual rules" data-rules>
+          <div class="rule">
+            <span class="rule__name"><code>get_pricing</code></span>
+            <div class="seg" role="radiogroup" aria-label="Rule for get pricing">
+              <button type="button" class="seg__opt" role="radio" aria-checked="true" data-v="allow">Allow</button>
+              <button type="button" class="seg__opt" role="radio" aria-checked="false" data-v="ask">Ask first</button>
+              <button type="button" class="seg__opt" role="radio" aria-checked="false" data-v="deny">Deny</button>
+            </div>
+          </div>
+          <div class="rule" data-rule-signup>
+            <span class="rule__name"><code>start_signup</code></span>
+            <div class="seg" role="radiogroup" aria-label="Rule for start signup">
+              <button type="button" class="seg__opt" role="radio" aria-checked="false" data-v="allow">Allow</button>
+              <button type="button" class="seg__opt" role="radio" aria-checked="true" data-v="ask">Ask first</button>
+              <button type="button" class="seg__opt" role="radio" aria-checked="false" data-v="deny">Deny</button>
+            </div>
+          </div>
+          <div class="ask" data-ask>
+            <span class="ask__icon" aria-hidden="true">?</span>
+            <p>The agent wants to sign you up for <b>Pro ($49/mo)</b>. Allow?</p>
+          </div>
+          <div class="rule">
+            <span class="rule__name"><code>delete_account</code></span>
+            <div class="seg" role="radiogroup" aria-label="Rule for delete account">
+              <button type="button" class="seg__opt" role="radio" aria-checked="false" data-v="allow">Allow</button>
+              <button type="button" class="seg__opt" role="radio" aria-checked="false" data-v="ask">Ask first</button>
+              <button type="button" class="seg__opt" role="radio" aria-checked="true" data-v="deny">Deny</button>
+            </div>
+          </div>
+          <div class="alert" aria-hidden="true">
+            <span class="alert__dot"></span>
+            <span><b>Score dropped after deploy</b> · Agent Nick opened a fix PR</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section class="section how" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">How it works</p>
+      <h2 class="h2" id="how-title">Four steps. Your only job: <span class="mark">click Merge.</span></h2>
+    </div>
+    <ol class="steps" data-steps>
+      <li class="step" data-reveal><span class="step__n">1</span><h3>Get your score</h3><p>Paste your URL.</p><span class="step__meta">30 seconds</span></li>
+      <li class="step" data-reveal><span class="step__n">2</span><h3>Connect GitHub</h3><p>Install on the repos you choose.</p><span class="step__meta">minutes</span></li>
+      <li class="step" data-reveal><span class="step__n">3</span><h3>Agent Nick opens a PR</h3><p>Every change explained.</p><span class="step__meta">automatic</span></li>
+      <li class="step step--go" data-reveal><span class="step__n">4</span><h3>You click Merge</h3><p>Nothing changes until you do.</p><span class="step__meta">one click</span></li>
+    </ol>
+    <p class="how__after" data-reveal>Then agents can read your prices, recommend you and finish tasks. Your site looks exactly the same to people.</p>
+  </div>
+</section>
+
+<!-- ============ PROOF ============ -->
+<section class="section dark proof" aria-labelledby="proof-title">
+  <div class="wrap proof__grid">
+    <div data-reveal>
+      <p class="eyebrow">Proof</p>
+      <h2 class="h2" id="proof-title">We scanned our own site first.</h2>
+      <p class="sub">The scan found 3 gaps. We merged one pull request.</p>
+      <ul class="chips">
+        <li>+ sitemap</li><li>+ llms.txt</li><li>+ structured data</li>
+      </ul>
+      <p class="proof__note">Most sites start much lower. Our sample report for example.com scored 39.</p>
+    </div>
+    <div class="proof__score" data-reveal data-proof>
+      <div class="proof__before"><span>Before</span><b>85</b></div>
+      <svg class="proof__arrow" viewBox="0 0 80 24" aria-hidden="true"><path d="M2 12h72M64 3l10 9-10 9"/></svg>
+      <div class="proof__after"><span>After</span><b data-proof-num>100</b></div>
+      <p class="proof__meta">agentronics.dev · one pull request · October 2026</p>
+      <a class="btn btn--go" href="#score" data-scan-self>Scan this site yourself <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRUST ============ -->
+<section class="section trust" aria-labelledby="trust-title">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">Trust</p>
+      <h2 class="h2" id="trust-title">Safe by design.</h2>
+    </div>
+    <ul class="trust__grid">
+      <li data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v12M18 9v12M6 15a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM18 3a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM6 9c0 4 12 2 12 6"/></svg><h3>Nothing changes until you click Merge.</h3><p>Every fix is a pull request your team reviews.</p></li>
+      <li data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16v12H4zM8 7V5h8v2M4 12h16"/></svg><h3>Only the repos you pick.</h3><p>Install the GitHub App where you choose.</p></li>
+      <li data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg><h3>Public pages only.</h3><p>No login or code access for your score.</p></li>
+      <li data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18M12 3v18"/><circle cx="12" cy="12" r="9"/></svg><h3>Agents see what people see.</h3><p>No cloaking. No SEO risk.</p></li>
+      <li data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8"/></svg><h3>Your design stays.</h3><p>Fixes are invisible to people.</p></li>
+      <li data-reveal><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18 10 12l4 4 6-8"/><path d="M15 8h5v5"/></svg><h3>Won’t hurt Google rankings.</h3><p>Many fixes are what search already rewards.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="section pricing" id="pricing" aria-labelledby="pricing-title">
+  <div class="wrap">
+    <div class="section-head section-head--center" data-reveal>
+      <p class="eyebrow">Pricing</p>
+      <h2 class="h2" id="pricing-title">Start free. Upgrade when agents <span class="mark">start bringing you business.</span></h2>
+      <p class="sub">Every plan includes Agent Nick.</p>
+    </div>
+
+    <div class="plans">
+      <article class="plan" data-reveal>
+        <h3 class="plan__name">Free</h3>
+        <p class="plan__for">See your site through an agent’s eyes.</p>
+        <p class="plan__price"><b>$0</b></p>
+        <a class="btn btn--line" href="/signup?plan=free" data-plan="free">Start free</a>
+        <ul class="plan__list">
+          <li>1 site · 1 fix round / month</li>
+          <li>Up to 5 agent actions</li>
+          <li>5,000 agent visits / month</li>
+          <li>7-day history</li>
+          <li>1 seat · community help</li>
+        </ul>
+      </article>
+
+      <article class="plan plan--hot" data-reveal>
+        <span class="plan__badge">★ Most popular</span>
+        <h3 class="plan__name">Starter</h3>
+        <p class="plan__for">Make your site agent-ready.</p>
+        <p class="plan__price"><b>$19</b><span>/month</span></p>
+        <a class="btn btn--go" href="/signup?plan=starter" data-plan="starter">Get Starter</a>
+        <ul class="plan__list">
+          <li><b>5 fix rounds / month</b></li>
+          <li><b>Auto-fixes + alerts on code changes</b></li>
+          <li>Up to 15 actions (page + API)</li>
+          <li>Agent verification (Web Bot Auth, OAuth 2.1)</li>
+          <li>5 access rules · procedural memory</li>
+          <li>50,000 agent visits · 30-day history</li>
+          <li>2 seats · email help</li>
+        </ul>
+      </article>
+
+      <article class="plan" data-reveal>
+        <h3 class="plan__name">Pro</h3>
+        <p class="plan__for">Control agents across several sites.</p>
+        <p class="plan__price"><b>$49</b><span>/month</span></p>
+        <a class="btn btn--line" href="/signup?plan=pro" data-plan="pro">Get Pro</a>
+        <ul class="plan__list">
+          <li>3 sites · 30 fix rounds / month</li>
+          <li>Unlimited actions</li>
+          <li>Unlimited rules + rate limits</li>
+          <li>Context transfer between agents (coming soon)</li>
+          <li>250,000 visits · 90 days · webhooks</li>
+          <li>5 seats · priority email</li>
+        </ul>
+      </article>
+
+      <article class="plan" data-reveal>
+        <h3 class="plan__name">Enterprise</h3>
+        <p class="plan__for">For large organizations.</p>
+        <p class="plan__price"><b>Custom</b></p>
+        <a class="btn btn--line" href="/demo" data-plan="enterprise">Talk to sales</a>
+        <ul class="plan__list">
+          <li>Unlimited sites, fixes, visits</li>
+          <li>Audit log + raw trace export</li>
+          <li>SSO/SAML · unlimited seats</li>
+          <li>Custom retention</li>
+          <li>Dedicated support, Slack, SLA</li>
+        </ul>
+      </article>
+    </div>
+
+    <p class="pricing__note" data-reveal>Prices in USD, billed monthly. Merged fixes stay in your code, even if you cancel.</p>
+
+    <details class="compare" data-reveal>
+      <summary>Compare every feature</summary>
+      <div class="compare__scroll">
+        <table>
+          <caption class="visually-hidden">Full plan comparison</caption>
+          <thead><tr><th scope="col">Feature</th><th scope="col">Free</th><th scope="col">Starter</th><th scope="col">Pro</th><th scope="col">Enterprise</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Price</th><td>$0</td><td>$19/mo</td><td>$49/mo</td><td>Custom</td></tr>
+            <tr><th scope="row">Sites</th><td>1</td><td>1</td><td>3</td><td>Unlimited</td></tr>
+            <tr><th scope="row">Agent Nick fix rounds / month</th><td>1</td><td>5</td><td>30</td><td>Unlimited</td></tr>
+            <tr><th scope="row">Agent actions</th><td>Up to 5</td><td>Up to 15 (page + API)</td><td>Unlimited</td><td>Unlimited</td></tr>
+            <tr><th scope="row">Automatic fixes + alerts on code changes</th><td>–</td><td>✓</td><td>✓</td><td>✓</td></tr>
+            <tr><th scope="row">Procedural memory</th><td>–</td><td>✓</td><td>✓</td><td>✓</td></tr>
+            <tr><th scope="row">Agent verification (Web Bot Auth, OAuth 2.1)</th><td>–</td><td>✓</td><td>✓</td><td>✓</td></tr>
+            <tr><th scope="row">Access rules (allow / ask first / deny)</th><td>–</td><td>5 rules</td><td>Unlimited + rate limits</td><td>Unlimited</td></tr>
+            <tr><th scope="row">Context transfer between agents (coming soon)</th><td>–</td><td>–</td><td>✓</td><td>✓</td></tr>
+            <tr><th scope="row">Agent visits / month</th><td>5,000</td><td>50,000</td><td>250,000</td><td>Unlimited</td></tr>
+            <tr><th scope="row">History</th><td>7 days</td><td>30 days</td><td>90 days + webhook export</td><td>Custom retention, audit log, raw trace export</td></tr>
+            <tr><th scope="row">Seats</th><td>1</td><td>2</td><td>5</td><td>Unlimited, SSO/SAML</td></tr>
+            <tr><th scope="row">Support</th><td>Community</td><td>Email</td><td>Priority email</td><td>Dedicated, Slack, SLA</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section faq" id="faq" aria-labelledby="faq-title">
+  <div class="wrap faq__grid">
+    <div class="section-head" data-reveal>
+      <p class="eyebrow">FAQ</p>
+      <h2 class="h2" id="faq-title">Questions buyers ask before they start.</h2>
+    </div>
+    <div class="faq__list">
+      <details open><summary>What does the Agent Readiness Score measure?</summary><p>A number from 0 to 100 from 12 checks in three groups: can agents <b>find</b> your site, <b>read</b> it, and <b>act</b> on it. Each check shows what’s wrong and how to fix it.</p></details>
+      <details><summary>Do I have to give you access to my code?</summary><p>Not for the score, which only reads public pages. For fixes, you install the Agentronics GitHub App on the repos you choose. Every change arrives as a pull request your team reviews before merging.</p></details>
+      <details><summary>Can I trust AI-written code?</summary><p>You don’t have to trust it blindly. Every change is a normal pull request with an explanation, and your team reviews it before merging.</p></details>
+      <details><summary>Will this change how my site looks?</summary><p>No. Fixes are invisible to people.</p></details>
+      <details><summary>Will it hurt or help my Google rankings?</summary><p>It won’t hurt. Many fixes are things search engines already reward. llms.txt is for AI tools, and Google ignores it for rankings. Agents never see different content from people.</p></details>
+      <details><summary>Are AI agents really visiting websites?</summary><p>Yes. AI-referred visits to US retail sites rose about 693% in the 2025 holidays (Adobe Analytics), and those visitors converted better. Your dashboard shows which agents visit your own site.</p></details>
+      <details><summary>Which AI agents does this help?</summary><p>Any agent that reads web pages, such as ChatGPT, Claude, Perplexity and Gemini. Browsers supporting WebMCP can also call your site’s actions directly.</p></details>
+      <details><summary>Can agents do things I don’t want?</summary><p>No. For each action you choose allow, ask first, or deny.</p></details>
+      <details><summary>How long does setup take? Do I need a developer?</summary><p>The score takes 30 seconds, and connecting GitHub takes minutes. Someone who can approve a pull request reviews the changes.</p></details>
+      <details><summary>My score is already high. Do I still need this?</summary><p>Maybe not today. But sites change, and one new form can break agent access. Paid plans re-check after every code change and alert you.</p></details>
+      <details><summary>Is Free really free?</summary><p>Yes. Free is $0 for one site, with Agent Nick included. Merged fixes stay in your code even if you later cancel a paid plan.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final" aria-labelledby="final-title">
+  <div class="wrap final__grid">
+    <div>
+      <h2 class="h2 final__title" id="final-title">Agents are visiting today. Can they use your site?</h2>
+      <p class="final__sub">If they can’t read your prices or finish a signup, they send your customers to a competitor. Find out where you stand.</p>
+      <form class="scanform scanform--final" action="./" method="get" data-scan-form novalidate>
+        <label class="scanform__label" for="final-url">Get your free Agent Readiness Score</label>
+        <div class="scanform__row">
+          <div class="scanform__field">
+            <span class="scanform__prefix" aria-hidden="true">https://</span>
+            <input id="final-url" name="url" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="yourcompany.com" required>
+          </div>
+          <button class="btn btn--ink btn--lg" type="submit" data-magnetic>
+            <span class="btn__text">Get my score</span>
+            <svg class="btn__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+        <p class="scanform__error" role="alert" hidden>Enter a website like yourcompany.com</p>
+        <ul class="ticks"><li>Score out of 100</li><li>Free</li><li>No signup</li><li>If it’s low, Agent Nick writes the fixes</li></ul>
+      </form>
+    </div>
+    <div class="final__q" aria-hidden="true"><span>?</span><small>/100</small></div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="wrap footer__grid">
+    <div>
+      <a class="logo logo--light" href="#top" aria-label="Agentronics home">
+        <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#FF4D1F"/><path transform="translate(8 8.33) scale(.019162)" d="M458 0L835 660L317 660L368 570L664 570L458 209L119 800L0 800Z" fill="#D4FF3A"/></svg>
+        <span>agentronics</span>
+      </a>
+      <p class="footer__tag">Make your website ready for AI agents.</p>
+      <a class="live-badge" href="#score" data-scan-self><span class="live-badge__dot"></span>Agent Readiness Score: <b>100/100 ✓</b></a>
+    </div>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="#product">Product</a>
+      <a href="#pricing">Pricing</a>
+      <a href="/docs">Docs</a>
+      <a href="/developers">Developers</a>
+      <a href="/demo">Book a demo</a>
+      <a href="/login">Log in</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </nav>
+    <div class="footer__agents">
+      <p>For AI agents</p>
+      <a href="/llms.txt">llms.txt</a>
+      <a href="/index.md">Markdown version</a>
+      <a href="/openapi.json">Scan API (OpenAPI)</a>
+      <a href="/sitemap.xml">Sitemap</a>
+    </div>
+  </div>
+  <div class="wrap footer__base">© 2026 Agentronics</div>
+</footer>
+
+</body>
+</html>

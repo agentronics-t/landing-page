@@ -1,20 +1,35 @@
 # Agentronics
 
-> Agentronics makes websites ready for AI agents. The free Agent Readiness Score (0–100, 12 checks) shows how well AI agents can find, read and act on a site; Agent Nick then writes the fixes (WebMCP tools, a sitemap, llms.txt and structured data) into the site's code as a pull request; and the SDK and console let the owner see which agents visit and decide what each may do.
+> Agentronics makes company websites ready for AI agents. It scores how well AI agents can use your site (the Agent Readiness Score, 0–100), then Agent Nick, our AI agent, fixes the problems in a GitHub pull request you approve.
 
-## Product
+## Key facts
 
-- [Free Agent Readiness Score](https://agentronics.dev/scan): score any public website out of 100 across Find, Read and Act, with fixes. No signup.
-- [Pricing](https://agentronics.dev/pricing): Free, Starter $19/mo (most popular), Pro $49/mo, Enterprise custom. USD, billed monthly; Free needs no card.
-- [Book a demo](https://agentronics.dev/book)
+- Agent Readiness Score: free, about 30 seconds, no signup. 12 checks in three groups: Find, Read, Act. Reads public pages only.
+- Score bands: 0–40 Not ready · 41–70 Partly ready · 71–100 Agent-ready.
+- Agent Nick: writes fixes (labels, structured data, sitemap, llms.txt, agent actions) and opens a pull request. Nothing changes until you click Merge. Included in every plan, including Free.
+- Control: allow, ask first or deny each agent action. See which agents visit. Alerts when a code change breaks agent access.
+- Your site looks the same to people. Agents see the same content people see (no cloaking).
+
+## Pricing (USD, monthly)
+
+- Free: $0. 1 site, 1 fix round/month, up to 5 agent actions, 5,000 agent visits/month.
+- Starter: $19/month (most popular). 5 fix rounds, up to 15 actions, automatic fixes + alerts on code changes, agent verification, 5 access rules.
+- Pro: $49/month. 3 sites, 30 fix rounds, unlimited actions, unlimited rules + rate limits.
+- Enterprise: custom. Unlimited sites, SSO/SAML, audit log, SLA.
+
+## Pages
+
+- [Home](https://www.agentronics.dev/): overview, free scan, pricing, FAQ
+- [Markdown version of the home page](https://www.agentronics.dev/index.md)
+- [Pricing](https://www.agentronics.dev/#pricing)
+- [Book a demo](https://www.agentronics.dev/demo)
+
+## Agent actions
+
+- Scan API: `GET https://www.agentronics.dev/api/scan?url=example.com` returns the score as JSON. [OpenAPI](https://www.agentronics.dev/openapi.json)
+- WebMCP: the scan form is declared as the tool `get_agent_readiness_score`; `get_pricing` returns plans.
 
 ## Developers
 
-- [SDK overview](https://agentronics.dev/developers): WebMCP tools, detection, authentication, authorization, procedural memory, observability.
-- [Getting started](https://agentronics.dev/docs/getting-started): install @agentronics/sdk and publish a governed WebMCP tool.
-- [Authentication](https://agentronics.dev/docs/auth/overview): verified crawlers, agent API keys, Web Bot Auth, OAuth 2.1.
-- [Authorization](https://agentronics.dev/docs/authorization): allow, deny, or ask the person on the page first.
-
-## Agent tools on this site
-
-This site registers WebMCP tools on document.modelContext: get_pricing, recommend_plan, compare_features, get_product_overview, search_docs, check_agent_readiness, book_demo, start_signup, navigate_to.
+- [SDK overview](https://www.agentronics.dev/developers): WebMCP tools, detection, authentication, authorization, procedural memory, observability.
+- [Docs](https://www.agentronics.dev/docs) and the [quickstart](https://www.agentronics.dev/docs/getting-started): install @agentronics/sdk and publish a governed WebMCP tool.
