@@ -29,7 +29,7 @@ export function FinalCta() {
           id="scan-bottom"
           source="final"
           className="mx-auto mt-10 max-w-[600px] text-left"
-          microcopy="Score out of 100 · Free · No signup · If it's low, we show every fix, and Agent Nick writes the agent tools for you."
+          microcopy="Score out of 100 · Free · No signup · If it's low, Agent Nick writes the agent tools, sitemap, llms.txt and structured data for you."
           onFocus={() => {
             setLit(true);
             setPulse((n) => n + 1);

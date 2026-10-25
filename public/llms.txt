@@ -1,6 +1,6 @@
 # Agentronics
 
-> Agentronics makes websites ready for AI agents. The free Agent Readiness Score (0–100, 12 checks) shows how well AI agents can find, read and act on a site; Agent Nick then writes the fixes (WebMCP tools, labels, structured data) into the site's code as a pull request; and the SDK and console let the owner see which agents visit and decide what each may do.
+> Agentronics makes websites ready for AI agents. The free Agent Readiness Score (0–100, 12 checks) shows how well AI agents can find, read and act on a site; Agent Nick then writes the fixes (WebMCP tools, a sitemap, llms.txt and structured data) into the site's code as a pull request; and the SDK and console let the owner see which agents visit and decide what each may do.
 
 ## Product
 

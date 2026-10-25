@@ -255,7 +255,7 @@ function Results({ report }: { report: Report }) {
               <>
                 <p className="font-display text-xl font-semibold leading-snug">{ready ? "Keep it that way." : "Fix it free with Agent Nick."}</p>
                 <p className="mt-3 text-sm text-content-secondary">
-                  Agent Nick reads your code, writes the tools agents need to book, buy and sign up, and sends them as a pull request.
+                  Agent Nick reads your code, writes the tools agents need to book, buy and sign up, plus your sitemap, llms.txt and structured data, and sends them as a pull request.
                   Nothing changes until you approve it.
                 </p>
                 <ButtonLink href="/sign-up" fullWidth className="mt-6" onClick={() => track("plan_click", { plan: "free", from: "scan" })}>

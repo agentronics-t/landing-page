@@ -97,11 +97,12 @@ export function fixPlan(report: ScanReport): { fixes: ScanCheck[]; projected: nu
 }
 
 /**
- * Checks whose fix Agent Nick writes today: it publishes WebMCP tools, and
- * exposes forms as tools. The rest (sitemap, llms.txt, structured data,
- * server rendering, labels…) come with written instructions in the report.
+ * Checks whose fix Agent Nick writes: WebMCP tools (forms included), an
+ * llms.txt, a sitemap and schema.org structured data. The rest (server
+ * rendering, headings, labels, alt text, robots rules, bot protection) come
+ * with written instructions in the report.
  */
-export const AGENT_NICK_FIXES = new Set(["webmcp", "forms"]);
+export const AGENT_NICK_FIXES = new Set(["webmcp", "forms", "llms-txt", "sitemap", "structured-data"]);
 
 /** "What agents miss on your site today" — one concrete line per failing check, from the user's own scan. */
 export const MISSES: Record<string, string> = {

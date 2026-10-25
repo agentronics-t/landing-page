@@ -13,7 +13,7 @@ const STEPS = [
   },
   {
     title: "Agent Nick writes the fixes.",
-    body: "Our AI agent writes the code that lets agents act on your site and sends it as a pull request: a proposed change you review on GitHub.",
+    body: "Our AI agent writes the code (agent tools, sitemap, llms.txt, structured data) and sends it as a pull request you review on GitHub.",
     scene: "pr",
   },
   {

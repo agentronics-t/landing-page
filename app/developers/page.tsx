@@ -91,7 +91,7 @@ export default function DevelopersPage() {
             <SectionHeading
               eyebrow="Agent Nick"
               title="Or let Agent Nick write it."
-              lead="Connect a GitHub repository. Agent Nick reads your routes and forms, writes the WebMCP tools with the SDK, and opens a pull request. From Starter up, it also fixes CI failures on that pull request."
+              lead="Connect a GitHub repository. Agent Nick reads your routes and forms, writes the WebMCP tools with the SDK, adds a sitemap, llms.txt and structured data if they're missing, and opens a pull request. From Starter up, it also fixes CI failures on that pull request."
             />
             <ol className="space-y-4">
               {["Connect a GitHub repository", "Agent Nick proposes tools, page by page", "You review the pull request and merge"].map((s, i) => (
