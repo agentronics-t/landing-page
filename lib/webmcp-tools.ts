@@ -221,19 +221,16 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
       },
       annotations: { readOnlyHint: true },
       async execute(args) {
-        const res = await fetch("/api/scan", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ url: String(args.url ?? "") }),
-        });
+        const res = await fetch(`/api/scan?url=${encodeURIComponent(String(args.url ?? ""))}`);
         const data = await res.json().catch(() => ({ error: "The check failed." }));
         if (!res.ok) return { content: [{ type: "text", text: data.error ?? "The check failed." }], isError: true };
-        const broken = (data.checks as { status: string; label: string; fix?: string }[]).filter((c) => c.status === "fail" || c.status === "warn");
+        const broken = (data.checks as { pass: boolean; title: string; fix?: string }[]).filter((c) => !c.pass);
+        const groups = data.groups as Record<string, { label: string; score: number }>;
         const text =
-          `${data.host} has an Agent Readiness Score of ${data.score}/100 ` +
-          `(${data.categories.map((c: { label: string; score: number }) => `${c.label} ${c.score}`).join(", ")}).\n` +
-          (broken.length ? `To fix:\n${broken.map((c) => `• ${c.label}: ${c.fix ?? ""}`).join("\n")}` : "Nothing to fix.") +
-          `\nFull report: /scan?url=${encodeURIComponent(data.host)}`;
+          `${data.host} has an Agent Readiness Score of ${data.score}/100, ${data.band.label} ` +
+          `(${Object.values(groups).map((g) => `${g.label} ${g.score}`).join(", ")}).\n` +
+          (broken.length ? `To fix:\n${broken.map((c) => `• ${c.title}: ${c.fix ?? ""}`).join("\n")}` : "Nothing to fix.") +
+          `\nFull report: /?url=${encodeURIComponent(data.host)}#score`;
         return result(text, data);
       },
     },

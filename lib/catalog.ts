@@ -18,25 +18,28 @@ export interface PlanInfo {
   tagline: string;
   priceMonthly: number | null; // null = custom / contact sales
   cta: string;
+  href: string;
   highlighted?: boolean;
   badge?: string;
-  /** A string ending in "plus:" is a lead-in label (e.g. "Everything in Starter, plus:"). */
+  /** The plan card's list, word for word as on the home page. The first `bold` items are bold. */
   highlights: string[];
+  bold?: number;
 }
 
 export const PLANS: PlanInfo[] = [
   {
     id: "free",
     name: "Free",
-    tagline: "See your site through an agent's eyes.",
+    tagline: "See your site through an agent’s eyes.",
     priceMonthly: 0,
     cta: "Start free",
+    href: "/signup?plan=free",
     highlights: [
-      "Agent Nick: 1 site, 1 fix round a month",
-      "Up to 5 actions agents can use (like \"sign up\")",
-      "See which AI agents visit",
-      "5,000 agent requests a month, 7-day history",
-      "1 team member, community help",
+      "1 site · 1 fix round / month",
+      "Up to 5 agent actions",
+      "5,000 agent visits / month",
+      "7-day history",
+      "1 seat · community help",
     ],
   },
   {
@@ -45,46 +48,49 @@ export const PLANS: PlanInfo[] = [
     tagline: "Make your site agent-ready.",
     priceMonthly: 19,
     cta: "Get Starter",
+    href: "/signup?plan=starter",
     highlighted: true,
-    badge: "Most popular",
+    badge: "★ Most popular",
+    bold: 2,
     highlights: [
-      "Everything in Free, plus:",
-      "5 fix rounds a month and up to 15 agent actions, including page actions and API calls",
-      "Automatic CI fixes and alerts when your code changes",
-      "Check which agents are genuine (Web Bot Auth, OAuth 2.1)",
-      "5 rules: allow / ask first / deny",
-      "AI-shortened tool descriptions, so agents spend fewer tokens",
-      "50,000 agent requests a month, 30-day history",
-      "2 team members, email help",
+      "5 fix rounds / month",
+      "Auto-fixes + alerts on code changes",
+      "Up to 15 actions (page + API)",
+      "Agent verification (Web Bot Auth, OAuth 2.1)",
+      "5 access rules · procedural memory",
+      "50,000 agent visits · 30-day history",
+      "2 seats · email help",
     ],
   },
   {
     id: "pro",
     name: "Pro",
-    tagline: "Control every agent across your sites.",
+    tagline: "Control agents across several sites.",
     priceMonthly: 49,
     cta: "Get Pro",
+    href: "/signup?plan=pro",
     highlights: [
-      "Everything in Starter, plus:",
-      "3 sites, 30 fix rounds a month and unlimited actions",
-      "Unlimited rules and per-agent rate limits",
-      "Context handoff between agents (coming soon)",
-      "250,000 agent requests a month, 90-day history, webhook export",
-      "5 team members, priority email",
+      "3 sites · 30 fix rounds / month",
+      "Unlimited actions",
+      "Unlimited rules + rate limits",
+      "Context transfer between agents (coming soon)",
+      "250,000 visits · 90 days · webhooks",
+      "5 seats · priority email",
     ],
   },
   {
     id: "enterprise",
     name: "Enterprise",
-    tagline: "Custom limits, SSO and an SLA.",
+    tagline: "For large organizations.",
     priceMonthly: null,
     cta: "Talk to sales",
+    href: "/demo",
     highlights: [
-      "Everything in Pro, plus:",
-      "Unlimited sites, fix rounds and agent requests",
-      "Audit log and raw trace export",
-      "SSO / SAML, unlimited team members",
-      "Custom retention, SLA, dedicated support and Slack",
+      "Unlimited sites, fixes, visits",
+      "Audit log + raw trace export",
+      "SSO/SAML · unlimited seats",
+      "Custom retention",
+      "Dedicated support, Slack, SLA",
     ],
   },
 ];
@@ -191,7 +197,7 @@ export const PRODUCT_OVERVIEW = {
   ],
   links: {
     home: "/",
-    scan: "/scan",
+    scan: "/#score",
     pricing: "/pricing",
     developers: "/developers",
     docs: "/docs",

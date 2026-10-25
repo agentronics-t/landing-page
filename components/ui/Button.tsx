@@ -1,68 +1,36 @@
-import Link from "next/link";
-import { cn } from "@/lib/cn";
+type Variant = "go" | "ink" | "line";
+type Size = "md" | "lg" | "sm";
 
-/**
- * primary = Copper with PCB Black text — the one clickable colour (guide rule 1).
- * Use one primary per screen. outline/ghost for everything else; they read on
- * Bone and inside `.tone-dark` sections alike.
- */
-type Variant = "primary" | "outline" | "ghost";
-type Size = "sm" | "md" | "lg";
+export const ARROW = (
+  <svg className="btn__arrow" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+);
 
-interface BaseProps {
-  variant?: Variant;
-  size?: Size;
-  fullWidth?: boolean;
-  className?: string;
-  children?: React.ReactNode;
-}
-
-const base =
-  "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-[background-color,border-color,color,transform] duration-[var(--dur-fast)] ease-out focus-ring active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap";
-
-const sizes: Record<Size, string> = {
-  sm: "h-9 px-3.5 text-sm",
-  md: "h-11 px-5 text-base",
-  lg: "h-[52px] px-6 text-md",
-};
-
-const variants: Record<Variant, string> = {
-  primary: "bg-accent text-accent-content hover:-translate-y-px hover:bg-accent-hover",
-  outline: "border border-border-strong text-content hover:border-content",
-  ghost: "text-content-secondary hover:text-content",
-};
-
-export function buttonClass({ variant = "primary", size = "md", fullWidth = false, className }: BaseProps) {
-  return cn(base, sizes[size], variants[variant], fullWidth && "w-full", className);
-}
-
-export function Button({
-  variant,
-  size,
-  fullWidth,
-  className,
-  children,
-  ...rest
-}: BaseProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button className={buttonClass({ variant, size, fullWidth, className })} {...rest}>
-      {children}
-    </button>
-  );
-}
-
+/** The design system's `.btn`: lime "go" for the primary action, ink, or outline ("line"). */
 export function ButtonLink({
   href,
-  variant,
-  size,
-  fullWidth,
+  variant = "go",
+  size = "md",
+  arrow = false,
   className,
   children,
   ...rest
-}: BaseProps & { href: string } & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">) {
+}: {
+  href: string;
+  variant?: Variant;
+  size?: Size;
+  arrow?: boolean;
+  className?: string;
+  children: React.ReactNode;
+} & Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">) {
+  const cls = ["btn", `btn--${variant}`, size !== "md" && `btn--${size}`, className].filter(Boolean).join(" ");
+  // A plain <a>: "/" is the static home page and /docs is another zone, so
+  // client-side routing has nothing to render for most of these links.
   return (
-    <Link href={href} className={buttonClass({ variant, size, fullWidth, className })} {...rest}>
+    <a className={cls} href={href} {...rest}>
       {children}
-    </Link>
+      {arrow && ARROW}
+    </a>
   );
 }

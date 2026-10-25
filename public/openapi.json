@@ -1,0 +1,54 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Agentronics Agent Readiness Score API",
+    "version": "1.0.0",
+    "description": "Scan a public website and get its Agent Readiness Score (0–100): 12 pass/fail checks grouped into Find, Read and Act. Reads public pages only."
+  },
+  "servers": [{ "url": "https://www.agentronics.dev" }],
+  "paths": {
+    "/api/scan": {
+      "get": {
+        "operationId": "getAgentReadinessScore",
+        "summary": "Get a website's Agent Readiness Score",
+        "parameters": [
+          { "name": "url", "in": "query", "required": true, "description": "Website address, with or without https://", "schema": { "type": "string", "example": "example.com" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scan result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "host": { "type": "string" },
+                    "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+                    "band": { "type": "object", "properties": { "key": { "type": "string", "enum": ["not", "partly", "ready"] }, "label": { "type": "string" }, "message": { "type": "string" } } },
+                    "groups": { "type": "object", "description": "find, read and act sub-scores (0–100)" },
+                    "passed": { "type": "integer" },
+                    "total": { "type": "integer" },
+                    "path": { "type": "object", "description": "Fixes needed to reach Agent-ready (71+) and the projected score" },
+                    "checks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" }, "group": { "type": "string" }, "title": { "type": "string" },
+                          "pass": { "type": "boolean" }, "weight": { "type": "integer" }, "detail": { "type": "string" }, "fix": { "type": "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid address" },
+          "422": { "description": "Site could not be reached" },
+          "429": { "description": "Too many scans" }
+        }
+      }
+    }
+  }
+}
