@@ -84,3 +84,19 @@ html:root {
 .legal__body b { color: var(--ink); font-weight: 650; }
 .legal__body a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 3px; }
 .legal__body a:hover { background: var(--lime); }
+
+/* /sign-in /sign-up: Clerk's card in the design system (see CLERK_APPEARANCE in app/layout.tsx) */
+.auth { position: relative; min-height: 100vh; overflow: hidden; }
+.auth__inner { position: relative; display: grid; justify-items: center; gap: 28px; padding-top: calc(var(--nav-h) + 48px); padding-bottom: 72px; }
+.auth__head { text-align: center; }
+.auth__head .eyebrow { margin-bottom: 14px; }
+.auth__demo { font-size: 15px; color: var(--ink-65); }
+.auth__demo a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.clerk-card { border: 2px solid var(--ink) !important; border-radius: 22px !important; box-shadow: 8px 8px 0 var(--ink) !important; overflow: hidden; }
+.clerk-primary {
+  border: 2px solid var(--ink) !important; box-shadow: 3px 3px 0 var(--ink) !important;
+  font-family: var(--f-display) !important; font-weight: 650 !important; color: var(--ink) !important;
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+}
+.clerk-primary:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink) !important; }
+.clerk-input:focus { box-shadow: 0 0 0 4px var(--lime) !important; border-color: var(--ink) !important; }

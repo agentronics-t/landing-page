@@ -7,6 +7,7 @@ const LINKS = [
   { label: "Developers", href: "/developers" },
   { label: "Book a demo", href: "/demo" },
   { label: "Log in", href: "/login" },
+  { label: "Sign up", href: "/signup" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Refunds", href: "/refunds" },

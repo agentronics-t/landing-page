@@ -1,14 +1,18 @@
+import type { Metadata } from "next";
 import { SignIn } from "@clerk/nextjs";
+import { AuthFrame } from "@/components/site/AuthFrame";
 
 export const dynamic = "force-dynamic";
 
-// After sign-in, send the user to the dashboard app.
+export const metadata: Metadata = { title: "Log in: Agentronics" };
+
+// After sign-in, go back where the console sent you (?redirect_url=…), or to the console.
 const DASHBOARD_URL = process.env.NEXT_PUBLIC_DASHBOARD_URL || "/";
 
 export default function SignInPage() {
   return (
-    <div className="grid min-h-screen place-items-center bg-canvas px-4 py-16">
-      <SignIn signUpUrl="/sign-up" forceRedirectUrl={DASHBOARD_URL} />
-    </div>
+    <AuthFrame eyebrow="Log in" title="Welcome back.">
+      <SignIn signUpUrl="/sign-up" fallbackRedirectUrl={DASHBOARD_URL} />
+    </AuthFrame>
   );
 }

@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { WebMcpProvider } from "@/components/webmcp/WebMcpProvider";
 import { SiteEffects } from "@/components/layout/SiteEffects";
 import { PLANS } from "@/lib/catalog";
+import { hasClerkKey } from "@/lib/clerk";
 import "./globals.css";
 // The design system (the home page's stylesheet), after Tailwind so its base rules win.
 import "../public/home-assets/styles.css";
@@ -28,14 +29,28 @@ export const metadata: Metadata = {
   other: { "theme-color": "#0B0B0C" },
 };
 
-/**
- * ClerkProvider only mounts when a real publishable key is present, so the site
- * still boots without keys.
- */
-function hasClerkKey() {
-  const k = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  return !!k && k.startsWith("pk_") && !k.includes("TODO");
-}
+// Clerk's sign-in and sign-up in the design system: lime primary with ink text,
+// white card with a 2px ink frame and hard shadow (classes in globals.css).
+const CLERK_APPEARANCE = {
+  variables: {
+    colorPrimary: "#D4FF3A",
+    colorTextOnPrimaryBackground: "#0B0B0C",
+    colorText: "#0B0B0C",
+    colorTextSecondary: "rgba(11,11,12,.65)",
+    colorBackground: "#FFFFFF",
+    colorInputBackground: "#FFFFFF",
+    colorInputText: "#0B0B0C",
+    colorDanger: "#C2320A",
+    colorSuccess: "#4D6B00",
+    borderRadius: "12px",
+    fontFamily: "var(--f-sans)",
+  },
+  elements: {
+    cardBox: "clerk-card",
+    formButtonPrimary: "clerk-primary",
+    formFieldInput: "clerk-input",
+  },
+};
 
 const ORG_JSON_LD = {
   "@context": "https://schema.org",
@@ -80,5 +95,5 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     </html>
   );
 
-  return hasClerkKey() ? <ClerkProvider>{body}</ClerkProvider> : body;
+  return hasClerkKey() ? <ClerkProvider appearance={CLERK_APPEARANCE}>{body}</ClerkProvider> : body;
 }
