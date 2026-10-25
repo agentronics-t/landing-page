@@ -100,3 +100,5 @@ html:root {
 }
 .clerk-primary:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink) !important; }
 .clerk-input:focus { box-shadow: 0 0 0 4px var(--lime) !important; border-color: var(--ink) !important; }
+.clerk-link { color: var(--ink) !important; font-weight: 600 !important; text-decoration: underline !important; text-underline-offset: 3px; }
+.clerk-link:hover { background: var(--lime); }
