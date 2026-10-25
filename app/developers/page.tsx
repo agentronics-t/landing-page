@@ -19,7 +19,7 @@ const PILLARS = [
   { icon: BarChart3, title: "Observability", body: "Every detection, auth decision and tool call as a trace: sessions, latency, failures, and export." },
 ];
 
-const STEPS = ["Connect a GitHub repository", "Agent Nick proposes tools, page by page", "You review the pull request and merge"];
+const STEPS = ["Connect a GitHub repository", "Agent Nic proposes tools, page by page", "You review the pull request and merge"];
 
 // [class, text] lines, coloured with the agent log's palette (.term__body .d/.g/.a/.w)
 const INIT: [string, string][] = [
@@ -65,7 +65,7 @@ export default function DevelopersPage() {
               </h1>
               <p className="lede">
                 Publish your site’s actions as WebMCP tools, know which agents are calling them, and decide what each one may
-                do. Agent Nick writes it for you, or you write it yourself.
+                do. Agent Nic writes it for you, or you write it yourself.
               </p>
               <div className="dev-actions">
                 <ButtonLink href="/docs" size="lg" arrow>
@@ -127,12 +127,12 @@ export default function DevelopersPage() {
         <section className="section dark" aria-labelledby="nick-title">
           <div className="wrap proof__grid">
             <div className="section-head" data-reveal style={{ marginBottom: 0 }}>
-              <p className="eyebrow">Agent Nick</p>
+              <p className="eyebrow">Agent Nic</p>
               <h2 className="h2" id="nick-title">
-                Or let Agent Nick <span className="mark">write it.</span>
+                Or let Agent Nic <span className="mark">write it.</span>
               </h2>
               <p className="sub">
-                Connect a GitHub repository. Agent Nick reads your routes and forms, writes the WebMCP tools with the SDK, adds
+                Connect a GitHub repository. Agent Nic reads your routes and forms, writes the WebMCP tools with the SDK, adds
                 a sitemap, llms.txt and structured data if they’re missing, and opens a pull request. From Starter up, it also
                 fixes CI failures on that pull request.
               </p>

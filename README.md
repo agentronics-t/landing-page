@@ -16,10 +16,10 @@ Edit the home page there, not in React. Changes made to the redesign files, on p
 - an inline snippet forwards `app.js`'s `agentronics:track` events to Vercel Web Analytics,
   and there's an `og:image`;
 - two claims the code doesn't back yet: "Context transfer between agents (coming soon)", and
-  the proof says "The scan found 3 gaps" (Agent Nick wasn't run on our own site).
+  the proof says "The scan found 3 gaps" (Agent Nic wasn't run on our own site).
 
-The home page links to `/signup?plan=…`, `/login` and `/demo`; redirects send them to `/book`
-while the console isn't public. `/scan?url=x` redirects to `/?url=x`, which runs the scan.
+The home page links to `/signup?plan=…`, `/login` and `/demo`: the first two redirect to the
+console's sign-up and sign-in at app.agentronics.dev, the last to `/book`. `/scan?url=x` redirects to `/?url=x`, which runs the scan.
 
 ## Design system
 
@@ -43,8 +43,8 @@ npm run dev        # http://localhost:3000
 npm run build
 ```
 
-The site boots without keys. Clerk mounts only when `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` is set;
-`/sign-in` and `/sign-up` currently redirect to `/book` (console not public yet).
+The site needs no keys. Log in and Sign up (`/login`, `/signup`, `/sign-in`, `/sign-up`) redirect
+to the console's own pages at app.agentronics.dev; `/demo` goes to the Calendly booking page.
 
 To scan your local copy (private addresses are blocked by default), run with
 `SCAN_ALLOW_PRIVATE=1` and click "Scan this site yourself". It should score 100/100. Never set it

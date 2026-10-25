@@ -16,7 +16,7 @@ export function FinalCta() {
           <ScanForm
             className="scanform--final"
             variant="ink"
-            ticks={["Score out of 100", "Free", "No signup", "If it’s low, Agent Nick writes the fixes"]}
+            ticks={["Score out of 100", "Free", "No signup", "If it’s low, Agent Nic writes the fixes"]}
           />
         </div>
         <div className="final__q" aria-hidden="true">

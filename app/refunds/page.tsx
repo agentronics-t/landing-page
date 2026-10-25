@@ -33,7 +33,7 @@ export default function RefundsPage() {
           Cancelling stops the next charge. Your plan stays active until the end of the month you&rsquo;ve paid for, then
           your workspace moves to Free.
         </li>
-        <li>Fixes you merged from Agent Nick stay in your code.</li>
+        <li>Fixes you merged from Agent Nic stay in your code.</li>
       </ul>
 
       <h2>Refunds</h2>

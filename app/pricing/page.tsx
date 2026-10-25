@@ -8,7 +8,7 @@ import { MATRIX, PLANS, type Cell } from "@/lib/catalog";
 export const metadata: Metadata = {
   title: "Pricing: Agentronics",
   description:
-    "Start free with your Agent Readiness Score and Agent Nick. Starter $19/mo (most popular) and Pro $49/mo add more fix rounds, agent actions, rules and history. Enterprise plans are custom.",
+    "Start free with your Agent Readiness Score and Agent Nic. Starter $19/mo (most popular) and Pro $49/mo add more fix rounds, agent actions, rules and history. Enterprise plans are custom.",
 };
 
 const cell = (v: Cell) => (v === true ? "✓" : v === false ? "–" : v);
@@ -25,7 +25,7 @@ export default function PricingPage() {
               <h1 className="h2" id="pricing-title">
                 Start free. Upgrade when agents <span className="mark">start bringing you business.</span>
               </h1>
-              <p className="sub">Every plan includes Agent Nick.</p>
+              <p className="sub">Every plan includes Agent Nic.</p>
             </div>
 
             <Plans />
