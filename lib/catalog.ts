@@ -17,6 +17,8 @@ export interface PlanInfo {
   name: string;
   tagline: string;
   priceMonthly: number | null; // null = custom / contact sales
+  /** USD per year when billed yearly (21% off twelve months); null = custom. */
+  priceYearly: number | null;
   cta: string;
   href: string;
   highlighted?: boolean;
@@ -32,6 +34,7 @@ export const PLANS: PlanInfo[] = [
     name: "Free",
     tagline: "See your site through an agent’s eyes.",
     priceMonthly: 0,
+    priceYearly: 0,
     cta: "Start free",
     href: "/signup?plan=free",
     highlights: [
@@ -47,6 +50,7 @@ export const PLANS: PlanInfo[] = [
     name: "Starter",
     tagline: "Make your site agent-ready.",
     priceMonthly: 19,
+    priceYearly: 180,
     cta: "Get Starter",
     href: "/signup?plan=starter",
     highlighted: true,
@@ -67,13 +71,13 @@ export const PLANS: PlanInfo[] = [
     name: "Pro",
     tagline: "Control agents across several sites.",
     priceMonthly: 49,
+    priceYearly: 465,
     cta: "Get Pro",
     href: "/signup?plan=pro",
     highlights: [
       "3 sites · 30 fix rounds / month",
       "Unlimited actions",
       "Unlimited rules + rate limits",
-      "Context transfer between agents (coming soon)",
       "250,000 visits · 90 days · webhooks",
       "5 seats · priority email",
     ],
@@ -83,6 +87,7 @@ export const PLANS: PlanInfo[] = [
     name: "Enterprise",
     tagline: "For large organizations.",
     priceMonthly: null,
+    priceYearly: null,
     cta: "Talk to sales",
     href: "/demo",
     highlights: [
@@ -157,7 +162,6 @@ export const MATRIX: MatrixGroup[] = [
     rows: [
       { label: "AI-shortened tool descriptions (procedural memory)", values: [false, true, true, true] },
       { label: "Site memory", values: [false, true, true, true] },
-      { label: "Context handoff between agents (coming soon)", values: [false, false, true, true] },
     ],
   },
   {

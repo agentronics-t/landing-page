@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
-import { Plans } from "@/components/site/Plans";
+import { BillingSwitch, Plans } from "@/components/site/Plans";
 import { FinalCta } from "@/components/site/FinalCta";
 import { MATRIX, PLANS, type Cell } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Pricing: Agentronics",
   description:
-    "Start free with your Agent Readiness Score and Agent Nic. Starter $19/mo (most popular) and Pro $49/mo add more fix rounds, agent actions, rules and history. Enterprise plans are custom.",
+    "Start free with your Agent Readiness Score and Agent Nic. Starter $19/mo or $180/yr (most popular) and Pro $49/mo or $465/yr add more fix rounds, agent actions, rules and history. Enterprise plans are custom.",
 };
 
 const cell = (v: Cell) => (v === true ? "✓" : v === false ? "–" : v);
@@ -28,10 +28,11 @@ export default function PricingPage() {
               <p className="sub">Every plan includes Agent Nic.</p>
             </div>
 
+            <BillingSwitch />
             <Plans />
 
             <p className="pricing__note" data-reveal>
-              Prices in USD, billed monthly. Merged fixes stay in your code, even if you cancel.
+              Prices in USD, billed monthly or yearly (yearly saves 21%). Merged fixes stay in your code, even if you cancel.
             </p>
             <p className="pricing__limits">
               Limits never block agents: at a limit your site keeps working and we stop recording until next month.

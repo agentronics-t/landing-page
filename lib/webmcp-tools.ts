@@ -22,7 +22,7 @@ function result(text: string, structuredContent?: unknown): McpToolResult {
 function priceLabel(p: PlanInfo): string {
   if (p.priceMonthly === null) return "Custom (contact sales)";
   if (p.priceMonthly === 0) return "Free";
-  return `$${p.priceMonthly}/mo, billed monthly`;
+  return `$${p.priceMonthly}/mo billed monthly, or $${p.priceYearly}/yr billed yearly (21% off)`;
 }
 
 function planPublic(p: PlanInfo) {
@@ -31,6 +31,7 @@ function planPublic(p: PlanInfo) {
     name: p.name,
     tagline: p.tagline,
     priceMonthly: p.priceMonthly,
+    priceYearly: p.priceYearly,
     currency: "USD",
     cta: p.cta,
     highlights: p.highlights.filter((h) => !h.endsWith("plus:")),

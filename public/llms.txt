@@ -10,11 +10,11 @@
 - Control: allow, ask first or deny each agent action. See which agents visit. Alerts when a code change breaks agent access.
 - Your site looks the same to people. Agents see the same content people see (no cloaking).
 
-## Pricing (USD, monthly)
+## Pricing (USD, monthly or yearly; yearly saves 21%)
 
 - Free: $0. 1 site, 1 fix round/month, up to 5 agent actions, 5,000 agent visits/month.
-- Starter: $19/month (most popular). 5 fix rounds, up to 15 actions, automatic fixes + alerts on code changes, agent verification, 5 access rules.
-- Pro: $49/month. 3 sites, 30 fix rounds, unlimited actions, unlimited rules + rate limits.
+- Starter: $19/month or $180/year (most popular). 5 fix rounds, up to 15 actions, automatic fixes + alerts on code changes, agent verification, 5 access rules.
+- Pro: $49/month or $465/year. 3 sites, 30 fix rounds, unlimited actions, unlimited rules + rate limits.
 - Enterprise: custom. Unlimited sites, SSO/SAML, audit log, SLA.
 
 ## Pages
@@ -38,5 +38,5 @@
 
 - [Terms of Service](https://www.agentronics.dev/terms)
 - [Privacy Policy](https://www.agentronics.dev/privacy)
-- [Refund & Cancellation Policy](https://www.agentronics.dev/refunds): cancel any paid plan anytime; it stays active until the end of the paid month; no refunds for partial months.
+- [Refund & Cancellation Policy](https://www.agentronics.dev/refunds): cancel any paid plan anytime; it stays active until the end of the paid month or year; no refunds for partial periods.
 - [Contact](https://www.agentronics.dev/contact): agentronics.help@gmail.com

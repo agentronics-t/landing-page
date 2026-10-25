@@ -608,17 +608,17 @@
 
   /* ---------- WebMCP (imperative): pricing tool for agents ---------- */
   const PLANS = [
-    { plan: 'Free', priceUsdPerMonth: 0, sites: 1, fixRoundsPerMonth: 1, agentActions: 5, agentVisitsPerMonth: 5000, signup: '/signup?plan=free' },
-    { plan: 'Starter', priceUsdPerMonth: 19, sites: 1, fixRoundsPerMonth: 5, agentActions: 15, agentVisitsPerMonth: 50000, mostPopular: true, signup: '/signup?plan=starter' },
-    { plan: 'Pro', priceUsdPerMonth: 49, sites: 3, fixRoundsPerMonth: 30, agentActions: 'unlimited', agentVisitsPerMonth: 250000, signup: '/signup?plan=pro' },
-    { plan: 'Enterprise', priceUsdPerMonth: 'custom', sites: 'unlimited', fixRoundsPerMonth: 'unlimited', agentActions: 'unlimited', agentVisitsPerMonth: 'unlimited', contact: '/demo' },
+    { plan: 'Free', priceUsdPerMonth: 0, priceUsdPerYear: 0, sites: 1, fixRoundsPerMonth: 1, agentActions: 5, agentVisitsPerMonth: 5000, signup: '/signup?plan=free' },
+    { plan: 'Starter', priceUsdPerMonth: 19, priceUsdPerYear: 180, sites: 1, fixRoundsPerMonth: 5, agentActions: 15, agentVisitsPerMonth: 50000, mostPopular: true, signup: '/signup?plan=starter' },
+    { plan: 'Pro', priceUsdPerMonth: 49, priceUsdPerYear: 465, sites: 3, fixRoundsPerMonth: 30, agentActions: 'unlimited', agentVisitsPerMonth: 250000, signup: '/signup?plan=pro' },
+    { plan: 'Enterprise', priceUsdPerMonth: 'custom', priceUsdPerYear: 'custom', sites: 'unlimited', fixRoundsPerMonth: 'unlimited', agentActions: 'unlimited', agentVisitsPerMonth: 'unlimited', contact: '/demo' },
   ];
   try {
     const mc = navigator.modelContext;
     if (mc && typeof mc.registerTool === 'function') {
       mc.registerTool({
         name: 'get_pricing',
-        description: 'Return Agentronics plans with monthly USD prices and limits. Every plan includes Agent Nic.',
+        description: 'Return Agentronics plans with monthly and yearly USD prices (yearly is 21% off) and limits. Every plan includes Agent Nic.',
         inputSchema: { type: 'object', properties: {} },
         async execute() { return { content: [{ type: 'text', text: JSON.stringify(PLANS) }] }; },
       });
