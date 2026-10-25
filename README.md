@@ -12,7 +12,7 @@ under `/docs` (see `next.config.mjs`).
 Edit the home page there, not in React. Changes made to the redesign files, on purpose:
 
 - asset paths are root-relative (`/home-assets/…`, `/llms.txt`, …);
-- the logo is the brand master (lime A on a red square), not the redesign's placeholder mark;
+- the logo is the brand master (red A on a lime square), not the redesign's placeholder mark;
 - an inline snippet forwards `app.js`'s `agentronics:track` events to Vercel Web Analytics,
   and there's an `og:image`;
 - two claims the code doesn't back yet: "Context transfer between agents (coming soon)", and

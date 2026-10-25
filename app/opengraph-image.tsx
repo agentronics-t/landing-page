@@ -12,8 +12,8 @@ export default function OpengraphImage() {
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#0B0B0C", padding: 72 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <svg width="64" height="64" viewBox="0 0 32 32">
-            <rect width="32" height="32" rx="9" fill="#FF4D1F" />
-            <path transform="translate(8 8.33) scale(.019162)" fill="#D4FF3A" d="M458 0L835 660L317 660L368 570L664 570L458 209L119 800L0 800Z" />
+            <rect width="32" height="32" rx="9" fill="#D4FF3A" />
+            <path transform="translate(8 8.33) scale(.019162)" fill="#FF4D1F" d="M458 0L835 660L317 660L368 570L664 570L458 209L119 800L0 800Z" />
           </svg>
           <span style={{ color: "#FFFFFF", fontSize: 42, fontWeight: 700, letterSpacing: -1.5 }}>agentronics</span>
         </div>
