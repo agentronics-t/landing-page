@@ -17,7 +17,7 @@
 
   --ink-80: rgba(11, 11, 12, .8);
   --ink-65: rgba(11, 11, 12, .65);
-  --ink-50: rgba(11, 11, 12, .5);
+  --ink-50: rgba(11, 11, 12, .6); /* .5 failed WCAG AA contrast for small text */
   --ink-25: rgba(11, 11, 12, .25);
   --ink-15: rgba(11, 11, 12, .15);
   --ink-10: rgba(11, 11, 12, .1);
@@ -301,7 +301,7 @@ section[id], main [id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
 .ag__line code { color: var(--paper-50); }
 .ag__line.ok b { color: var(--lime); }
 .ag__empty { display: inline-block; width: 56px; height: 12px; border-radius: 3px; background: repeating-linear-gradient(45deg, var(--paper-15) 0 4px, transparent 4px 8px); }
-.flag { font: 500 10px/1.2 var(--f-mono); font-style: normal; color: var(--red); background: color-mix(in srgb, var(--red) 14%, transparent); border: 1px solid color-mix(in srgb, var(--red) 55%, transparent); padding: 3px 6px; border-radius: 5px; white-space: nowrap; }
+.flag { font: 500 10px/1.2 var(--f-mono); font-style: normal; color: color-mix(in srgb, var(--red) 88%, var(--paper)); background: color-mix(in srgb, var(--red) 14%, transparent); border: 1px solid color-mix(in srgb, var(--red) 55%, transparent); padding: 3px 6px; border-radius: 5px; white-space: nowrap; }
 .flag::before { content: "✕ "; }
 .ag__log { margin-top: 4px; padding-top: 10px; border-top: 1px dashed var(--paper-15); color: var(--red); }
 
