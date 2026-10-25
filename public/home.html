@@ -20,7 +20,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:wght@300..800&family=Martian+Mono:wdth,wght@75..112.5,300..700&display=swap">
+<!-- Fonts load without blocking first paint; text shows in the fallback face until they arrive (display=swap). -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:wght@300..800&family=Martian+Mono:wdth,wght@75..112.5,300..700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Funnel+Sans:wght@300..800&family=Martian+Mono:wdth,wght@75..112.5,300..700&display=swap"></noscript>
 <link rel="stylesheet" href="/home-assets/styles.css">
 
 <script type="application/ld+json">
@@ -216,7 +218,7 @@ addEventListener('agentronics:track', function (e) {
 </section>
 
 <!-- ============ MARQUEE ============ -->
-<div class="marquee" aria-label="Works with any AI agent that reads the web: ChatGPT, Claude, Gemini, Perplexity and AI browsers. Supports WebMCP.">
+<div class="marquee" role="img" aria-label="Works with any AI agent that reads the web: ChatGPT, Claude, Gemini, Perplexity and AI browsers. Supports WebMCP.">
   <div class="marquee__track" aria-hidden="true">
     <span>Works with every agent that reads the web</span><i>✦</i><span>ChatGPT</span><i>✦</i><span>Claude</span><i>✦</i><span>Gemini</span><i>✦</i><span>Perplexity</span><i>✦</i><span>AI browsers</span><i>✦</i><span>WebMCP support</span><i>✦</i>
     <span>Works with every agent that reads the web</span><i>✦</i><span>ChatGPT</span><i>✦</i><span>Claude</span><i>✦</i><span>Gemini</span><i>✦</i><span>Perplexity</span><i>✦</i><span>AI browsers</span><i>✦</i><span>WebMCP support</span><i>✦</i>
