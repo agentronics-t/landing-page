@@ -129,14 +129,13 @@ export const MATRIX: MatrixGroup[] = [
       { label: "Tool serving + registry sync", values: [true, true, true, true] },
       { label: "Token-cost estimate per tool / page", values: [true, true, true, true] },
       { label: "Tool status (callable / failed) + call health", values: [true, true, true, true] },
-      { label: "Tool groups + progressive disclosure", values: [false, true, true, true] },
+      { label: "Tool groups + progressive disclosure", values: [true, true, true, true] },
     ],
   },
   {
     group: "Detect",
     rows: [
       { label: "Agent detection", tip: DETECTION_TIP, values: [true, true, true, true] },
-      { label: "Agent signature updates", values: ["Monthly", "Weekly", "Live", "Live"] },
     ],
   },
   {
@@ -153,7 +152,7 @@ export const MATRIX: MatrixGroup[] = [
     rows: [
       { label: "Rules: allow / ask first / deny", values: [false, "5", "Unlimited", "Unlimited"] },
       { label: "Per-agent rate limits", values: [false, false, true, true] },
-      { label: "On-page (DOM) enforcement", values: [false, false, true, true] },
+      { label: "On-page (DOM) enforcement", values: [true, true, true, true] },
       { label: "Per-tool access from Agent Nic enforced", values: [false, true, true, true] },
     ],
   },
