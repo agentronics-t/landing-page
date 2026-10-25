@@ -39,14 +39,14 @@ No error. No alert. Just a sale you never knew you lost.
 ## Others tell you what's broken. Agentronics fixes it.
 
 1. **Measure**: one score, 0–100. Every failed check comes with the fix.
-2. **Fix**: Agent Nick, our AI agent, writes the code and opens a pull request that explains every change. You click Merge. Included in every plan, even Free.
+2. **Fix**: Agent Nic, our AI agent, writes the code and opens a pull request that explains every change. You click Merge. Included in every plan, even Free.
 3. **Control**: allow, ask first or deny, per action. See which agents visit. Get an alert when a deploy breaks agent access.
 
 ## How it works
 
 1. Get your score (30 seconds).
 2. Connect GitHub on the repos you choose (minutes).
-3. Agent Nick opens a pull request. Every change is explained.
+3. Agent Nic opens a pull request. Every change is explained.
 4. You click Merge. Nothing changes until you do.
 
 ## Proof

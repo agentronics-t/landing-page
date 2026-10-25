@@ -105,7 +105,7 @@ export const DETECTION_TIP =
 
 export const MATRIX: MatrixGroup[] = [
   {
-    group: "Agent Nick — we write the code",
+    group: "Agent Nic — we write the code",
     rows: [
       { label: "Sites (repositories)", values: ["1", "1", "3", "Custom"] },
       { label: "Fix rounds / month (scan → pull request)", values: ["1", "5", "30", "Unlimited"] },
@@ -149,7 +149,7 @@ export const MATRIX: MatrixGroup[] = [
       { label: "Rules: allow / ask first / deny", values: [false, "5", "Unlimited", "Unlimited"] },
       { label: "Per-agent rate limits", values: [false, false, true, true] },
       { label: "On-page (DOM) enforcement", values: [false, false, true, true] },
-      { label: "Per-tool access from Agent Nick enforced", values: [false, true, true, true] },
+      { label: "Per-tool access from Agent Nic enforced", values: [false, true, true, true] },
     ],
   },
   {
@@ -186,13 +186,13 @@ export const MATRIX: MatrixGroup[] = [
 export const PRODUCT_OVERVIEW = {
   name: "Agentronics",
   tagline: "Make your website ready for AI agents.",
-  what: "AI assistants now browse, compare and buy for people. Agentronics checks how AI agents see a website, fixes what's broken (Agent Nick writes the code and opens a pull request), and lets the site owner see and control what agents do.",
+  what: "AI assistants now browse, compare and buy for people. Agentronics checks how AI agents see a website, fixes what's broken (Agent Nic writes the code and opens a pull request), and lets the site owner see and control what agents do.",
   webmcp:
     "WebMCP is the emerging browser standard (document.modelContext) that lets a page expose typed tools to the AI agents that visit it, so agents call the site's actions directly instead of clicking through the page.",
   sdk: "The Agentronics SDK (npm install @agentronics/sdk) publishes WebMCP tools and detects, authenticates and governs the agents that call them, with every call visible in the console.",
   howItWorks: [
     { title: "Get your score", body: "Paste your URL. In 30 seconds you see your Agent Readiness Score out of 100: what agents can and can't do on your site." },
-    { title: "Agent Nick writes the fixes", body: "Our AI agent writes the code and sends it as a pull request: a proposed change you review on GitHub." },
+    { title: "Agent Nic writes the fixes", body: "Our AI agent writes the code and sends it as a pull request: a proposed change you review on GitHub." },
     { title: "You approve. Agents can buy.", body: "Merge it, and agents can read your prices, recommend you and finish tasks." },
   ],
   links: {

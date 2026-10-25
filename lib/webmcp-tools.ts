@@ -58,7 +58,7 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
     {
       name: "get_pricing",
       description:
-        "Get Agentronics pricing: all plans with monthly prices (USD) and headline features, including Agent Nick limits.",
+        "Get Agentronics pricing: all plans with monthly prices (USD) and headline features, including Agent Nic limits.",
       inputSchema: { type: "object", properties: {}, additionalProperties: false },
       execute() {
         const lines = PLANS.map((p) => `• ${p.name} — ${priceLabel(p)}: ${p.tagline}`).join("\n");
@@ -81,7 +81,7 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
           },
           sites: {
             type: "number",
-            description: "How many websites (repositories) Agent Nick should make agent-ready.",
+            description: "How many websites (repositories) Agent Nic should make agent-ready.",
           },
           needSSO: { type: "boolean", description: "Requires SSO / SAML for the team's console." },
           needAuthz: {

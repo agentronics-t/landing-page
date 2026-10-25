@@ -55,7 +55,7 @@ export default function PrivacyPage() {
           among the fields it sends us. For this data we act on your behalf, as your processor.
         </li>
         <li>
-          <b>Agent Nick.</b> If you connect GitHub, Agent Nick reads the repositories you chose through our GitHub App.
+          <b>Agent Nic.</b> If you connect GitHub, Agent Nic reads the repositories you chose through our GitHub App.
           It sends relevant parts of your code to Google&rsquo;s Gemini models on Vertex AI to write fixes. We store what
           it proposes and the pull requests it opens, not a copy of your repository.
         </li>
@@ -75,10 +75,10 @@ export default function PrivacyPage() {
       <h2>4. Who processes it for us</h2>
       <ul>
         <li><b>Vercel</b>: hosts the website and console, and provides web analytics.</li>
-        <li><b>Google Cloud</b>: runs our API and Agent Nick (United States), and provides Gemini through Vertex AI.</li>
+        <li><b>Google Cloud</b>: runs our API and Agent Nic (United States), and provides Gemini through Vertex AI.</li>
         <li><b>Neon</b>: our database (United States).</li>
         <li><b>Clerk</b>: sign-in and accounts.</li>
-        <li><b>GitHub</b>: repository access for Agent Nick, through the app you install.</li>
+        <li><b>GitHub</b>: repository access for Agent Nic, through the app you install.</li>
         <li><b>Dodo Payments</b>: payments, taxes and invoices, as merchant of record.</li>
         <li><b>Calendly</b>: demo bookings.</li>
       </ul>
@@ -91,7 +91,7 @@ export default function PrivacyPage() {
       <ul>
         <li>Agent activity: 7 days on Free, 30 on Starter, 90 on Pro, or as agreed for Enterprise. Then it is deleted.</li>
         <li>Account and billing records: while your account is open, and afterwards as long as the law requires.</li>
-        <li>Agent Nick&rsquo;s proposals and pull request records: while your account is open.</li>
+        <li>Agent Nic&rsquo;s proposals and pull request records: while your account is open.</li>
       </ul>
 
       <h2>6. Cookies</h2>

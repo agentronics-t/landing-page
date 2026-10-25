@@ -493,8 +493,8 @@
            <a class="report__alt" href="/signup?plan=free&site=${site}" data-plan="free">Start free instead</a>
          </div>`
       : `<div class="report__cta">
-           <p><b>Agent Nick writes these fixes.</b> You review one pull request and click Merge. Your site looks the same to people.</p>
-           <a class="btn btn--ink" href="/signup?plan=free&site=${site}" data-plan="free">Fix it free with Agent Nick ${ARROW}</a>
+           <p><b>Agent Nic writes these fixes.</b> You review one pull request and click Merge. Your site looks the same to people.</p>
+           <a class="btn btn--ink" href="/signup?plan=free&site=${site}" data-plan="free">Fix it free with Agent Nic ${ARROW}</a>
            <a class="report__alt" href="/signup?plan=starter&site=${site}" data-plan="starter">Or Starter, $19/mo: re-checks after every code change</a>
          </div>`;
 
@@ -618,7 +618,7 @@
     if (mc && typeof mc.registerTool === 'function') {
       mc.registerTool({
         name: 'get_pricing',
-        description: 'Return Agentronics plans with monthly USD prices and limits. Every plan includes Agent Nick.',
+        description: 'Return Agentronics plans with monthly USD prices and limits. Every plan includes Agent Nic.',
         inputSchema: { type: 'object', properties: {} },
         async execute() { return { content: [{ type: 'text', text: JSON.stringify(PLANS) }] }; },
       });

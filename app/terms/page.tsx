@@ -4,7 +4,7 @@ import { LEGAL } from "@/lib/legal";
 
 export const metadata: Metadata = {
   title: "Terms of Service: Agentronics",
-  description: "The agreement for using Agentronics: the Agent Readiness Score, the console, the SDK and Agent Nick.",
+  description: "The agreement for using Agentronics: the Agent Readiness Score, the console, the SDK and Agent Nic.",
 };
 
 export default function TermsPage() {
@@ -12,7 +12,7 @@ export default function TermsPage() {
     <LegalPage
       eyebrow="Terms"
       title="Terms of Service"
-      lede="The agreement between you and Agentronics when you use our website, the Agent Readiness Score, the console, the SDK or Agent Nick."
+      lede="The agreement between you and Agentronics when you use our website, the Agent Readiness Score, the console, the SDK or Agent Nic."
     >
       <h2>1. Who we are</h2>
       <p>
@@ -32,7 +32,7 @@ export default function TermsPage() {
           for what they may do.
         </li>
         <li>
-          <b>Agent Nick</b>: our AI agent, which reads the GitHub repositories you connect and opens pull requests with
+          <b>Agent Nic</b>: our AI agent, which reads the GitHub repositories you connect and opens pull requests with
           proposed fixes.
         </li>
       </ul>
@@ -55,10 +55,10 @@ export default function TermsPage() {
       </ul>
       <p>We may suspend accounts that break these rules.</p>
 
-      <h2>5. Agent Nick and your code</h2>
+      <h2>5. Agent Nic and your code</h2>
       <ul>
         <li>
-          Agent Nick works only on the repositories where you install our GitHub App, with the permissions GitHub shows
+          Agent Nic works only on the repositories where you install our GitHub App, with the permissions GitHub shows
           you when you install it. You can remove it at any time in your GitHub settings.
         </li>
         <li>

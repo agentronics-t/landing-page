@@ -5,9 +5,9 @@
 // third rewrite. Override the target with DOCS_ZONE_URL if the zone moves.
 const DOCS_ZONE = process.env.DOCS_ZONE_URL ?? "https://agentronics-docs.vercel.app";
 
-// Baseline hardening. No CSP here on purpose: Clerk, Calendly and Vercel
-// Analytics each need their own script/frame/connect origins, and a wrong
-// allowlist silently breaks sign-in or the booking embed. Add it deliberately.
+// Baseline hardening. No CSP here on purpose: Calendly and Vercel Analytics each
+// need their own script/frame/connect origins, and a wrong allowlist silently
+// breaks the booking embed. Add it deliberately.
 const SECURITY_HEADERS = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
@@ -38,10 +38,12 @@ const nextConfig = {
       // Old routes.
       { source: "/sdk", destination: "/", permanent: true },
       { source: "/intelligence", destination: "/", permanent: true },
-      // The home page links to these names: log in and sign up go to Clerk
-      // (then on to the console), a demo goes to the Calendly booking page.
-      { source: "/signup", destination: "/sign-up", permanent: false },
-      { source: "/login", destination: "/sign-in", permanent: false },
+      // Log in and sign up happen on the console itself (no hop between domains);
+      // a demo goes to the Calendly booking page. Query strings pass through.
+      { source: "/login", destination: "https://app.agentronics.dev/sign-in", permanent: false },
+      { source: "/sign-in/:path*", destination: "https://app.agentronics.dev/sign-in", permanent: false },
+      { source: "/signup", destination: "https://app.agentronics.dev/sign-up", permanent: false },
+      { source: "/sign-up/:path*", destination: "https://app.agentronics.dev/sign-up", permanent: false },
       { source: "/demo", destination: "/book", permanent: false },
       // The scanner lives on the home page now: /scan?url=x → /?url=x, which runs it.
       { source: "/scan", destination: "/", permanent: true },
