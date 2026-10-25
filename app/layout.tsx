@@ -49,6 +49,11 @@ const CLERK_APPEARANCE = {
     cardBox: "clerk-card",
     formButtonPrimary: "clerk-primary",
     formFieldInput: "clerk-input",
+    // Clerk colours text links with colorPrimary; lime text on white is unreadable
+    footerActionLink: "clerk-link",
+    formFieldAction: "clerk-link",
+    identityPreviewEditButton: "clerk-link",
+    formResendCodeLink: "clerk-link",
   },
 };
 
