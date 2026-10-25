@@ -38,12 +38,10 @@ const nextConfig = {
       // Old routes.
       { source: "/sdk", destination: "/", permanent: true },
       { source: "/intelligence", destination: "/", permanent: true },
-      // The console isn't open to the public yet: Login / Sign up go to the demo booking.
-      { source: "/sign-in/:path*", destination: "/book", permanent: false },
-      { source: "/sign-up/:path*", destination: "/book", permanent: false },
-      // The home page links to these names; query strings (?plan=…) pass through.
-      { source: "/signup", destination: "/book", permanent: false },
-      { source: "/login", destination: "/book", permanent: false },
+      // The home page links to these names: log in and sign up go to Clerk
+      // (then on to the console), a demo goes to the Calendly booking page.
+      { source: "/signup", destination: "/sign-up", permanent: false },
+      { source: "/login", destination: "/sign-in", permanent: false },
       { source: "/demo", destination: "/book", permanent: false },
       // The scanner lives on the home page now: /scan?url=x → /?url=x, which runs it.
       { source: "/scan", destination: "/", permanent: true },
