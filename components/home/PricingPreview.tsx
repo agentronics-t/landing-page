@@ -3,7 +3,7 @@ import { Section } from "@/components/layout/Section";
 import { PlanCards } from "@/components/pricing/PlanCards";
 
 export const PRICING_LEAD =
-  "Every plan includes Agent Nick, our AI agent. He reads your code, writes the tools agents need to book, buy and sign up, and sends them to you as a pull request: a proposed change you approve on GitHub. Nothing changes on your site until you say yes.";
+  "Every plan includes Agent Nick, our AI agent. He reads your code, writes the tools agents need to book, buy and sign up, plus your sitemap, llms.txt and structured data, and sends it all to you as a pull request: a proposed change you approve on GitHub. Nothing changes on your site until you say yes.";
 
 /** Spec v3 §3.9 — Pricing, Bone. Starter is the highlighted plan. */
 export function PricingPreview() {
