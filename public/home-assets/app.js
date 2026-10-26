@@ -326,9 +326,10 @@
   function revealRow(check) {
     const row = $(`[data-check="${check.id}"]`, consoleEl);
     row.classList.remove('is-running');
-    row.classList.add(check.pass ? 'is-pass' : 'is-fail');
+    // partial: the check doesn't apply to this page (half points, amber)
+    row.classList.add(check.pass ? 'is-pass' : check.partial ? 'is-partial' : 'is-fail');
     if (check.detail) row.insertAdjacentHTML('beforeend', `<span class="check__detail">${esc(check.detail)}</span>`);
-    if (!check.pass && check.fix) row.insertAdjacentHTML('beforeend', `<span class="check__fix">${esc(check.fix)}</span>`);
+    if (!check.pass && !check.partial && check.fix) row.insertAdjacentHTML('beforeend', `<span class="check__fix">${esc(check.fix)}</span>`);
   }
 
   function setStatus(text, isError = false) {
@@ -446,7 +447,7 @@
 
   function renderReport(r) {
     const host = esc(r.host);
-    const fails = r.checks.filter((c) => !c.pass);
+    const fails = r.checks.filter((c) => !c.pass && !c.partial);
     const tone = { not: 't-red', partly: 't-amber', ready: 't-lime' }[r.band.key];
     const verdict = {
       not: 'Most AI agents can’t use your site yet.',
