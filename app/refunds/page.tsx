@@ -12,14 +12,14 @@ export default function RefundsPage() {
     <LegalPage
       eyebrow="Refunds"
       title="Refund & Cancellation Policy"
-      lede="Cancel any paid plan at any time. You keep what you paid for until the end of the month, and merged fixes stay in your code."
+      lede="Cancel any paid plan at any time. You keep what you paid for until the end of the month or year you paid for, and merged fixes stay in your code."
     >
       <h2>Free plan</h2>
       <p>The Free plan costs nothing and needs no payment.</p>
 
       <h2>How paid plans are billed</h2>
       <p>
-        Starter and Pro are billed monthly in advance, in US dollars, through Dodo Payments, our merchant of record. Prices
+        Starter and Pro are billed monthly or yearly in advance, in US dollars, through Dodo Payments, our merchant of record. Yearly saves 21%. Prices
         are on the <a href="/pricing">pricing page</a>.
       </p>
 
@@ -30,7 +30,7 @@ export default function RefundsPage() {
           You can also email <Mail /> from your account email and we&rsquo;ll cancel for you.
         </li>
         <li>
-          Cancelling stops the next charge. Your plan stays active until the end of the month you&rsquo;ve paid for, then
+          Cancelling stops the next charge. Your plan stays active until the end of the month or year you&rsquo;ve paid for, then
           your workspace moves to Free.
         </li>
         <li>Fixes you merged from Agent Nic stay in your code.</li>
@@ -39,7 +39,7 @@ export default function RefundsPage() {
       <h2>Refunds</h2>
       <ul>
         <li>
-          We don&rsquo;t refund partial months or unused time after you cancel, except where the law or Dodo&rsquo;s
+          We don&rsquo;t refund partial months, partial years or unused time after you cancel, except where the law or Dodo&rsquo;s
           buyer terms require it.
         </li>
         <li>
@@ -51,7 +51,7 @@ export default function RefundsPage() {
 
       <h2>Changing plans</h2>
       <p>
-        Moving between Starter and Pro takes effect right away. The price difference for the rest of the month is
+        Moving between Starter and Pro, or between monthly and yearly billing, takes effect right away. The price difference for the rest of the current period is
         prorated by Dodo Payments.
       </p>
 

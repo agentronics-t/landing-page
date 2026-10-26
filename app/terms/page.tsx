@@ -73,7 +73,7 @@ export default function TermsPage() {
 
       <h2>6. Plans, billing and payments</h2>
       <ul>
-        <li>The Free plan costs nothing. Paid plans are billed monthly in advance, in US dollars.</li>
+        <li>The Free plan costs nothing. Paid plans are billed monthly or yearly in advance, in US dollars.</li>
         <li>
           Payments are processed by Dodo Payments, our merchant of record. Dodo handles your card details, taxes and
           invoices, and its buyer terms also apply to your purchase.

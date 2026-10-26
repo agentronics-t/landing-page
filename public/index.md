@@ -58,11 +58,11 @@ We scanned our own site first: 85 → 100 after one pull request (October 2026).
 | Plan | Price | Highlights |
 |---|---|---|
 | Free | $0 | 1 site, 1 fix round/month, up to 5 actions, 5,000 agent visits/month |
-| Starter (most popular) | $19/month | 5 fix rounds, up to 15 actions, auto-fixes + alerts, agent verification, 5 rules |
-| Pro | $49/month | 3 sites, 30 fix rounds, unlimited actions, unlimited rules + rate limits |
+| Starter (most popular) | $19/month or $180/year | 5 fix rounds, up to 15 actions, auto-fixes + alerts, agent verification, 5 rules |
+| Pro | $49/month or $465/year | 3 sites, 30 fix rounds, unlimited actions, unlimited rules + rate limits |
 | Enterprise | Custom | Unlimited, SSO/SAML, audit log, dedicated support, SLA |
 
-Prices in USD, billed monthly. Merged fixes stay in your code, even if you cancel.
+Prices in USD, billed monthly or yearly (yearly saves 21%). Merged fixes stay in your code, even if you cancel.
 
 ## Contact
 

@@ -53,8 +53,8 @@ in production.
 ## The scanner
 
 `GET /api/scan?url=example.com` (or `POST { url }`) → the Agent Readiness Score as JSON:
-12 pass/fail checks in Find / Read / Act, each group scored out of 100, overall = their mean,
-bands 0–40 / 41–70 / 71–100. Contract and checks: `public/openapi.json`, `lib/agentscan/scanner.js`
+12 pass/fail checks worth Find 5 each (20), Read 10 each (40) and Act 10 each (40); the score is the
+sum of passed checks out of 100, and each group also reports its own percentage. Bands 0–40 / 41–70 / 71–100. Contract and checks: `public/openapi.json`, `lib/agentscan/scanner.js`
 (the redesign's scanner, unchanged except for its fetch).
 
 - `lib/agentscan/pinned-fetch.ts` is the only way it touches the network: http/https on ports
