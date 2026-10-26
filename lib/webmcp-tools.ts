@@ -225,7 +225,7 @@ export function buildTools(navigate: (path: string) => void): WebMcpTool[] {
         const res = await fetch(`/api/scan?url=${encodeURIComponent(String(args.url ?? ""))}`);
         const data = await res.json().catch(() => ({ error: "The check failed." }));
         if (!res.ok) return { content: [{ type: "text", text: data.error ?? "The check failed." }], isError: true };
-        const broken = (data.checks as { pass: boolean; title: string; fix?: string }[]).filter((c) => !c.pass);
+        const broken = (data.checks as { pass: boolean; partial?: boolean; title: string; fix?: string }[]).filter((c) => !c.pass && !c.partial);
         const groups = data.groups as Record<string, { label: string; score: number }>;
         const text =
           `${data.host} has an Agent Readiness Score of ${data.score}/100, ${data.band.label} ` +
