@@ -18,7 +18,11 @@ export const metadata: Metadata = {
   description:
     "Get your free Agent Readiness Score in 30 seconds. See if AI agents can find, read and act on your website, then let Agent Nic fix it with a pull request you approve.",
   metadataBase: new URL("https://www.agentronics.dev"),
-  icons: { icon: "/home-assets/favicon.svg" },
+  // A new file name: browsers keep favicons for a long time, and the old red one lived at favicon.svg.
+  icons: {
+    icon: [{ url: "/favicon.ico", sizes: "48x48" }, { url: "/home-assets/icon-lime.svg", type: "image/svg+xml" }],
+    apple: "/apple-touch-icon.png"
+  },
   openGraph: {
     title: "Can AI agents buy from you? Get your Agent Readiness Score.",
     description: "Free scan, 30 seconds. Agent Nic fixes what's broken in a pull request you approve.",
