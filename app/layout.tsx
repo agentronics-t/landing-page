@@ -40,7 +40,7 @@ const ORG_JSON_LD = {
       name: "Agentronics",
       url: "https://www.agentronics.dev/",
       logo: "https://www.agentronics.dev/home-assets/favicon.svg",
-      sameAs: ["https://x.com/agentronics", "https://www.linkedin.com/company/agentronicss", "https://github.com/agentronics-t"],
+      sameAs: ["https://x.com/agentronics", "https://www.linkedin.com/company/agentronicss"],
     },
     {
       "@type": "SoftwareApplication",

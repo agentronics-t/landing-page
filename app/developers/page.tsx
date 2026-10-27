@@ -71,9 +71,6 @@ export default function DevelopersPage() {
                 <ButtonLink href="/docs" size="lg" arrow>
                   Read the docs
                 </ButtonLink>
-                <ButtonLink href="https://github.com/agentronics-t" variant="line" size="lg">
-                  GitHub
-                </ButtonLink>
               </div>
             </div>
             <div className="hero__visual">
@@ -152,13 +149,19 @@ export default function DevelopersPage() {
           <div className="wrap">
             <div className="section-head section-head--center" data-reveal style={{ marginBottom: 34 }}>
               <h2 className="h2" id="qs-title">
-                Start with the <span className="mark">quickstart.</span>
+                Do it yourself, <span className="mark">or let Agent Nic.</span>
               </h2>
-              <p className="sub">Five steps from npm install to your first agent call in the console.</p>
+              <p className="sub">
+                The quickstart takes you from npm install to your first agent call in five steps. Or sign up, and Agent Nic writes it
+                into your code and opens a pull request for you to review.
+              </p>
             </div>
-            <div style={{ display: "flex", justifyContent: "center" }} data-reveal>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center" }} data-reveal>
               <ButtonLink href="/docs/getting-started" size="lg" arrow>
                 Open the quickstart
+              </ButtonLink>
+              <ButtonLink href="/signup" variant="line" size="lg">
+                Sign up for Agent Nic
               </ButtonLink>
             </div>
           </div>
