@@ -42,7 +42,7 @@ export const PLANS: PlanInfo[] = [
       "Up to 5 agent actions",
       "5,000 agent visits / month",
       "7-day history",
-      "1 seat · community help",
+      "Community help",
     ],
   },
   {
@@ -63,7 +63,7 @@ export const PLANS: PlanInfo[] = [
       "Agent verification (Web Bot Auth, OAuth 2.1)",
       "5 access rules · procedural memory",
       "50,000 agent visits · 30-day history",
-      "2 seats · email help",
+      "Email help",
     ],
   },
   {
@@ -79,7 +79,7 @@ export const PLANS: PlanInfo[] = [
       "Unlimited actions",
       "Unlimited rules + rate limits",
       "250,000 visits · 90 days · webhooks",
-      "5 seats · priority email",
+      "Priority email help",
     ],
   },
   {
@@ -93,7 +93,7 @@ export const PLANS: PlanInfo[] = [
     highlights: [
       "Unlimited sites, fixes, visits",
       "Audit log + raw trace export",
-      "SSO/SAML · unlimited seats",
+      "SSO/SAML",
       "Custom retention",
       "Dedicated support, Slack, SLA",
     ],
@@ -176,7 +176,6 @@ export const MATRIX: MatrixGroup[] = [
   {
     group: "Workspace & support",
     rows: [
-      { label: "Team members", values: ["1", "2", "5", "Unlimited"] },
       { label: "SSO / SAML for the console", values: [false, false, false, true] },
       { label: "Support", values: ["Community", "Email", "Priority email", "Dedicated + Slack"] },
       { label: "SLA", values: [false, false, false, true] },
