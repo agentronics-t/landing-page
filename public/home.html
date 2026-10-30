@@ -20,6 +20,9 @@
 <meta property="og:image" content="https://www.agentronics.dev/opengraph-image">
 <meta name="twitter:image" content="https://www.agentronics.dev/opengraph-image">
 
+<!-- Log in and Start free open the console: warm up its connection and Clerk's script. -->
+<link rel="preconnect" href="https://app.agentronics.dev">
+<link rel="preconnect" href="https://clerk.agentronics.dev" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Fonts load without blocking first paint; text shows in the fallback face until they arrive (display=swap). -->
@@ -117,7 +120,7 @@ addEventListener('agentronics:track', function (e) {
       <a href="/docs">Docs</a>
     </nav>
     <div class="nav__right">
-      <a class="nav__login" href="/login">Log in</a>
+      <a class="nav__login" href="https://app.agentronics.dev/sign-in">Log in</a>
       <a class="btn btn--go btn--sm" href="#score" data-goto-score>Get my score</a>
     </div>
   </div>
