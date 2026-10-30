@@ -101,29 +101,34 @@
   if (stage) {
     let x = 58, target = 58, auto = !reduce, t0 = performance.now(), visible = true, raf = 0;
     const AMP = 36;
+    // The sweep plays for a few passes, then rests; the beam then only moves
+    // when the pointer does. (A never-ending 60 fps repaint lags Safari and Brave.)
+    const SWEEP_MS = 2 * Math.PI * 1800 * 2;
     const frame = (now) => {
+      if (auto && now - t0 > SWEEP_MS) { auto = false; target = 58; }
       if (auto) target = 50 + AMP * Math.sin((now - t0) / 1800);
       x += (target - x) * 0.14;
       stage.style.setProperty('--x', `${x.toFixed(2)}%`);
-      raf = visible ? requestAnimationFrame(frame) : 0;
+      const settled = !auto && Math.abs(target - x) < 0.05;
+      raf = visible && !settled ? requestAnimationFrame(frame) : 0;
     };
+    const wake = () => { if (visible && !raf) raf = requestAnimationFrame(frame); };
     const point = (e) => {
       const r = stage.getBoundingClientRect();
       target = clamp(((e.clientX - r.left) / r.width) * 100, 3, 97);
       auto = false;
+      wake();
     };
     stage.addEventListener('pointermove', point);
     stage.addEventListener('pointerdown', point);
     stage.addEventListener('pointerleave', () => {
-      if (reduce) return;
-      // resume the sweep from where the beam is now
-      t0 = performance.now() - Math.asin(clamp((x - 50) / AMP, -1, 1)) * 1800;
-      auto = true;
+      target = 58;
+      wake();
     });
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(([e]) => {
         visible = e.isIntersecting;
-        if (visible && !raf) raf = requestAnimationFrame(frame);
+        wake();
       }).observe(stage);
     }
     raf = requestAnimationFrame(frame);
@@ -163,7 +168,10 @@
       ['a', '// your analytics: nothing happened.'],
       ['a', '// this is the sale you never see.'],
     ];
-    let playing = false;
+    let playing = false, onScreen = true;
+    if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { onScreen = e.isIntersecting; }).observe(logBox);
+    // Typing only runs while the log is on screen and the tab is visible.
+    const idle = async () => { while (!onScreen || document.hidden) await sleep(400); };
     const render = (lines) => lines.map(([c, t]) => `<span class="${c}">${esc(t)}</span>`).join('\n');
     const play = async () => {
       if (playing) return;
@@ -173,6 +181,7 @@
         const done = [];
         for (const [c, t] of LINES) {
           for (let k = 1; k <= t.length; k++) {
+            await idle();
             out.innerHTML = render([...done, [c, t.slice(0, k)]]);
             await sleep(t.startsWith('  ') && k < 3 ? 0 : 16);
           }
@@ -614,8 +623,28 @@
     { plan: 'Pro', priceUsdPerMonth: 49, priceUsdPerYear: 465, sites: 3, fixRoundsPerMonth: 30, agentActions: 'unlimited', agentVisitsPerMonth: 250000, signup: '/signup?plan=pro' },
     { plan: 'Enterprise', priceUsdPerMonth: 'custom', priceUsdPerYear: 'custom', sites: 'unlimited', fixRoundsPerMonth: 'unlimited', agentActions: 'unlimited', agentVisitsPerMonth: 'unlimited', contact: '/demo' },
   ];
+  /* ---------- warm up the console when someone heads for it ---------- */
+  // Clerk's script is the slow part of the sign-in page (330 KB from the US).
+  // Fetch it into the cache on intent; www and app share the cache (same site).
+  // Keep the version in step with CLERK_JS_VERSION in the console (lib/clerkAssets.ts).
+  const CLERK_JS = 'https://clerk.agentronics.dev/npm/@clerk/clerk-js@5.128.0/dist/clerk.browser.js';
+  let warmed = false;
+  const warm = () => {
+    if (warmed || navigator.connection?.saveData) return;
+    warmed = true;
+    const l = document.createElement('link');
+    Object.assign(l, { rel: 'prefetch', as: 'script', crossOrigin: 'anonymous', href: CLERK_JS });
+    document.head.appendChild(l);
+  };
+  $$('a[href*="app.agentronics.dev/sign-"], a[href^="/signup"], a[href^="/login"]').forEach((a) => {
+    a.addEventListener('pointerenter', warm, { once: true });
+    a.addEventListener('focus', warm, { once: true });
+    a.addEventListener('touchstart', warm, { once: true, passive: true });
+  });
+
   try {
-    const mc = navigator.modelContext;
+    // document.modelContext is the WebMCP API; navigator.modelContext was its old name.
+    const mc = document.modelContext ?? navigator.modelContext;
     if (mc && typeof mc.registerTool === 'function') {
       mc.registerTool({
         name: 'get_pricing',
