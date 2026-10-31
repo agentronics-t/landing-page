@@ -68,3 +68,5 @@ Prices in USD, billed monthly or yearly (yearly saves 21%). Merged fixes stay in
 
 - Start free: https://www.agentronics.dev/signup
 - Book a demo: https://www.agentronics.dev/demo
+- Help: agentronics.help@gmail.com · Team: agentronics.team@gmail.com
+- The team on X: https://x.com/NeelakandanNC, https://x.com/sarathnarendrak
