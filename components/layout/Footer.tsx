@@ -14,6 +14,13 @@ const LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
+const TEAM = [
+  { label: "@NeelakandanNC on X", href: "https://x.com/NeelakandanNC" },
+  { label: "@sarathnarendrak on X", href: "https://x.com/sarathnarendrak" },
+];
+
+const HELP = ["agentronics.help@gmail.com", "agentronics.team@gmail.com"];
+
 /** The home page's footer (public/home.html). The badge opens the home scanner on this site. */
 export function Footer() {
   return (
@@ -40,6 +47,20 @@ export function Footer() {
           <a href="/index.md">Markdown version</a>
           <a href="/openapi.json">Scan API (OpenAPI)</a>
           <a href="/sitemap.xml">Sitemap</a>
+        </div>
+        <div className="footer__agents footer__team">
+          <p>Team</p>
+          {TEAM.map((t) => (
+            <a key={t.href} href={t.href} target="_blank" rel="noopener">
+              {t.label}
+            </a>
+          ))}
+          <p>Help</p>
+          {HELP.map((mail) => (
+            <a key={mail} href={`mailto:${mail}`}>
+              {mail}
+            </a>
+          ))}
         </div>
       </div>
       <div className="wrap footer__base">© 2026 Agentronics</div>
